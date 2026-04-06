@@ -31,9 +31,25 @@ docker compose up -d --build
 # API: http://localhost:5000 — chạy FE trên host với NEXT_PUBLIC_BE_URL=http://localhost:5000
 ```
 
+## Monorepo (một repo)
+
+Toàn bộ FE + BE nằm trong **một** Git ở thư mục gốc `yt2future/`. Xem `MONOREPO.md` (remote cũ, cách push repo mới).
+
+### Deploy VPS (một `git pull`)
+
+```bash
+cd /path/to/yt2future
+git pull
+
+cd yt2future-be-v2 && npm ci && npm run build && pm2 restart <tên-api>
+cd ../yt2future-f2-v2 && npm ci && npm run build && pm2 restart <tên-web>
+```
+
+Đường dẫn trên server (ví dụ `/home/deploy/yt2future`) giữ nguyên; chỉ đổi **một** remote Git thay vì pull hai repo.
+
 ## Git & Husky
 
-Sau `git init` (hoặc clone repo có `.git`), chạy `npm install` ở thư mục gốc để cài Husky hooks (`pre-commit` = lint-staged, `commit-msg` = commitlint). Nếu chưa dùng Git, bỏ qua cảnh báo Husky khi `npm install`.
+Ở thư mục gốc monorepo, chạy `npm install` để cài Husky hooks (`pre-commit` = lint-staged, `commit-msg` = commitlint).
 
 ## Lint & format
 
