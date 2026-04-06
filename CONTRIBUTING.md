@@ -79,6 +79,24 @@ Dùng [Conventional Commits](https://www.conventionalcommits.org/), ví dụ:
 
 Nếu không dùng commitlint tạm thời, có thể bỏ hook: `chmod -x .husky/commit-msg`.
 
-## CI
+## CI trên GitHub (đã cấu hình)
 
-GitHub Actions chạy `format:check`, `lint`, `build` cho FE và BE khi push/PR vào `main`/`master`.
+Sau khi push repo lên GitHub, vào **Settings → Actions → General** và bật **Allow all actions** (hoặc tương đương).
+
+| Workflow | File | Khi nào chạy |
+|----------|------|----------------|
+| **CI** | `.github/workflows/ci.yml` | Push / PR vào `main` hoặc `master`; có thể chạy tay tab **Actions → CI → Run workflow** |
+| **Dependabot** | `.github/dependabot.yml` | Hàng tuần tạo PR cập nhật `npm` trong `yt2future-f2-v2` và `yt2future-be-v2` |
+
+**CI làm gì:** job **frontend** — Prettier check, ESLint, `next build` (có env giả `NEXT_PUBLIC_*`). Job **backend** — `prisma generate`, Prettier, ESLint, `tsc`.
+
+## CD (deploy VPS) — mẫu, chưa bật
+
+File `.github/workflows/deploy-vps.yml` là **khung** deploy qua SSH (appleboy/ssh-action). Mặc định job có `if: false` để **không** chạy nhầm.
+
+1. Trên GitHub: **Settings → Secrets and variables → Actions** — thêm `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`.
+2. Sửa trong file workflow: đường dẫn `cd /home/deploy/yt2future` và lệnh `pm2 restart …` cho đúng VPS.
+3. Đổi `if: false` → `if: true` (hoặc xóa dòng `if`), commit.
+4. **Actions → Deploy VPS → Run workflow** để deploy tay.
+
+Nếu chưa dùng CD tự động, cứ **deploy tay** SSH như mục Deploy VPS ở trên.

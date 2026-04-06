@@ -1,0 +1,37 @@
+# CD: tự deploy lên VPS qua SSH (bật khi đã cấu hình secrets + chỉnh path)
+# Trên GitHub: Settings → Secrets and variables → Actions
+#   VPS_HOST, VPS_USER, VPS_SSH_KEY (private key đầy đủ)
+# Đổi `if: false` → `if: true` ở job deploy sau khi xong.
+
+name: Deploy VPS
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Nhánh hoặc tag (mặc định branch đang chọn)'
+        required: false
+        default: 'main'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: false
+
+    steps:
+      - name: Deploy qua SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script_stop: true
+          script: |
+            set -e
+            cd /home/deploy/yt2future
+            git fetch origin
+            git checkout ${{ inputs.ref || 'main' }}
+            git pull origin ${{ inputs.ref || 'main' }}
+            cd yt2future-be-v2 && npm ci && npm run build
+            cd ../yt2future-f2-v2 && npm ci && npm run build
+            pm2 restart all
