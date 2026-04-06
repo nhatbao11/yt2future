@@ -1,0 +1,18 @@
+{
+  "name": "yt2future",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "lint": "npm run lint --prefix yt2future-f2-v2 && npm run lint --prefix yt2future-be-v2",
+    "format": "prettier --write \"yt2future-f2-v2/**/*.{ts,tsx,mjs,js,json,css,md}\" \"yt2future-be-v2/**/*.{ts,tsx,js,json,md}\" \"*.{md,json,yml,yaml}\" \".github/**/*.{yml,yaml}\" \".vscode/*.json\"",
+    "format:check": "prettier --check \"yt2future-f2-v2/**/*.{ts,tsx,mjs,js,json,css,md}\" \"yt2future-be-v2/**/*.{ts,tsx,js,json,md}\"",
+    "ci": "npm run format:check && npm run lint --prefix yt2future-f2-v2 && npm run lint --prefix yt2future-be-v2 && npm run build --prefix yt2future-f2-v2 && npm run build --prefix yt2future-be-v2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.5.0"
+  }
+}

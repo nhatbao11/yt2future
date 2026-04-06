@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: yt2future-f2-v2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: yt2future-f2-v2/package-lock.json
+      - run: npm ci
+      - run: npx prettier --ignore-path ../.prettierignore --check "**/*.{ts,tsx,mjs,js,json,css,md}"
+      - run: npm run lint
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://example.com
+          NEXT_PUBLIC_BE_URL: http://localhost:5000
+
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: yt2future-be-v2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: yt2future-be-v2/package-lock.json
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npx prettier --ignore-path ../.prettierignore --check "src/**/*.{ts,tsx}"
+      - run: npm run lint
+      - run: npm run build

@@ -1,0 +1,28 @@
+# Root & OS
+.venv/
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Nested project build artifacts (monorepo)
+yt2future-f2-v2/node_modules/
+yt2future-f2-v2/.next/
+yt2future-f2-v2/out/
+
+yt2future-be-v2/node_modules/
+yt2future-be-v2/dist/
+
+# Python venv (BE sync script)
+yt2future-be-v2/.venv/
+
+# Không commit backup .git cũ sau khi gộp monorepo
+**/.git.backup/

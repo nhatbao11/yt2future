@@ -1,0 +1,161 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(uuid())
+  fullName    String
+  email       String    @unique
+  password    String?   // Sếp thêm dòng này vào, để dấu ? để hỗ trợ cả Google Login
+  avatarUrl   String?
+  role        Role      @default(USER) 
+  roleTitle   String?   // Ví dụ: "Founder", "Senior Analyst"
+  
+  // Các quan hệ
+  reports     Report[]
+  feedbacks   Feedback[]
+  viewLogs    ViewLog[]
+
+  // QUAN TRỌNG: Thêm thời gian tạo để Admin sắp xếp
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Category {
+  id      Int      @id @default(autoincrement())
+  name    String
+  slug    String   @unique
+  
+  // Quan hệ đối ứng
+  reports Report[]
+  books   Book[]
+}
+
+model Report {
+  id          String    @id @default(uuid())
+  title       String
+  slug        String    @unique
+  description String?
+  content     String?   @db.Text
+  thumbnail   String?
+  pdfUrl      String
+  status      String    @default("PENDING") // PENDING, APPROVED, REJECTED
+  categoryId  Int
+  userId      String    
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user        User      @relation(fields: [userId], references: [id])
+  category    Category  @relation(fields: [categoryId], references: [id])
+  
+  // Quan hệ đối ứng
+  viewLogs    ViewLog[]
+}
+
+model Book {
+  id          String    @id @default(uuid())
+  title       String
+  authorName  String
+  description String?
+  thumbnail   String?
+  pdfUrl      String
+  categoryId  Int
+  createdAt   DateTime  @default(now())
+
+  category    Category  @relation(fields: [categoryId], references: [id])
+}
+
+model ViewLog {
+  id           String   @id @default(uuid())
+  reportId     String
+  userId       String?
+  ipAddress    String
+  guestSession String?
+  createdAt    DateTime @default(now())
+
+  report       Report   @relation(fields: [reportId], references: [id])
+  user         User?    @relation(fields: [userId], references: [id])
+}
+
+
+model Feedback {
+  id        String   @id @default(uuid())
+  content   String
+  rating    Int      @default(5)
+  status    String   @default("PENDING")
+  userId    String?
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id])
+}
+
+// --- STOCK DATA MODELS ---
+model MarketIndexDaily {
+  id         Int      @id @default(autoincrement())
+  symbol     String   // VNINDEX, VN30, VN30F1M, HNX, etc
+  date       DateTime
+  open       Float?
+  high       Float?
+  low        Float?
+  close      Float?
+  volume     BigInt?
+  change     Float?   // Giá trị thay đổi so với hôm trước
+  changePct  Float?   // % thay đổi
+  ref        Float?   // Giá tham chiếu
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([symbol, date])
+}
+
+model TopStockDaily {
+  id         Int      @id @default(autoincrement())
+  date       DateTime
+  symbol     String
+  rank       Int      // top 1,2,3,4,5
+  category   String   // gainer, loser, foreignBuy, foreignSell
+  value      Float?   // giá trị mua/bán ròng, % tăng/giảm
+  volume     BigInt?
+  changePct  Float?
+  createdAt  DateTime @default(now())
+
+  @@unique([date, symbol, category])
+}
+
+model ForeignFlowDaily {
+  id         Int      @id @default(autoincrement())
+  date       DateTime
+  symbol     String?  // null = toàn thị trường, hoặc mã cụ thể
+  buyValue   BigInt?
+  sellValue  BigInt?
+  netValue   BigInt?  // mua-bán
+  buyVolume  BigInt?
+  sellVolume BigInt?
+  netVolume  BigInt?
+  rom        Float?   // room ngoại còn lại (%)
+  createdAt  DateTime @default(now())
+
+  @@unique([date, symbol])
+}
+
+model AuditLog {
+  id             String   @id @default(cuid())
+  adminId        String
+  adminName      String
+  adminAvatarUrl String?  
+  action         String
+  target         String
+  createdAt      DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  CTV
+  MEMBER
+  USER
+}
