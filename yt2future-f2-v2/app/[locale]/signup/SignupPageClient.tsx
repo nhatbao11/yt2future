@@ -8,6 +8,7 @@ import PasswordField from '@/components/partials/PasswordField';
 import { FileText, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'react-hot-toast';
+import InlinePdfViewer from '@/components/common/InlinePdfViewer';
 
 interface SignupPageClientProps {
   errorMessage?: string;
@@ -213,9 +214,9 @@ export default function SignupPageClient({ errorMessage, successMessage }: Signu
               </button>
             </div>
             <div className="bg-gray-100 h-[calc(100dvh-56px)] sm:h-[calc(94dvh-56px)] lg:h-auto lg:flex-1">
-              <iframe
+              <InlinePdfViewer
                 src={getPdfViewerSrc(activePdf.url)}
-                className="w-full h-full border-0"
+                className="w-full h-full"
                 title={tAuth('policyViewerTitle')}
               />
             </div>

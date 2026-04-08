@@ -6,6 +6,7 @@ import { reportService } from '@/features/reports/api/reportApi';
 import { categoryApi } from '@/features/categories/api/categoryApi';
 import { Search, PlusCircle, User, FileText, X, ChevronDown, Calendar } from 'lucide-react';
 import CreateReportPage from '@/components/common/CreateReportPage';
+import InlinePdfViewer from '@/components/common/InlinePdfViewer';
 import { useTranslations, useLocale } from 'next-intl';
 
 export default function SectorPage() {
@@ -267,9 +268,9 @@ export default function SectorPage() {
                 </div>
               </div>
 
-              <iframe
+              <InlinePdfViewer
                 src={getPdfViewerSrc(readingPdfUrl)}
-                className="w-full h-[calc(100dvh-56px)] sm:h-[calc(94dvh-56px)] lg:h-auto lg:flex-1 border-0 bg-slate-100"
+                className="w-full h-[calc(100dvh-56px)] sm:h-[calc(94dvh-56px)] lg:h-auto lg:flex-1"
                 title={t('viewer_title')}
               />
             </div>

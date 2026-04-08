@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import CreateReportPage from '@/components/common/CreateReportPage';
+import InlinePdfViewer from '@/components/common/InlinePdfViewer';
 import { AdminReportTableRow } from './AdminReportTableRow';
 import type { LucideIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -202,9 +203,9 @@ export default function AdminReportsPage() {
               {/* PDF VIEWER */}
               <div className="lg:col-span-8 xl:col-span-9 bg-gray-100 border border-gray-200 rounded-lg relative overflow-hidden min-h-[52dvh] sm:min-h-[56dvh] lg:min-h-0">
                 {/* intentionally no direct open/download action here */}
-                <iframe
+                <InlinePdfViewer
                   src={!previewData.pdfUrl ? '' : getPdfViewerSrc(previewData.pdfUrl)}
-                  className="w-full h-[52dvh] sm:h-[56dvh] lg:h-full border-0"
+                  className="w-full h-[52dvh] sm:h-[56dvh] lg:h-full"
                   title={t('pdfViewerTitle')}
                 />
                 {!previewData.pdfUrl && (

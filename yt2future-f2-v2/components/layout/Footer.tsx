@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from '@/components/common/Link';
+import InlinePdfViewer from '@/components/common/InlinePdfViewer';
 import { FaFacebookF, FaInstagram, FaTiktok } from 'react-icons/fa';
 import { X, FileText } from 'lucide-react';
 
@@ -172,9 +173,9 @@ export default function Footer() {
               </button>
             </div>
             <div className="bg-gray-100 h-[calc(100dvh-56px)] sm:h-[calc(94dvh-56px)] lg:h-auto lg:flex-1">
-              <iframe
+              <InlinePdfViewer
                 src={getPdfViewerSrc(activePdf.url)}
-                className="w-full h-full border-0"
+                className="w-full h-full"
                 title={t('footer.policyViewerTitle')}
               />
             </div>
