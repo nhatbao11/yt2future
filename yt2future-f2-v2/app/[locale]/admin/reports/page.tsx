@@ -194,11 +194,11 @@ export default function AdminReportsPage() {
 
       {/* PREVIEW MODAL */}
       {previewData && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 md:p-10 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white w-full max-w-7xl border border-gray-200 rounded-lg shadow-xl p-6 md:p-10 relative overflow-hidden">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-[75vh]">
+        <div className="fixed inset-0 z-[1000] bg-black/60 backdrop-blur-sm sm:flex sm:items-center sm:justify-center sm:p-3 lg:p-8">
+          <div className="bg-white w-full h-[100dvh] sm:h-[94dvh] sm:max-w-[98vw] xl:max-w-7xl border border-gray-200 sm:rounded-lg shadow-xl p-3 md:p-6 xl:p-8 relative overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 xl:gap-8 h-full">
               {/* PDF VIEWER */}
-              <div className="lg:col-span-9 bg-gray-100 border border-gray-200 rounded-lg relative overflow-hidden">
+              <div className="lg:col-span-8 xl:col-span-9 bg-gray-100 border border-gray-200 rounded-lg relative overflow-hidden min-h-[52dvh] sm:min-h-[56dvh] lg:min-h-0">
                 {/* intentionally no direct open/download action here */}
                 <iframe
                   src={
@@ -206,7 +206,7 @@ export default function AdminReportsPage() {
                       ? ''
                       : `/api/pdf-proxy?url=${encodeURIComponent(previewData.pdfUrl)}`
                   }
-                  className="w-full h-full border-0"
+                  className="w-full h-[52dvh] sm:h-[56dvh] lg:h-full border-0"
                   title={t('pdfViewerTitle')}
                 />
                 {!previewData.pdfUrl && (
@@ -217,8 +217,8 @@ export default function AdminReportsPage() {
               </div>
 
               {/* INFO */}
-              <div className="lg:col-span-3 flex flex-col justify-between">
-                <div className="space-y-6 overflow-y-auto max-h-[50vh] pr-2">
+              <div className="lg:col-span-4 xl:col-span-3 flex flex-col justify-between min-h-0">
+                <div className="space-y-4 md:space-y-5 xl:space-y-6 overflow-y-auto max-h-[28dvh] sm:max-h-[30dvh] lg:max-h-[calc(94dvh-220px)] xl:max-h-[50vh] pr-2">
                   <div className="space-y-2">
                     <label className="text-xs text-yellow-600 font-semibold uppercase tracking-wide">
                       {t('coverLabel')}
@@ -247,10 +247,10 @@ export default function AdminReportsPage() {
                 </div>
 
                 {/* CLOSE BUTTON */}
-                <div className="mt-8">
+                <div className="mt-4 md:mt-8">
                   <button
                     onClick={() => setPreviewData(null)}
-                    className="w-full py-4 bg-gray-900 text-white font-semibold text-sm uppercase tracking-wide hover:bg-gray-800 transition-all rounded-md"
+                    className="w-full py-3 md:py-4 bg-gray-900 text-white font-semibold text-sm uppercase tracking-wide hover:bg-gray-800 transition-all rounded-md"
                   >
                     {t('closePreview')}
                   </button>

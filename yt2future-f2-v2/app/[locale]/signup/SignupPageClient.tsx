@@ -194,23 +194,23 @@ export default function SignupPageClient({ errorMessage, successMessage }: Signu
 
       {/* MODAL XEM PDF */}
       {activePdf && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-5xl h-[90vh] flex flex-col shadow-2xl overflow-hidden border-2 border-yellow-500">
-            <div className="bg-[#001a41] p-4 flex justify-between items-center">
+        <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm animate-in fade-in duration-300 sm:flex sm:items-center sm:justify-center sm:p-3 lg:p-4">
+          <div className="bg-white w-full h-[100dvh] sm:h-[94dvh] sm:max-w-[96vw] lg:max-w-5xl lg:h-[90vh] flex flex-col shadow-2xl overflow-hidden border-2 border-yellow-500 sm:rounded-lg">
+            <div className="bg-[#001a41] px-3 py-2.5 md:p-4 flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <FileText className="text-yellow-500" size={20} />
-                <span className="text-white text-[10px] font-black uppercase tracking-widest">
+                <span className="text-white text-[10px] md:text-xs font-black uppercase tracking-widest truncate pr-2">
                   {activePdf.title}
                 </span>
               </div>
               <button
                 onClick={() => setActivePdf(null)}
-                className="bg-yellow-500 text-[#001a41] p-1 hover:rotate-90 transition-all cursor-pointer"
+                className="bg-yellow-500 text-[#001a41] p-1 hover:rotate-90 transition-all cursor-pointer shrink-0"
               >
                 <X size={24} />
               </button>
             </div>
-            <div className="flex-1 bg-gray-100">
+            <div className="bg-gray-100 h-[calc(100dvh-56px)] sm:h-[calc(94dvh-56px)] lg:h-auto lg:flex-1">
               <iframe
                 src={`/api/pdf-proxy?url=${encodeURIComponent(activePdf.url)}`}
                 className="w-full h-full border-0"

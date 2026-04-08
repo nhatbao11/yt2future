@@ -245,17 +245,17 @@ export default function SectorPage() {
 
         {/* MODAL XEM PDF CÓ NÚT TẢI XUỐNG */}
         {readingPdfUrl && (
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-0 md:p-10 animate-in fade-in duration-300">
-            <div className="bg-white w-full h-full md:max-w-7xl md:h-[90vh] flex flex-col relative shadow-2xl">
-              <div className="bg-[#001a41] p-4 flex justify-between items-center text-white border-b-2 border-slate-900 font-black">
-                <span className="text-[10px] tracking-widest flex items-center gap-3">
+          <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm animate-in fade-in duration-300 sm:flex sm:items-center sm:justify-center sm:p-3 lg:p-6">
+            <div className="bg-white w-full h-[100dvh] sm:h-[94dvh] sm:max-w-[96vw] lg:max-w-7xl lg:h-[90vh] flex flex-col relative shadow-2xl sm:rounded-lg overflow-hidden">
+              <div className="bg-[#001a41] px-3 py-2.5 md:p-4 flex justify-between items-center text-white border-b-2 border-slate-900 font-black">
+                <span className="text-[10px] md:text-xs tracking-widest flex items-center gap-2 md:gap-3 truncate pr-2">
                   <FileText size={18} className="text-yellow-500" /> {t('modal_title')}
                 </span>
 
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setReadingPdfUrl(null)}
-                    className="bg-rose-600 p-2 border-2 border-slate-900 hover:rotate-90 transition-all"
+                    className="bg-rose-600 p-2 border-2 border-slate-900 hover:rotate-90 transition-all shrink-0"
                   >
                     <X size={22} />
                   </button>
@@ -264,7 +264,7 @@ export default function SectorPage() {
 
               <iframe
                 src={`/api/pdf-proxy?url=${encodeURIComponent(readingPdfUrl)}`}
-                className="flex-1 w-full border-0 bg-slate-100"
+                className="w-full h-[calc(100dvh-56px)] sm:h-[calc(94dvh-56px)] lg:h-auto lg:flex-1 border-0 bg-slate-100"
                 title={t('viewer_title')}
               />
             </div>
