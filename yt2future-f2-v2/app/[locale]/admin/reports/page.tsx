@@ -92,25 +92,10 @@ export default function AdminReportsPage() {
   };
 
   const openPreview = (report: AdminReport) => {
-    if (!report.pdfUrl) {
-      setPreviewData(report);
-      return;
-    }
-    if (shouldOpenPdfExternally()) {
-      window.open(getPdfViewerSrc(report.pdfUrl), '_blank', 'noopener,noreferrer');
-      return;
-    }
     setPreviewData(report);
   };
   const getPdfViewerSrc = (pdfUrl: string) =>
     `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0`;
-  const shouldOpenPdfExternally = () => {
-    if (typeof navigator === 'undefined') return false;
-    const ua = navigator.userAgent;
-    const iOS = /iPad|iPhone|iPod/.test(ua);
-    const iPadOS = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
-    return iOS || iPadOS;
-  };
 
   return (
     <div className="space-y-6">

@@ -36,19 +36,7 @@ export default function SectorPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const getPdfViewerSrc = (pdfUrl: string) =>
     `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0`;
-  const shouldOpenPdfExternally = () => {
-    if (typeof navigator === 'undefined') return false;
-    const ua = navigator.userAgent;
-    const iOS = /iPad|iPhone|iPod/.test(ua);
-    const iPadOS = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
-    return iOS || iPadOS;
-  };
   const openPdf = (pdfUrl: string) => {
-    const src = getPdfViewerSrc(pdfUrl);
-    if (shouldOpenPdfExternally()) {
-      window.open(src, '_blank', 'noopener,noreferrer');
-      return;
-    }
     setReadingPdfUrl(pdfUrl);
   };
 

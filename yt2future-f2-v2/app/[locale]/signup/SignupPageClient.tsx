@@ -29,21 +29,10 @@ export default function SignupPageClient({ errorMessage, successMessage }: Signu
   };
 
   const openPdf = (url: string, title: string) => {
-    if (shouldOpenPdfExternally()) {
-      window.open(getPdfViewerSrc(url), '_blank', 'noopener,noreferrer');
-      return;
-    }
     setActivePdf({ url, title });
   };
   const getPdfViewerSrc = (pdfUrl: string) =>
     `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0`;
-  const shouldOpenPdfExternally = () => {
-    if (typeof navigator === 'undefined') return false;
-    const ua = navigator.userAgent;
-    const iOS = /iPad|iPhone|iPod/.test(ua);
-    const iPadOS = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
-    return iOS || iPadOS;
-  };
 
   return (
     <>
