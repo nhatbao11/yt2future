@@ -10,3 +10,4 @@ dist/
 # Never commit compiled artifacts inside src/ (TypeScript sources only)
 src/**/*.js
 src/**/*.d.ts
+!src/types/**/*.d.ts
