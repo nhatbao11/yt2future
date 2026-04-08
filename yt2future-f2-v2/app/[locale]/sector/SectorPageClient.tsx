@@ -36,6 +36,21 @@ export default function SectorPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const getPdfViewerSrc = (pdfUrl: string) =>
     `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0`;
+  const shouldOpenPdfExternally = () => {
+    if (typeof navigator === 'undefined') return false;
+    const ua = navigator.userAgent;
+    const iOS = /iPad|iPhone|iPod/.test(ua);
+    const iPadOS = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+    return iOS || iPadOS;
+  };
+  const openPdf = (pdfUrl: string) => {
+    const src = getPdfViewerSrc(pdfUrl);
+    if (shouldOpenPdfExternally()) {
+      window.open(src, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    setReadingPdfUrl(pdfUrl);
+  };
 
   // Khởi tạo dữ liệu
   useEffect(() => {
@@ -168,7 +183,7 @@ export default function SectorPage() {
             {reports.map((report) => (
               <div
                 key={report.id}
-                onClick={() => setReadingPdfUrl(report.pdfUrl)}
+                onClick={() => openPdf(report.pdfUrl)}
                 className="group bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col cursor-pointer hover:shadow-xl hover:border-[#001a41]/30 transition-all duration-300"
               >
                 <div className="aspect-video relative overflow-hidden bg-slate-100 border-b border-slate-100">
