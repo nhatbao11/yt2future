@@ -31,6 +31,8 @@ export default function SignupPageClient({ errorMessage, successMessage }: Signu
   const openPdf = (url: string, title: string) => {
     setActivePdf({ url, title });
   };
+  const getPdfViewerSrc = (pdfUrl: string) =>
+    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0`;
 
   return (
     <>
@@ -212,7 +214,7 @@ export default function SignupPageClient({ errorMessage, successMessage }: Signu
             </div>
             <div className="bg-gray-100 h-[calc(100dvh-56px)] sm:h-[calc(94dvh-56px)] lg:h-auto lg:flex-1">
               <iframe
-                src={`/api/pdf-proxy?url=${encodeURIComponent(activePdf.url)}`}
+                src={getPdfViewerSrc(activePdf.url)}
                 className="w-full h-full border-0"
                 title={tAuth('policyViewerTitle')}
               />

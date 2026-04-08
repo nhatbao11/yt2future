@@ -34,6 +34,8 @@ export default function SectorPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [readingPdfUrl, setReadingPdfUrl] = useState<string | null>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const getPdfViewerSrc = (pdfUrl: string) =>
+    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0`;
 
   // Khởi tạo dữ liệu
   useEffect(() => {
@@ -263,7 +265,7 @@ export default function SectorPage() {
               </div>
 
               <iframe
-                src={`/api/pdf-proxy?url=${encodeURIComponent(readingPdfUrl)}`}
+                src={getPdfViewerSrc(readingPdfUrl)}
                 className="w-full h-[calc(100dvh-56px)] sm:h-[calc(94dvh-56px)] lg:h-auto lg:flex-1 border-0 bg-slate-100"
                 title={t('viewer_title')}
               />

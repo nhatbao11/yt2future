@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import PageHeader from '@/components/layout/PageHeader';
 import {
@@ -180,6 +180,19 @@ export default function InvestmentSolutions() {
 
   const [activeId, setActiveId] = useState<string>(services[0]?.id ?? '');
   const active = services.find((s) => s.id === activeId) ?? services[0];
+  const mobileTabsRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = mobileTabsRef.current;
+    if (!container || typeof window === 'undefined' || window.innerWidth >= 1024) return;
+
+    const activeTab = container.querySelector<HTMLButtonElement>(
+      `button[data-tab-id="${activeId}"]`
+    );
+    if (!activeTab) return;
+
+    activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }, [activeId]);
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">
@@ -208,14 +221,19 @@ export default function InvestmentSolutions() {
         </section>
 
         <section className="lg:hidden">
-          <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory no-scrollbar">
+          <div
+            ref={mobileTabsRef}
+            className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory no-scrollbar"
+          >
             {services.map((item) => {
               const activeCard = item.id === active.id;
               return (
                 <button
                   key={item.id}
+                  data-tab-id={item.id}
                   type="button"
                   onClick={() => setActiveId(item.id)}
+                  aria-current={activeCard ? 'true' : undefined}
                   className={`snap-start min-w-[260px] rounded-xl border p-4 text-left transition-all ${
                     activeCard
                       ? 'bg-[#001a41] text-white border-[#001a41]'

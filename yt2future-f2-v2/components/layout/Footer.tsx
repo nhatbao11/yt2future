@@ -22,6 +22,8 @@ export default function Footer() {
   const openPdf = (url: string, title: string) => {
     setActivePdf({ url, title });
   };
+  const getPdfViewerSrc = (pdfUrl: string) =>
+    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0`;
 
   return (
     <footer className="bg-[#001a41] text-white pt-16 md:pt-20 pb-10 border-t border-white/5">
@@ -171,7 +173,7 @@ export default function Footer() {
             </div>
             <div className="bg-gray-100 h-[calc(100dvh-56px)] sm:h-[calc(94dvh-56px)] lg:h-auto lg:flex-1">
               <iframe
-                src={`/api/pdf-proxy?url=${encodeURIComponent(activePdf.url)}`}
+                src={getPdfViewerSrc(activePdf.url)}
                 className="w-full h-full border-0"
                 title={t('footer.policyViewerTitle')}
               />
