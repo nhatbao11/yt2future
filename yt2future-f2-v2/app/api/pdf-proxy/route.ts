@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
   const range = req.headers.get('range');
   const upstream = await fetch(target.toString(), {
     headers: range ? { Range: range } : undefined,
-    cache: 'force-cache',
+    cache: range ? 'no-store' : 'force-cache',
   });
 
   if (!upstream.ok && upstream.status !== 206) {
@@ -38,7 +38,11 @@ export async function GET(req: NextRequest) {
   headers.set('Content-Type', 'application/pdf');
   headers.set('Content-Disposition', 'inline; filename="report.pdf"');
   headers.set('Accept-Ranges', upstream.headers.get('accept-ranges') || 'bytes');
-  headers.set('Cache-Control', 'public, max-age=600, s-maxage=600');
+  headers.set('Vary', 'Range');
+  headers.set(
+    'Cache-Control',
+    range ? 'private, no-store, max-age=0' : 'public, max-age=600, s-maxage=600'
+  );
 
   const contentLength = upstream.headers.get('content-length');
   if (contentLength) headers.set('Content-Length', contentLength);
