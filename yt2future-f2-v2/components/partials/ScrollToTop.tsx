@@ -1,10 +1,12 @@
 'use client';
 
 import { ArrowUp } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function ScrollToTop() {
+  const t = useTranslations('common');
   const [isVisible, setIsVisible] = useState(false);
   const pathname = usePathname();
 
@@ -41,7 +43,7 @@ export default function ScrollToTop() {
       <button
         onClick={scrollToTop}
         className="bg-[#001a41] hover:bg-yellow-500 text-white p-3 rounded-full shadow-lg transition-all duration-300 group border-2 border-white/20"
-        aria-label="Scroll to top"
+        aria-label={t('scrollToTop')}
       >
         <ArrowUp
           size={24}

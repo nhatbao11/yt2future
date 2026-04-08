@@ -1,5 +1,12 @@
 import type { Request, Response } from 'express';
 import AuthService from '../services/authService.js';
+import { prisma } from '../lib/prisma.js';
+import { getErrorMessage } from '../utils/errors.js';
+
+function authErrorMessage(error: unknown, req: Request): string {
+  const message = getErrorMessage(error);
+  return message.startsWith('auth.') ? req.t(message) : message;
+}
 
 /**
  * 1. ĐĂNG KÝ
@@ -12,10 +19,8 @@ export const register = async (req: Request, res: Response) => {
       message: req.t('auth.registerSuccess'),
       userId: user.id,
     });
-  } catch (error: any) {
-    // Check if error message is a translation key
-    const message = error.message.startsWith('auth.') ? req.t(error.message) : error.message;
-    res.status(400).json({ success: false, message });
+  } catch (error: unknown) {
+    res.status(400).json({ success: false, message: authErrorMessage(error, req) });
   }
 };
 
@@ -41,9 +46,8 @@ export const login = async (req: Request, res: Response) => {
       user,
       token, // Trả về Token để FE (Server Action) có thể lấy và set Cookie
     });
-  } catch (error: any) {
-    const message = error.message.startsWith('auth.') ? req.t(error.message) : error.message;
-    res.status(400).json({ success: false, message });
+  } catch (error: unknown) {
+    res.status(400).json({ success: false, message: authErrorMessage(error, req) });
   }
 };
 
@@ -51,14 +55,12 @@ export const login = async (req: Request, res: Response) => {
  * 3. LẤY THÔNG TIN NGƯỜI DÙNG HIỆN TẠI (GET ME)
  * Sửa lại req.user.id cho khớp với Middleware
  */
-export const getMe = async (req: any, res: Response) => {
+export const getMe = async (req: Request, res: Response) => {
   try {
-    // Middleware đã gán id vào req.user
-    const user = await AuthService.getMe(req.user.id);
+    const user = await AuthService.getMe(req.user!.id);
     res.json({ success: true, user });
-  } catch (error: any) {
-    const message = error.message.startsWith('auth.') ? req.t(error.message) : error.message;
-    res.status(404).json({ success: false, message });
+  } catch (error: unknown) {
+    res.status(404).json({ success: false, message: authErrorMessage(error, req) });
   }
 };
 
@@ -90,11 +92,41 @@ export const grantGoogleRole = async (req: Request, res: Response) => {
     });
 
     return res.json({ success: true, user, token });
-  } catch (error: any) {
-    console.error('Google Auth Backend Error:', error); // Log lỗi thật ra console
-    const message = error.message.startsWith('auth.')
-      ? req.t(error.message)
+  } catch (error: unknown) {
+    console.error('Google Auth Backend Error:', getErrorMessage(error));
+    const message = getErrorMessage(error);
+    const finalMessage = message.startsWith('auth.')
+      ? req.t(message)
       : req.t('auth.googleAuthError');
-    res.status(400).json({ success: false, message });
+    res.status(400).json({ success: false, message: finalMessage });
+  }
+};
+
+export const updateUserProfile = async (req: Request, res: Response) => {
+  try {
+    const { fullName, avatarUrl } = req.body;
+    const updatedUser = await prisma.user.update({
+      where: { id: req.user!.id },
+      data: {
+        fullName: fullName || undefined,
+        avatarUrl: avatarUrl || undefined,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: 'Đã cập nhật hồ sơ thành công sếp ơi!',
+      user: {
+        id: updatedUser.id,
+        fullName: updatedUser.fullName,
+        avatarUrl: updatedUser.avatarUrl,
+      },
+    });
+  } catch (error: unknown) {
+    res.status(500).json({
+      success: false,
+      message: 'Lỗi cập nhật DB!',
+      error: getErrorMessage(error),
+    });
   }
 };

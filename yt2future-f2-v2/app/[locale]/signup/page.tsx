@@ -16,7 +16,14 @@ export default async function SignupPage({
 
       {/* BACKGROUND LAYER */}
       <div className="absolute inset-0 z-0">
-        <Image src="/bgSign.jpg" alt="Signup background" fill className="object-cover" priority />
+        <Image
+          src="/bgSign.jpg"
+          alt="Signup background"
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority
+        />
         <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-[2px]" />
       </div>
 

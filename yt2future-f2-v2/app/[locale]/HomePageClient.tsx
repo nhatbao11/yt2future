@@ -1,8 +1,8 @@
 'use client';
+import { useEffect, useState } from 'react';
 import PrimaryButton from '@/components/common/PrimaryButton';
 import SectorGrid from '@/components/partials/SectorGrid';
 import ProcessSection from '@/components/partials/ProcessSection';
-import FeedbackSection from '@/components/partials/FeedbackHome';
 import { ArrowRight } from 'lucide-react';
 import Link from '@/components/common/Link';
 import FeedbackHome from '@/components/partials/FeedbackHome';
@@ -10,8 +10,42 @@ import ScrollReveal from '@/components/common/ScrollReveal';
 
 import { useTranslations } from 'next-intl';
 
+/** Hoãn tải file video (WebM ~6.5MB, MP4 ~24MB) để không tranh băng thông với font/CSS/LCP. */
+function useHeroVideoSources() {
+  const [loadSources, setLoadSources] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setReducedMotion(mq.matches);
+    const onChange = () => setReducedMotion(mq.matches);
+    mq.addEventListener('change', onChange);
+    if (mq.matches) {
+      return () => mq.removeEventListener('change', onChange);
+    }
+
+    const run = () => setLoadSources(true);
+    let cancelScheduled: () => void;
+    if (typeof requestIdleCallback !== 'undefined') {
+      const id = requestIdleCallback(run, { timeout: 2200 });
+      cancelScheduled = () => cancelIdleCallback(id);
+    } else {
+      const id = setTimeout(run, 450);
+      cancelScheduled = () => clearTimeout(id);
+    }
+
+    return () => {
+      mq.removeEventListener('change', onChange);
+      cancelScheduled();
+    };
+  }, []);
+
+  return { loadSources: loadSources && !reducedMotion, reducedMotion };
+}
+
 export default function HomePage() {
   const t = useTranslations('home');
+  const { loadSources } = useHeroVideoSources();
 
   return (
     <div className="min-h-screen flex flex-col font-sans bg-white">
@@ -20,14 +54,20 @@ export default function HomePage() {
         <section className="relative h-[calc(100vh-72px)] md:h-[calc(100vh-75px)] min-h-125 w-full flex items-center overflow-hidden bg-slate-900">
           <div className="absolute inset-0 z-0">
             <video
-              autoPlay
+              autoPlay={loadSources}
               muted
               loop
               playsInline
+              preload={loadSources ? 'metadata' : 'none'}
+              aria-hidden
               className="w-full h-full object-cover opacity-80"
             >
-              <source src="/Videohome.webm" type="video/webm" />
-              <source src="/Videohome.mp4" type="video/mp4" />
+              {loadSources ? (
+                <>
+                  <source src="/Videohome.webm" type="video/webm" />
+                  <source src="/Videohome.mp4" type="video/mp4" />
+                </>
+              ) : null}
             </video>
             <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent z-10" />
           </div>

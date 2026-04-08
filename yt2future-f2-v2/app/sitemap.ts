@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
 import { locales } from '@/i18n/request';
+import { getCanonicalBaseUrl } from '@/lib/seo';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yt2future.com';
+const baseUrl = getCanonicalBaseUrl();
 
 function seoNoindexEn(): boolean {
   return process.env.SEO_NOINDEX_EN === 'true' || process.env.NEXT_PUBLIC_SEO_NOINDEX_EN === 'true';
@@ -11,16 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const indexLocales = seoNoindexEn() ? (['vi'] as const) : locales;
 
   // Common routes in the application
-  const routes = [
-    '',
-    '/about',
-    '/investment',
-    '/contact',
-    '/business',
-    '/sector',
-    '/signin',
-    '/signup',
-  ];
+  const routes = ['', '/about', '/investment', '/contact', '/sector', '/signin', '/signup'];
 
   const sitemapEntries: MetadataRoute.Sitemap = [];
 

@@ -14,13 +14,14 @@
     "delete": "Xóa",
     "edit": "Sửa",
     "close": "Đóng",
-    "search": "Tìm kiếm"
+    "search": "Tìm kiếm",
+    "switchLanguage": "Chuyển ngôn ngữ",
+    "scrollToTop": "Cuộn lên đầu trang"
   },
   "nav": {
     "home": "Trang chủ",
     "about": "Về chúng tôi",
-    "business": "Kinh doanh",
-    "investment": "Giải pháp đầu tư",
+    "investment": "Sản phẩm dịch vụ",
     "sector": "Phân tích ngành",
     "contact": "Liên hệ",
     "dashboard": "Bảng điều khiển",
@@ -43,7 +44,8 @@
     "tagline": "Tương lai bền vững",
     "description": "Kiến tạo tương lai bằng tư duy linh hoạt và đổi mới không ngừng.",
     "quickLinks": "Liên kết nhanh",
-    "followUs": "Theo dõi chúng tôi"
+    "followUs": "Theo dõi chúng tôi",
+    "policyViewerTitle": "Trình xem chính sách"
   },
   "sectors": {
     "stock": {
@@ -76,7 +78,13 @@
     "loginRequired": "Vui lòng đăng nhập để gửi phản hồi!",
     "success": "Gửi phản hồi thành công!",
     "error": "Lỗi kết nối server!",
-    "failure": "Gửi thất bại!"
+    "failure": "Gửi thất bại!",
+    "readMore": "Xem thêm",
+    "showLess": "Thu gọn",
+    "userFallback": "Người dùng",
+    "anonymous": "Ẩn danh",
+    "ratingLabel": "Đánh giá",
+    "feedbackLabel": "Nội dung phản hồi"
   },
   "home": {
     "hero": {
@@ -158,6 +166,13 @@
     "subject": "Chủ đề",
     "message": "Tin nhắn",
     "submit": "Gửi yêu cầu",
+    "placeholders": {
+      "name": "Họ và tên của bạn",
+      "email": "Email của bạn",
+      "subject": "Chủ đề",
+      "message": "Nội dung tin nhắn"
+    },
+    "mapTitle": "Vị trí YT2Future",
     "info": {
       "address": "Địa chỉ",
       "email": "Email",
@@ -181,7 +196,37 @@
     "market_report_subtitle": "THỊ TRƯỜNG",
     "market_data": "Dữ liệu thị trường",
     "coming_soon": "Sớm ra mắt...",
-    "back_home": "Quay lại trang chủ"
+    "back_home": "Quay lại trang chủ",
+    "marketIndex": {
+      "errors": {
+        "api": "Lỗi API",
+        "invalidFormat": "Định dạng dữ liệu không hợp lệ",
+        "loadFailed": "Lỗi tải dữ liệu"
+      },
+      "legend": {
+        "liquidity": "Thanh khoản",
+        "high": "Mức cao",
+        "low": "Mức thấp"
+      },
+      "chartTitle": "Biểu đồ {symbol}",
+      "chartLabel": "Biểu đồ {symbol}",
+      "axis": {
+        "date": "Ngày"
+      },
+      "loading": "Đang tải dữ liệu",
+      "cards": {
+        "currentPrice": "Giá hiện tại",
+        "change": "Tăng/Giảm",
+        "open": "Giá mở",
+        "close": "Giá đóng",
+        "highest": "Giá cao nhất",
+        "lowest": "Giá thấp nhất"
+      },
+      "actions": {
+        "shrinkChart": "Thu nhỏ biểu đồ",
+        "expandChart": "Phóng to biểu đồ"
+      }
+    }
   },
   "auth": {
     "socialLogin": "Đăng nhập mạng xã hội",
@@ -191,6 +236,15 @@
     "privacy": "Chính sách bảo mật",
     "and": "và",
     "createAccount": "Tạo tài khoản",
+    "creating": "Đang tạo...",
+    "checking": "Đang kiểm tra...",
+    "serverError": "Lỗi kết nối server!",
+    "signInFailed": "Đăng nhập thất bại!",
+    "signInSuccess": "Đăng nhập thành công!",
+    "signUpFailed": "Đăng ký thất bại!",
+    "signUpSuccess": "Đăng ký thành công!",
+    "signUpSuccessRedirect": "Đăng ký thành công! Sếp đăng nhập ngay đi.",
+    "policyViewerTitle": "Trình xem chính sách",
     "loginNow": "Đăng nhập ngay",
     "signIn": {
       "title": "Đăng nhập",
@@ -216,16 +270,169 @@
     "categories": "Danh mục",
     "users": "Người dùng",
     "reports": "Báo cáo",
-    "settings": "Cài đặt"
+    "settings": "Cài đặt",
+    "layout": {
+      "pageTitle": "Bảng quản trị",
+      "menu": {
+        "overview": "Tổng quan",
+        "users": "Người dùng",
+        "reports": "Báo cáo",
+        "categories": "Danh mục",
+        "feedbacks": "Phản hồi"
+      },
+      "signOut": "Thoát hệ thống"
+    },
+    "dashboard": {
+      "loading": "Đang tải dữ liệu...",
+      "stats": {
+        "people": "Nhân sự",
+        "pendingReports": "Chờ duyệt bài",
+        "publishedReports": "Báo cáo đã đăng",
+        "categories": "Danh mục ngành"
+      },
+      "auditLogTitle": "Nhật ký thao tác hệ thống",
+      "emptyLogs": "Hệ thống chưa ghi nhận thao tác",
+      "pagination": "Trang {page} / {totalPages}",
+      "toast": {
+        "statsError": "Không tải được thống kê",
+        "logsError": "Không tải được nhật ký hệ thống"
+      }
+    },
+    "usersPage": {
+      "title": "Quản trị nhân sự",
+      "subtitle": "{count} người dùng | Trang {page}",
+      "loading": "Đang tải danh sách...",
+      "table": {
+        "memberTitle": "Thành viên & Chức danh",
+        "contact": "Liên hệ (Email)",
+        "role": "Phân quyền (Role)",
+        "actions": "Kiểm soát"
+      },
+      "pagination": "Trang {page} / {totalPages}",
+      "confirmDelete": "Bạn chắc chắn muốn xóa user \"{userName}\"?",
+      "roleTitle": {
+        "ADMIN": "Quản trị viên",
+        "CTV": "Cộng tác viên",
+        "MEMBER": "Hội viên chính thức",
+        "USER": "Thành viên mới"
+      },
+      "toast": {
+        "serverBusy": "Máy chủ đang bận, vui lòng đợi!",
+        "roleUpdated": "Đã cập nhật quyền thành công!",
+        "roleUpdateError": "Lỗi cập nhật quyền hạn!",
+        "deleted": "Đã xóa {userName} khỏi hệ thống!",
+        "deleteError": "Không thể xóa Admin khác!"
+      }
+    },
+    "categoriesPage": {
+      "title": "Quản lý danh mục ngành",
+      "form": {
+        "title": "Thêm ngành mới",
+        "name": "Tên danh mục",
+        "namePlaceholder": "Ví dụ: Ngân Hàng",
+        "slugPlaceholder": "vi-du: ngan-hang",
+        "submit": "Xác nhận thêm"
+      },
+      "table": {
+        "category": "Tên ngành",
+        "actions": "Thao tác"
+      },
+      "confirmDelete": "Bạn chắc chắn muốn xóa danh mục \"{catName}\"?",
+      "toast": {
+        "loadError": "Lỗi tải danh mục!",
+        "createSuccess": "Đã thêm danh mục mới!",
+        "createError": "Lỗi tạo danh mục!",
+        "deleteSuccess": "Đã xóa xong!",
+        "deleteError": "Không thể xóa danh mục đang có bài viết!"
+      }
+    },
+    "feedbacks": {
+      "console": "Admin Console",
+      "consoleLoadError": "Lỗi rồi sếp:",
+      "title": "Quản lý đánh giá",
+      "tabs": {
+        "pending": "Chờ duyệt",
+        "all": "Tất cả"
+      },
+      "loading": "Đang tải dữ liệu...",
+      "status": {
+        "approved": "Đã duyệt",
+        "rejected": "Đã loại"
+      },
+      "actions": {
+        "approve": "Duyệt",
+        "reject": "Từ chối",
+        "deleteFeedback": "Xóa phản hồi"
+      },
+      "empty": "Không có dữ liệu đánh giá",
+      "confirm": {
+        "title": "Xác nhận xóa",
+        "body": "Bạn có chắc chắn muốn xóa phản hồi này? Hành động này không thể hoàn tác.",
+        "cancel": "Hủy",
+        "deleteNow": "Xóa ngay"
+      },
+      "toast": {
+        "approved": "Đã duyệt phản hồi!",
+        "rejected": "Đã từ chối phản hồi!",
+        "actionError": "Lỗi thao tác!",
+        "deleteSuccess": "Đã xóa phản hồi!",
+        "deleteError": "Lỗi xóa phản hồi!"
+      }
+    },
+    "reportsPage": {
+      "title": "Trung tâm điều hành",
+      "subtitle": "{count} báo cáo (Trang {page})",
+      "create": "Phát hành mới",
+      "loading": "Đang tải...",
+      "table": {
+        "document": "Thông tin tài liệu",
+        "category": "Ngành hàng",
+        "status": "Trạng thái",
+        "actions": "Thao tác"
+      },
+      "pagination": "Trang {page} / {totalPages}",
+      "confirmDelete": "Bạn chắc chắn muốn xóa báo cáo này?",
+      "pdfViewerTitle": "PDF Viewer",
+      "pdfMissing": "Lỗi: Link PDF không tồn tại",
+      "coverLabel": "Ảnh bìa",
+      "detailsLabel": "Chi tiết",
+      "noDescription": "Hệ thống chưa ghi nhận mô tả.",
+      "closePreview": "Đóng bản xem trước",
+      "row": {
+        "status": {
+          "approved": "Đã duyệt",
+          "pending": "Chờ duyệt",
+          "rejected": "Từ chối"
+        }
+      },
+      "toast": {
+        "connectionError": "Không thể kết nối kho dữ liệu!",
+        "approved": "Đã duyệt thành công!",
+        "rejected": "Đã từ chối!",
+        "actionError": "Thao tác thất bại!",
+        "deleted": "Đã xóa!",
+        "deleteError": "Lỗi khi xóa bài!"
+      }
+    }
   },
   "investment_page": {
-    "title": "Giải pháp đầu tư",
-    "subtitle": "Giải pháp đầu tư",
-    "main_title": "Giải pháp đầu tư",
-    "main_title_sub": "Sắp ra mắt",
-    "academic_db": "Cơ sở dữ liệu học thuật",
-    "coming_soon": "Sắp ra mắt",
-    "back_home": "Quay lại trang chủ"
+    "title": "Sản phẩm dịch vụ",
+    "layoutTag": "Bố cục sản phẩm dịch vụ",
+    "layoutTitle": "Khung giao diện tối ưu cho desktop, tablet và mobile.",
+    "layoutDescription": "Nội dung hiện tại là placeholder. Trọng tâm là cấu trúc hiển thị: danh mục dịch vụ, vùng chi tiết, quy trình và điểm nhấn UX để sau này thay text/ảnh mà không phải sửa layout.",
+    "metrics": {
+      "catalog": "Catalog",
+      "details": "Chi tiết",
+      "flow": "Quy trình"
+    },
+    "blocks": {
+      "bestFor": "Phù hợp với",
+      "expectedOutcomes": "Kết quả kỳ vọng",
+      "deliveryFlow": "Quy trình triển khai"
+    },
+    "flowStep": "Bước {index}",
+    "scaffoldDescription": "Đây là khung UI/UX hoàn chỉnh cho sản phẩm dịch vụ. Sau này chỉ cần thay dữ liệu thật (text/ảnh) mà không phải sửa kiến trúc giao diện.",
+    "scalable": "Sẵn sàng mở rộng"
   },
   "sector_page": {
     "title": "Phân tích ngành",
@@ -240,29 +447,61 @@
     "prev": "Trước",
     "next": "Sau",
     "page": "Trang",
-    "modal_title": "Xem báo cáo"
-  },
-  "business_page": {
-    "title": "Giải pháp doanh nghiệp",
-    "subtitle": "Dành cho doanh nghiệp",
-    "description": "Các giải pháp tài chính và đầu tư chuyên nghiệp cho doanh nghiệp.",
-    "filters": {
-      "all": "Tất cả",
-      "banking": "Ngân hàng",
-      "real_estate": "Bất động sản",
-      "agriculture": "Nông nghiệp",
-      "tech": "Công nghệ"
-    },
-    "by": "Bởi",
-    "analyst": "Chuyên gia phân tích",
-    "view_pdf": "Xem PDF"
+    "modal_title": "Xem báo cáo",
+    "viewer_title": "Trình xem báo cáo"
   },
   "profile": {
     "title": "Hồ sơ cá nhân",
     "fullName": "Họ và tên",
     "fullNamePlaceholder": "Nhập họ và tên...",
+    "avatarCurrent": "Avatar hiện tại",
+    "avatarUrl": "Link ảnh đại diện",
+    "avatarUrlPlaceholder": "https://example.com/image.jpg",
     "email": "Email",
     "submit": "Lưu thay đổi",
-    "uploadHint": "Bấm cam để chọn ảnh (Chế độ Signed)"
+    "uploadHint": "Bấm cam để chọn ảnh (Chế độ Signed)",
+    "saving": "Đang lưu...",
+    "updateFailed": "Cập nhật thất bại!",
+    "updateSuccess": "Đã lưu vào DB thành công!",
+    "serverError": "Lỗi kết nối server!",
+    "avatarTooLarge": "Ảnh quá lớn! Vui lòng chọn ảnh < 1MB."
+  },
+  "createReport": {
+    "back": "Quay lại danh sách",
+    "titleCreate": "Thiết lập báo cáo chiến lược",
+    "titleEdit": "Cập nhật báo cáo",
+    "subtitle": "Intelligence Configuration",
+    "fields": {
+      "title": "Tiêu đề báo cáo",
+      "category": "Danh mục đầu tư",
+      "summary": "Tóm tắt nội dung",
+      "pdf": "File báo cáo (PDF)",
+      "thumbnail": "Ảnh bìa (Thumbnail)"
+    },
+    "placeholders": {
+      "title": "Nhập tiêu đề...",
+      "selectCategory": "-- Chọn danh mục --",
+      "summary": "Mô tả súc tích báo cáo (Tối đa 2 hàng)..."
+    },
+    "optionalChangeHint": "(Chỉ chọn nếu muốn thay đổi)",
+    "currentImage": "ẢNH HIỆN TẠI",
+    "fileLabels": {
+      "uploadPdf": "TẢI LÊN FILE PDF CHIẾN LƯỢC",
+      "uploadNewPdf": "BẤM ĐỂ TẢI FILE MỚI (NẾU CẦN)",
+      "uploadImage": "CHỌN ẢNH ĐẠI DIỆN BÁO CÁO",
+      "uploadNewImage": "BẤM ĐỂ TẢI ẢNH MỚI (NẾU CẦN)"
+    },
+    "processing": "ĐANG XỬ LÝ...",
+    "saveChanges": "Lưu thay đổi",
+    "publish": "Phát hành báo cáo",
+    "toast": {
+      "selectCategory": "Vui lòng chọn ngành nghề!",
+      "selectPdf": "Vui lòng chọn file PDF!",
+      "updated": "Đã cập nhật báo cáo!",
+      "created": "Đã phát hành báo cáo!",
+      "systemError": "Lỗi hệ thống, vui lòng thử lại!",
+      "pdfTooLarge": "File quá 10MB!",
+      "imageTooLarge": "Ảnh quá 2MB!"
+    }
   }
 }

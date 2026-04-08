@@ -1,83 +1,61 @@
-import type { Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { createLog } from '../services/logService.js';
-import { prisma } from '../lib/prisma.js';
+import { AppError } from '../utils/AppError.js';
+import { getErrorMessage } from '../utils/errors.js';
+import * as feedbackService from '../modules/feedback/feedbackService.js';
 
-// 1. Gửi feedback
-export const sendFeedback = async (req: any, res: Response) => {
+export const sendFeedback = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { content, rating } = req.body;
-    const userId = req.user.id;
+    const userId = req.user!.id;
 
-    await prisma.feedback.create({
-      data: {
-        content,
-        userId,
-        rating: Number(rating) || 5,
-        status: 'PENDING',
-      },
+    await feedbackService.sendFeedback({
+      userId,
+      content,
+      rating: Number(rating) || 5,
     });
     res.json({ success: true, message: req.t('feedback.sendSuccess') });
-  } catch (error) {
-    res.status(500).json({ message: req.t('feedback.sendError') });
+  } catch (error: unknown) {
+    console.error('[FeedbackController] sendFeedback failed:', getErrorMessage(error));
+    next(new AppError(req.t('feedback.sendError'), 500, 'FEEDBACK_SEND_FAILED'));
   }
 };
 
-// 2. Lấy feedback cho Slide Home (Status APPROVED)
-export const getHomeFeedbacks = async (req: Request, res: Response) => {
+export const getHomeFeedbacks = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const feedbacksRaw = await prisma.feedback.findMany({
-      where: { status: 'APPROVED' },
-      include: { user: { select: { fullName: true, avatarUrl: true } } },
-      take: 10,
-      orderBy: { createdAt: 'desc' },
-    });
-
-    // Lọc bỏ các feedback mà user đã bị xóa (user = null)
-    const feedbacks = feedbacksRaw.filter((f) => f.user);
-
+    const feedbacks = await feedbackService.getHomeFeedbacks();
     res.json({ success: true, feedbacks });
-  } catch (error) {
-    res.status(500).json({ message: req.t('feedback.fetchHomeError') });
+  } catch (error: unknown) {
+    console.error('[FeedbackController] getHomeFeedbacks failed:', getErrorMessage(error));
+    next(new AppError(req.t('feedback.fetchHomeError'), 500, 'FEEDBACK_HOME_FETCH_FAILED'));
   }
 };
 
-// 3. Lấy feedback chờ duyệt cho Admin
-export const getPendingFeedbacks = async (req: Request, res: Response) => {
+export const getPendingFeedbacks = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const feedbacks = await prisma.feedback.findMany({
-      where: { status: 'PENDING' },
-      include: { user: { select: { fullName: true, avatarUrl: true } } },
-      orderBy: { createdAt: 'desc' },
-    });
+    const feedbacks = await feedbackService.getPendingFeedbacks();
     res.json({ success: true, feedbacks });
-  } catch (error) {
-    res.status(500).json({ message: req.t('feedback.fetchPendingError') });
+  } catch (error: unknown) {
+    console.error('[FeedbackController] getPendingFeedbacks failed:', getErrorMessage(error));
+    next(new AppError(req.t('feedback.fetchPendingError'), 500, 'FEEDBACK_PENDING_FETCH_FAILED'));
   }
 };
 
-// 4. Lấy tất cả feedback (Tổng hợp)
-export const getAllFeedbacks = async (req: Request, res: Response) => {
+export const getAllFeedbacks = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const feedbacks = await prisma.feedback.findMany({
-      include: { user: { select: { fullName: true, avatarUrl: true } } },
-      orderBy: { createdAt: 'desc' },
-    });
+    const feedbacks = await feedbackService.getAllFeedbacks();
     res.json({ success: true, feedbacks });
-  } catch (error) {
-    res.status(500).json({ message: req.t('feedback.fetchAllError') });
+  } catch (error: unknown) {
+    console.error('[FeedbackController] getAllFeedbacks failed:', getErrorMessage(error));
+    next(new AppError(req.t('feedback.fetchAllError'), 500, 'FEEDBACK_ALL_FETCH_FAILED'));
   }
 };
 
-// 5. Duyệt hoặc Từ chối feedback
-export const reviewFeedback = async (req: any, res: Response) => {
-  const { id, status } = req.body;
-  const admin = req.user;
+export const reviewFeedback = async (req: Request, res: Response, next: NextFunction) => {
+  const { id, status } = req.body as { id: string; status: 'APPROVED' | 'REJECTED' };
+  const admin = req.user!;
   try {
-    const feedback = await prisma.feedback.update({
-      where: { id },
-      data: { status },
-      include: { user: { select: { fullName: true } } },
-    });
+    const feedback = await feedbackService.reviewFeedback(id, status);
 
     const actionLabel = status === 'APPROVED' ? 'DUYỆT PHẢN HỒI' : 'TỪ CHỐI PHẢN HỒI';
     const actionText = status === 'APPROVED' ? req.t('admin.approved') : req.t('admin.rejected');
@@ -89,34 +67,30 @@ export const reviewFeedback = async (req: any, res: Response) => {
     await createLog(admin, actionLabel, detail);
 
     res.json({ success: true, message: req.t('feedback.reviewSuccess', { status }) });
-  } catch (error) {
-    res.status(400).json({ message: req.t('feedback.reviewError') });
+  } catch (error: unknown) {
+    console.error('[FeedbackController] reviewFeedback failed:', getErrorMessage(error));
+    next(new AppError(req.t('feedback.reviewError'), 400, 'FEEDBACK_REVIEW_FAILED'));
   }
 };
 
-// 6. Xóa feedback
-export const deleteFeedback = async (req: any, res: Response) => {
+export const deleteFeedback = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
-  const admin = req.user;
+  const admin = req.user!;
   try {
-    const feedback = await prisma.feedback.findUnique({
-      where: { id },
-      include: { user: { select: { fullName: true } } },
-    });
+    const feedback = await feedbackService.findFeedbackForDelete(id!);
 
     if (!feedback) {
-      return res.status(404).json({ message: req.t('feedback.notFound') });
+      return next(new AppError(req.t('feedback.notFound'), 404, 'FEEDBACK_NOT_FOUND'));
     }
 
-    await prisma.feedback.delete({
-      where: { id },
-    });
+    await feedbackService.deleteFeedbackById(id!);
 
     const detail = req.t('admin.feedbackDeleted', { user: feedback.user?.fullName });
     await createLog(admin, 'XÓA PHẢN HỒI', detail);
 
     res.json({ success: true, message: req.t('feedback.deleteSuccess') });
-  } catch (error) {
-    res.status(400).json({ message: req.t('feedback.deleteError') });
+  } catch (error: unknown) {
+    console.error('[FeedbackController] deleteFeedback failed:', getErrorMessage(error));
+    next(new AppError(req.t('feedback.deleteError'), 400, 'FEEDBACK_DELETE_FAILED'));
   }
 };

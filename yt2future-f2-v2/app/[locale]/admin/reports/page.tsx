@@ -1,81 +1,98 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { reportService } from '@/services/reportService';
+import React, { useCallback, useEffect, useState } from 'react';
+import FallbackImage from '@/components/common/FallbackImage';
+import { reportService } from '@/features/reports/api/reportApi';
 import {
-  Trash2,
-  Check,
   X,
-  FileText,
   Plus,
   RefreshCcw,
-  Eye,
   FileSearch,
   AlertCircle,
-  Pencil,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import CreateReportPage from '@/components/common/CreateReportPage';
+import { AdminReportTableRow } from './AdminReportTableRow';
+import type { LucideIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+
+type AdminReport = {
+  id: string;
+  title: string;
+  description?: string;
+  thumbnail?: string;
+  pdfUrl?: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  category?: { name?: string };
+};
 
 export default function AdminReportsPage() {
-  const [reports, setReports] = useState<any[]>([]);
+  const t = useTranslations('admin.reportsPage');
+  const [reports, setReports] = useState<AdminReport[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [previewData, setPreviewData] = useState<any | null>(null);
-  const [editingReport, setEditingReport] = useState<any | null>(null);
+  const [previewData, setPreviewData] = useState<AdminReport | null>(null);
+  const [editingReport, setEditingReport] = useState<AdminReport | null>(null);
 
   // Pagination
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const loadReports = async (pageNo: number = 1) => {
-    setLoading(true);
-    try {
-      const res = await reportService.getAllReportsAdmin(pageNo);
-      if (res.success) {
-        setReports(res.reports);
-        setTotalPages(res.totalPages);
-        setPage(pageNo);
+  const loadReports = useCallback(
+    async (pageNo: number = 1) => {
+      setLoading(true);
+      try {
+        const res = await reportService.getAllReportsAdmin(pageNo);
+        if (res.success) {
+          setReports(res.reports);
+          setTotalPages(res.totalPages);
+          setPage(pageNo);
+        }
+      } catch {
+        toast.error(t('toast.connectionError'));
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      toast.error('Không thể kết nối kho dữ liệu!');
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [t]
+  );
 
   useEffect(() => {
     loadReports(1);
-  }, []);
+  }, [loadReports]);
 
   const handleReview = async (id: string, status: 'APPROVED' | 'REJECTED') => {
     try {
       const res = await reportService.reviewReport(id, status);
       if (res.success) {
-        toast.success(status === 'APPROVED' ? 'Đã duyệt thành công!' : 'Đã từ chối!');
+        toast.success(status === 'APPROVED' ? t('toast.approved') : t('toast.rejected'));
         loadReports(page);
       }
-    } catch (err) {
-      toast.error('Thao tác thất bại!');
+    } catch {
+      toast.error(t('toast.actionError'));
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Bạn chắc chắn muốn xóa báo cáo này?')) {
+    if (window.confirm(t('confirmDelete'))) {
       try {
         await reportService.deleteReport(id);
-        toast.success('Đã xóa!');
+        toast.success(t('toast.deleted'));
         loadReports(page);
-      } catch (err) {
-        toast.error('Lỗi khi xóa bài!');
+      } catch {
+        toast.error(t('toast.deleteError'));
       }
     }
   };
 
-  const handleEdit = (report: any) => {
+  const handleEdit = (report: AdminReport) => {
     setEditingReport(report);
     setIsModalOpen(true);
+  };
+
+  const openPreview = (report: AdminReport) => {
+    setPreviewData(report);
   };
 
   return (
@@ -84,10 +101,10 @@ export default function AdminReportsPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center pb-4 border-b border-gray-200 gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-            <FileSearch size={28} className="text-gray-600" /> Trung tâm điều hành
+            <FileSearch size={28} className="text-gray-600" /> {t('title')}
           </h2>
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mt-1">
-            {reports.length} báo cáo (Trang {page})
+            {t('subtitle', { count: reports.length, page })}
           </p>
         </div>
         <div className="flex gap-3 w-full md:w-auto">
@@ -98,7 +115,7 @@ export default function AdminReportsPage() {
             }}
             className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-yellow-500 text-white px-6 py-3 text-xs font-semibold uppercase tracking-wide hover:bg-yellow-600 transition-all rounded-md"
           >
-            <Plus size={16} /> Phát hành mới
+            <Plus size={16} /> {t('create')}
           </button>
           <button
             onClick={() => loadReports(page)}
@@ -112,95 +129,40 @@ export default function AdminReportsPage() {
       {/* TABLE */}
       <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
         {loading ? (
-          <div className="py-32 text-center text-sm text-gray-500">Đang tải...</div>
+          <div className="py-32 text-center text-sm text-gray-500">{t('loading')}</div>
         ) : (
           <>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse min-w-[1000px]">
                 <thead className="bg-gray-50 border-b border-gray-200 text-xs font-semibold uppercase tracking-wide text-gray-700">
-                  <tr>
-                    <th className="p-4 w-[450px]">Thông tin tài liệu</th>
-                    <th className="p-4 w-48">Ngành hàng</th>
-                    <th className="p-4 w-32 text-center">Trạng thái</th>
-                    <th className="p-4 w-40 text-center">Thao tác</th>
-                    <th className="w-auto"></th> {/* Spacer Column */}
+                  <tr className="bg-gray-50 border-b border-gray-200">
+                    {[
+                      <th key="h1" className="p-4 w-[450px]">
+                        {t('table.document')}
+                      </th>,
+                      <th key="h2" className="p-4 w-48">
+                        {t('table.category')}
+                      </th>,
+                      <th key="h3" className="p-4 w-32 text-center">
+                        {t('table.status')}
+                      </th>,
+                      <th key="h4" className="p-4 w-40 text-center">
+                        {t('table.actions')}
+                      </th>,
+                      <th key="h5" className="w-auto" aria-hidden />,
+                    ]}
                   </tr>
                 </thead>
                 <tbody className="text-sm">
                   {reports.map((report) => (
-                    <tr
+                    <AdminReportTableRow
                       key={report.id}
-                      className="border-b border-gray-100 hover:bg-gray-50 transition-all group"
-                    >
-                      <td className="p-4">
-                        <div className="flex items-center gap-4">
-                          <div className="w-20 h-12 border border-gray-200 rounded-md shrink-0 relative overflow-hidden">
-                            <img
-                              src={report.thumbnail || '/Logo.jpg'}
-                              className="w-full h-full object-cover"
-                              onError={(e) => (e.currentTarget.src = '/Logo.jpg')}
-                            />
-                            <div
-                              className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer"
-                              onClick={() => setPreviewData(report)}
-                            >
-                              <Eye size={18} className="text-white" />
-                            </div>
-                          </div>
-                          <p
-                            className="text-gray-900 font-medium leading-tight line-clamp-2 max-w-[350px]"
-                            title={report.title}
-                          >
-                            {report.title.length > 60
-                              ? report.title.slice(0, 60) + '...'
-                              : report.title}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <span className="px-3 py-1 bg-gray-100 border border-gray-200 rounded-md text-xs text-gray-600 font-medium whitespace-nowrap">
-                          {report.category?.name || '---'}
-                        </span>
-                      </td>
-                      <td className="p-4 text-center">
-                        <div
-                          className={`inline-block px-3 py-1 text-xs font-semibold rounded-md ${report.status === 'APPROVED' ? 'bg-green-100 text-green-700' : report.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}
-                        >
-                          {report.status}
-                        </div>
-                      </td>
-                      <td className="p-4 text-center space-x-1">
-                        {report.status === 'PENDING' && (
-                          <>
-                            <button
-                              onClick={() => handleReview(report.id, 'APPROVED')}
-                              className="p-2 bg-green-50 text-green-600 border border-green-200 hover:bg-green-100 transition-all rounded-md"
-                            >
-                              <Check size={16} />
-                            </button>
-                            <button
-                              onClick={() => handleReview(report.id, 'REJECTED')}
-                              className="p-2 bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-all rounded-md"
-                            >
-                              <X size={16} />
-                            </button>
-                          </>
-                        )}
-                        <button
-                          onClick={() => handleEdit(report)}
-                          className="p-2 text-gray-400 hover:text-blue-600 border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all rounded-md"
-                        >
-                          <Pencil size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(report.id)}
-                          className="p-2 text-gray-400 hover:text-red-600 border border-gray-200 hover:border-red-300 hover:bg-red-50 transition-all rounded-md"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
-                      <td className="w-auto"></td> {/* Spacer Cell */}
-                    </tr>
+                      report={report}
+                      onPreview={openPreview}
+                      onReview={handleReview}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                    />
                   ))}
                 </tbody>
               </table>
@@ -210,7 +172,7 @@ export default function AdminReportsPage() {
             {totalPages > 1 && (
               <div className="px-6 py-4 bg-gray-50 flex justify-between items-center border-t border-gray-200">
                 <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
-                  Trang {page} / {totalPages}
+                  {t('pagination', { page, totalPages })}
                 </span>
                 <div className="flex gap-2">
                   <PaginationBtn
@@ -237,14 +199,19 @@ export default function AdminReportsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-[75vh]">
               {/* PDF VIEWER */}
               <div className="lg:col-span-9 bg-gray-100 border border-gray-200 rounded-lg relative overflow-hidden">
+                {/* intentionally no direct open/download action here */}
                 <iframe
-                  src={`https://docs.google.com/viewer?url=${encodeURIComponent(previewData.pdfUrl)}&embedded=true`}
+                  src={
+                    !previewData.pdfUrl
+                      ? ''
+                      : `/api/pdf-proxy?url=${encodeURIComponent(previewData.pdfUrl)}`
+                  }
                   className="w-full h-full border-0"
-                  title="PDF Viewer"
-                ></iframe>
+                  title={t('pdfViewerTitle')}
+                />
                 {!previewData.pdfUrl && (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 text-red-600 font-semibold">
-                    <AlertCircle size={48} className="mb-4" /> Lỗi: Link PDF không tồn tại
+                    <AlertCircle size={48} className="mb-4" /> {t('pdfMissing')}
                   </div>
                 )}
               </div>
@@ -254,25 +221,27 @@ export default function AdminReportsPage() {
                 <div className="space-y-6 overflow-y-auto max-h-[50vh] pr-2">
                   <div className="space-y-2">
                     <label className="text-xs text-yellow-600 font-semibold uppercase tracking-wide">
-                      Visual Cover
+                      {t('coverLabel')}
                     </label>
-                    <div className="aspect-video border border-gray-200 rounded-lg overflow-hidden bg-white">
-                      <img
+                    <div className="relative aspect-video border border-gray-200 rounded-lg overflow-hidden bg-white">
+                      <FallbackImage
                         src={previewData.thumbnail || '/Logo.jpg'}
-                        className="w-full h-full object-cover"
-                        onError={(e) => (e.currentTarget.src = '/Logo.jpg')}
+                        className="object-cover"
+                        alt=""
+                        fill
+                        sizes="(max-width: 768px) 100vw, 320px"
                       />
                     </div>
                   </div>
                   <div className="space-y-3">
                     <label className="text-xs text-gray-500 uppercase tracking-wide font-semibold">
-                      Details
+                      {t('detailsLabel')}
                     </label>
                     <h3 className="text-xl font-bold text-gray-900 leading-tight pb-2 border-b border-gray-200">
                       {previewData.title}
                     </h3>
                     <p className="text-sm text-gray-700 leading-relaxed bg-gray-50 p-4 rounded-lg border-l-4 border-gray-300">
-                      "{previewData.description || 'Hệ thống chưa ghi nhận mô tả.'}"
+                      "{previewData.description || t('noDescription')}"
                     </p>
                   </div>
                 </div>
@@ -283,7 +252,7 @@ export default function AdminReportsPage() {
                     onClick={() => setPreviewData(null)}
                     className="w-full py-4 bg-gray-900 text-white font-semibold text-sm uppercase tracking-wide hover:bg-gray-800 transition-all rounded-md"
                   >
-                    Đóng bản xem trước
+                    {t('closePreview')}
                   </button>
                 </div>
               </div>
@@ -307,7 +276,7 @@ export default function AdminReportsPage() {
                 setIsModalOpen(false);
                 loadReports(page);
               }}
-              initialData={editingReport}
+              initialData={editingReport ?? undefined}
             />
           </div>
         </div>
@@ -317,7 +286,15 @@ export default function AdminReportsPage() {
 }
 
 // Pagination Helper
-function PaginationBtn({ Icon, onClick, disabled }: any) {
+function PaginationBtn({
+  Icon,
+  onClick,
+  disabled,
+}: {
+  Icon: LucideIcon;
+  onClick: () => void;
+  disabled: boolean;
+}) {
   return (
     <button
       disabled={disabled}

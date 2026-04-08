@@ -98,6 +98,7 @@ export default function AboutPage() {
                   src="/group.png"
                   alt="Tầm nhìn và Sứ mệnh YT2Future"
                   fill
+                  sizes="(max-width: 1023px) 100vw, 50vw"
                   className="object-cover grayscale-0 transition-all duration-1000 ease-in-out scale-100 lg:scale-105 lg:group-hover:scale-100"
                   priority
                 />

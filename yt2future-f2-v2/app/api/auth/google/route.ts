@@ -1,22 +1,22 @@
 import { createClient } from '@/utils/supabase/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const supabase = await createClient();
+  const origin = request.nextUrl.origin;
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/auth/callback`,
+      // Always use current request origin to avoid port/domain mismatches
+      // (e.g. local dev running on 3002 while env still points to 3000).
+      redirectTo: `${origin}/api/auth/callback`,
     },
   });
 
   if (error) {
     return NextResponse.redirect(
-      new URL(
-        `/signup?error=${encodeURIComponent(error.message)}`,
-        process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-      )
+      new URL(`/signup?error=${encodeURIComponent(error.message)}`, origin)
     );
   }
 
@@ -24,10 +24,5 @@ export async function GET() {
     return NextResponse.redirect(data.url);
   }
 
-  return NextResponse.redirect(
-    new URL(
-      '/signup?error=Unknown_Error',
-      process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-    )
-  );
+  return NextResponse.redirect(new URL('/signup?error=Unknown_Error', origin));
 }

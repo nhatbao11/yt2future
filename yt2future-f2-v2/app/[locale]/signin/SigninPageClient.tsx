@@ -42,15 +42,15 @@ export default function SigninPageClient({ errorMessage }: SigninPageClientProps
       const result = await res.json();
 
       if (!res.ok) {
-        toast.error(result.message || 'Đăng nhập thất bại sếp ơi!');
+        toast.error(result.message || tAuth('signInFailed'));
       } else {
-        toast.success('Đăng nhập thành công!');
+        toast.success(tAuth('signInSuccess'));
         router.refresh();
         router.push('/');
       }
     } catch (error) {
       console.error('Login Client Error:', error);
-      toast.error('Lỗi kết nối server!');
+      toast.error(tAuth('serverError'));
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,7 @@ export default function SigninPageClient({ errorMessage }: SigninPageClientProps
 
         <div className="pt-2">
           <PrimaryButton
-            label={loading ? 'Checking...' : t('submit')}
+            label={loading ? tAuth('checking') : t('submit')}
             type="submit"
             fullWidth={true}
             className="cursor-pointer font-black uppercase tracking-wider py-4"

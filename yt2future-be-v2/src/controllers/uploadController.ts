@@ -1,48 +1,38 @@
-import { v2 as cloudinary } from 'cloudinary';
-import type { Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
+import type { UploadedFile } from 'express-fileupload';
+import { AppError } from '../utils/AppError.js';
+import { getErrorMessage } from '../utils/errors.js';
+import * as uploadService from '../modules/upload/uploadService.js';
 
-// SỬA TÊN BIẾN CHO KHỚP VỚI INDEX.TS
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || '',
-  api_key: process.env.CLOUDINARY_API_KEY || '',
-  api_secret: process.env.CLOUDINARY_API_SECRET || '',
-});
+function getSinglePdf(files: Request['files']): UploadedFile | undefined {
+  if (!files || !('pdfFile' in files)) return undefined;
+  const pdfFile = files.pdfFile;
+  if (pdfFile == null) return undefined;
+  return Array.isArray(pdfFile) ? pdfFile[0] : pdfFile;
+}
 
-export const uploadFile = async (req: any, res: Response) => {
+export const uploadFile = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // 1. Kiểm tra xem middleware fileUpload đã hoạt động chưa
     if (!req.files) {
-      return res.status(400).json({ message: 'Server không nhận được file nào!' });
+      return next(new AppError('Server không nhận được file nào!', 400, 'UPLOAD_NO_FILES'));
     }
 
-    // 2. Lấy file theo cấu trúc của express-fileupload
-    // Sếp gửi từ FE là 'pdfFile' nên ở đây nhận đúng 'pdfFile'
-    const pdfFile = req.files.pdfFile;
-    const thumbFile = req.files.thumbnail;
-
+    const pdfFile = getSinglePdf(req.files);
     if (!pdfFile) {
-      return res.status(400).json({ message: 'Thiếu file PDF báo cáo sếp ơi!' });
+      return next(new AppError('Thiếu file PDF báo cáo sếp ơi!', 400, 'UPLOAD_NO_PDF'));
     }
 
-    // 3. Đẩy lên Cloudinary dùng tempFilePath (đường dẫn tạm của express-fileupload)
-    const result = await cloudinary.uploader.upload(pdfFile.tempFilePath, {
-      folder: 'yt_reports_pdf',
-      resource_type: 'raw', // BẮT BUỘC để giữ định dạng .pdf
-      use_filename: true,
-      unique_filename: true,
-    });
+    const { url, public_id } = await uploadService.uploadStandalonePdf(pdfFile);
 
-    // 4. Trả về kết quả thành công
     res.json({
       success: true,
-      url: result.secure_url,
-      public_id: result.public_id,
+      url,
+      public_id,
     });
-  } catch (error: any) {
-    console.error('Lỗi Controller Upload:', error.message);
-    res.status(500).json({
-      success: false,
-      message: 'Lỗi xử lý file tại server: ' + error.message,
-    });
+  } catch (error: unknown) {
+    console.error('[UploadController]', getErrorMessage(error));
+    next(
+      new AppError(`Lỗi xử lý file tại server: ${getErrorMessage(error)}`, 500, 'UPLOAD_FAILED')
+    );
   }
 };

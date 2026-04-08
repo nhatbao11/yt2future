@@ -171,9 +171,9 @@ export default function Footer() {
             </div>
             <div className="flex-1 bg-gray-100">
               <iframe
-                src={`https://docs.google.com/viewer?url=${encodeURIComponent(activePdf.url)}&embedded=true`}
+                src={`/api/pdf-proxy?url=${encodeURIComponent(activePdf.url)}`}
                 className="w-full h-full border-0"
-                title="Policy Viewer"
+                title={t('footer.policyViewerTitle')}
               />
             </div>
           </div>

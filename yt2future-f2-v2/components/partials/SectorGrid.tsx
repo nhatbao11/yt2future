@@ -2,7 +2,7 @@
 
 import React from 'react';
 import SectorCard from './SectorCard';
-import { LineChart, Coins, Globe, Lightbulb, Building } from 'lucide-react';
+import { LineChart, Globe, Lightbulb, Building } from 'lucide-react';
 // Import Swiper components và styles
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';

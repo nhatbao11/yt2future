@@ -11,7 +11,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'investment_page' });
 
   const title = t('title') + ' | YT2Future';
-  const description = `${t('subtitle')}. ${t('main_title')}`;
+  const description =
+    locale === 'vi'
+      ? 'Danh mục sản phẩm dịch vụ tài chính dành cho doanh nghiệp tại YT2Future.'
+      : 'Enterprise financial products and service offerings at YT2Future.';
 
   return {
     title,

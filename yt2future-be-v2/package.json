@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run smoke:test",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "smoke:test": "tsx src/scripts/smokeTest.ts",
     "sync:market-index": "tsx src/scripts/syncMarketIndexDaily.ts",
     "sync:market-index:prod": "node dist/scripts/syncMarketIndexDaily.js",
     "sync:market-index:vnstock": "python3 scripts/sync_market_index_vnstock.py",
@@ -35,8 +36,8 @@
     "i18next-fs-backend": "^2.6.1",
     "i18next-http-middleware": "^3.9.2",
     "jsonwebtoken": "^9.0.3",
-    "multer": "^2.0.2",
-    "slugify": "^1.6.6"
+    "slugify": "^1.6.6",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
@@ -46,7 +47,6 @@
     "@types/express": "^5.0.6",
     "@types/express-fileupload": "^1.5.1",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/multer": "^2.0.0",
     "@types/node": "^25.0.3",
     "eslint": "^9.19.0",
     "prettier": "^3.5.0",

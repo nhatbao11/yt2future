@@ -8,6 +8,7 @@ import { Menu, X, User, LogOut, ShieldCheck, LayoutDashboard, Settings } from 'l
 import { createBrowserClient } from '@supabase/ssr';
 import { useTranslations, useLocale } from 'next-intl';
 import LanguageSwitcher from '@/components/common/LanguageSwitcher';
+import { getApiBaseURL } from '@/services/apiClient';
 
 export default function Navbar() {
   const t = useTranslations('nav');
@@ -66,7 +67,7 @@ export default function Navbar() {
           setUserData(data.user);
         }
       } catch (err) {
-        console.error('Lỗi fetch user:', err);
+        console.error('User fetch error:', err);
       } finally {
         setLoading(false);
         setIsInitialRender(false);
@@ -98,20 +99,22 @@ export default function Navbar() {
 
       if (session?.user && !hasMyToken) {
         try {
-          await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/auth/grant-google-role`,
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                email: session.user.email,
-                name: session.user.user_metadata?.full_name || session.user.user_metadata?.name,
-                picture:
-                  session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture,
-              }),
-              credentials: 'include',
-            }
-          );
+          await fetch(`${getApiBaseURL()}/auth/grant-google-role`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: session.user.email,
+              name:
+                session.user.user_metadata?.full_name ||
+                session.user.user_metadata?.name ||
+                session.user.email?.split('@')[0],
+              picture:
+                session.user.user_metadata?.avatar_url ||
+                session.user.user_metadata?.picture ||
+                undefined,
+            }),
+            credentials: 'include',
+          });
           await fetchUser(true);
         } catch (err) {
           console.error('Sync error:', err);
@@ -120,8 +123,9 @@ export default function Navbar() {
     };
 
     handleSync();
-    window.addEventListener('profileUpdated', () => fetchUser(true));
-    return () => window.removeEventListener('profileUpdated', () => fetchUser(true));
+    const profileUpdatedHandler = () => fetchUser(true);
+    window.addEventListener('profileUpdated', profileUpdatedHandler);
+    return () => window.removeEventListener('profileUpdated', profileUpdatedHandler);
   }, [supabase, fetchUser]);
 
   const handleLogout = async () => {
@@ -131,7 +135,7 @@ export default function Navbar() {
       await fetch('/api/auth/logout', { method: 'POST' });
       document.cookie = 'yt2future_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
       window.location.replace(`/${locale}/signin?status=logout&t=${Date.now()}`);
-    } catch (error) {
+    } catch {
       window.location.replace(`/${locale}/signin`);
     }
   };

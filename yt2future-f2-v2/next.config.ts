@@ -1,12 +1,20 @@
 import createNextIntlPlugin from 'next-intl/plugin';
 import type { NextConfig } from 'next';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
+const projectRoot = dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
   /** Docker / self-host: tạo `.next/standalone` + `server.js` */
   output: 'standalone',
+  turbopack: {
+    // Monorepo có nhiều lockfile, khóa root về đúng app FE
+    root: projectRoot,
+  },
   images: {
+    qualities: [75, 95],
     remotePatterns: [
       {
         protocol: 'https' as const,
@@ -16,6 +24,11 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https' as const,
         hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https' as const,
+        hostname: 'images.unsplash.com',
         pathname: '/**',
       },
     ],
@@ -32,6 +45,16 @@ const nextConfig: NextConfig = {
       ];
     }
     return [];
+  },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.yt2future.com' }],
+        destination: 'https://yt2future.com/:path*',
+        permanent: true,
+      },
+    ];
   },
 };
 

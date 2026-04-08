@@ -6,8 +6,14 @@ import Image from 'next/image';
 import PrimaryButton from '@/components/common/PrimaryButton';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
-export default function ProfileForm({ profile }: { profile: any }) {
+export default function ProfileForm({
+  profile,
+}: {
+  profile: { fullName?: string; avatarUrl?: string | null };
+}) {
+  const t = useTranslations('profile');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   // State để cập nhật ảnh preview khi sếp dán link mới
@@ -31,14 +37,14 @@ export default function ProfileForm({ profile }: { profile: any }) {
           const result = await res.json();
 
           if (!res.ok) {
-            toast.error(result.message || 'Cập nhật thất bại!');
+            toast.error(result.message || t('updateFailed'));
           } else {
-            toast.success('Đã lưu thay đổi!');
+            toast.success(t('submit'));
             router.refresh();
             window.dispatchEvent(new Event('profileUpdated'));
           }
-        } catch (err) {
-          toast.error('Lỗi kết nối server!');
+        } catch {
+          toast.error(t('serverError'));
         } finally {
           setLoading(false);
         }
@@ -55,14 +61,14 @@ export default function ProfileForm({ profile }: { profile: any }) {
           />
         </div>
         <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">
-          Avatar Hiện Tại
+          {t('avatarCurrent')}
         </p>
       </div>
 
       <div className="space-y-4">
         <div className="group">
           <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">
-            Họ và Tên
+            {t('fullName')}
           </label>
           <input
             name="fullName"
@@ -73,13 +79,13 @@ export default function ProfileForm({ profile }: { profile: any }) {
 
         <div className="group">
           <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1">
-            Link ảnh đại diện
+            {t('avatarUrl')}
           </label>
           <input
             name="avatarUrl"
-            defaultValue={profile?.avatarUrl}
+            defaultValue={profile?.avatarUrl ?? ''}
             onChange={(e) => setAvatarPreview(e.target.value)} // Cập nhật preview khi gõ
-            placeholder="https://example.com/image.jpg"
+            placeholder={t('avatarUrlPlaceholder')}
             className="w-full bg-slate-50 border border-slate-200 p-3.5 mt-1 text-sm text-slate-900 font-bold rounded-md outline-none focus:border-yellow-500 transition-all"
           />
         </div>
@@ -87,7 +93,7 @@ export default function ProfileForm({ profile }: { profile: any }) {
 
       <div className="pt-4">
         <PrimaryButton
-          label={loading ? 'Đang cập nhật...' : 'Lưu thay đổi'}
+          label={loading ? t('saving') : t('submit')}
           type="submit"
           fullWidth={true}
           className="py-4 font-black uppercase tracking-wider"

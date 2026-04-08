@@ -11,7 +11,14 @@ export default async function SigninPage({
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 py-12 font-sans">
       <div className="absolute inset-0 z-0">
-        <Image src="/bgSign.jpg" alt="Signin background" fill className="object-cover" priority />
+        <Image
+          src="/bgSign.jpg"
+          alt="Signin background"
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority
+        />
         <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-[2px]" />
       </div>
 

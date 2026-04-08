@@ -10,6 +10,7 @@ import { notFound } from 'next/navigation';
 import { locales } from '@/i18n/request';
 import ScrollToTop from '@/components/partials/ScrollToTop';
 import { getTranslations } from 'next-intl/server';
+import { getCanonicalBaseUrl } from '@/lib/seo';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,7 +25,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yt2future.com';
+  const baseUrl = getCanonicalBaseUrl();
   const t = await getTranslations({ locale, namespace: 'seo' });
   const defaultTitle = t('defaultTitle');
   const defaultDescription = t('defaultDescription');
@@ -60,17 +61,7 @@ export async function generateMetadata({
       images: ['/Logo.jpg'],
     },
     alternates: {
-      canonical: `${baseUrl}/${locale}`,
-      languages: noindexEn
-        ? {
-            vi: `${baseUrl}/vi`,
-            'x-default': `${baseUrl}/vi`,
-          }
-        : {
-            vi: `${baseUrl}/vi`,
-            en: `${baseUrl}/en`,
-            'x-default': `${baseUrl}/vi`,
-          },
+      canonical: './',
     },
     ...(noindexEn && locale === 'en'
       ? {
@@ -94,19 +85,56 @@ export default async function LocaleLayout({
 }) {
   // Await params in Next.js 15+
   const { locale } = await params;
+  const isSupportedLocale = locales.includes(locale as (typeof locales)[number]);
 
   // Validate locale
-  if (!locales.includes(locale as any)) {
+  if (!isSupportedLocale) {
     notFound();
   }
 
   // Load messages
   const messages = await getMessages({ locale });
+  const baseUrl = getCanonicalBaseUrl();
+  const navT = await getTranslations({ locale, namespace: 'nav' });
+  const navSchema = [
+    { name: navT('home'), url: `${baseUrl}/${locale}` },
+    { name: navT('about'), url: `${baseUrl}/${locale}/about` },
+    { name: navT('investment'), url: `${baseUrl}/${locale}/investment` },
+    { name: navT('sector'), url: `${baseUrl}/${locale}/sector` },
+    { name: navT('contact'), url: `${baseUrl}/${locale}/contact` },
+  ];
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        name: 'YT2Future',
+        url: baseUrl,
+        logo: `${baseUrl}/Logo.jpg`,
+      },
+      {
+        '@type': 'WebSite',
+        name: 'YT2Future',
+        url: baseUrl,
+        inLanguage: locale,
+      },
+      ...navSchema.map((item) => ({
+        '@type': 'SiteNavigationElement',
+        name: item.name,
+        url: item.url,
+      })),
+    ],
+  };
 
   return (
     <html lang={locale}>
-      <head></head>
-      <body className={`${inter.className} flex flex-col min-h-screen`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body suppressHydrationWarning className={`${inter.className} flex flex-col min-h-screen`}>
         <NextIntlClientProvider messages={messages} locale={locale}>
           <Toaster position="top-center" />
           {/* Header xuất hiện ở mọi trang */}

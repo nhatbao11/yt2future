@@ -1,5 +1,5 @@
 'use client';
-import { Search, PenTool, Share2, BookOpen, Lightbulb, Users } from 'lucide-react';
+import { BookOpen, Lightbulb, Users } from 'lucide-react';
 
 import ScrollReveal from '@/components/common/ScrollReveal';
 

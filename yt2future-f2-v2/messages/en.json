@@ -14,13 +14,14 @@
     "delete": "Delete",
     "edit": "Edit",
     "close": "Close",
-    "search": "Search"
+    "search": "Search",
+    "switchLanguage": "Switch language",
+    "scrollToTop": "Scroll to top"
   },
   "nav": {
     "home": "Home",
     "about": "About Us",
-    "business": "Business",
-    "investment": "Investment Solutions",
+    "investment": "Products & Services",
     "sector": "Sector Analysis",
     "contact": "Contact",
     "dashboard": "Dashboard",
@@ -43,7 +44,8 @@
     "tagline": "Sustainable Future",
     "description": "Shaping tomorrow through agile thinking and continuous innovation.",
     "quickLinks": "Quick Links",
-    "followUs": "Follow Us"
+    "followUs": "Follow Us",
+    "policyViewerTitle": "Policy viewer"
   },
   "sectors": {
     "stock": {
@@ -76,7 +78,13 @@
     "loginRequired": "Please sign in to send feedback!",
     "success": "Feedback sent successfully!",
     "error": "Server connection error!",
-    "failure": "Sending failed!"
+    "failure": "Sending failed!",
+    "readMore": "Read more",
+    "showLess": "Show less",
+    "userFallback": "User",
+    "anonymous": "Anonymous",
+    "ratingLabel": "Rating",
+    "feedbackLabel": "Your feedback"
   },
   "home": {
     "hero": {
@@ -158,6 +166,13 @@
     "subject": "Subject",
     "message": "Message",
     "submit": "Submit Inquiry",
+    "placeholders": {
+      "name": "Your name",
+      "email": "Your email",
+      "subject": "Subject",
+      "message": "Your message"
+    },
+    "mapTitle": "YT2Future location",
     "info": {
       "address": "Address",
       "email": "Email",
@@ -181,7 +196,37 @@
     "market_report_subtitle": "REPORTS",
     "market_data": "Market Data",
     "coming_soon": "Coming Soon...",
-    "back_home": "Back to Home"
+    "back_home": "Back to Home",
+    "marketIndex": {
+      "errors": {
+        "api": "API error",
+        "invalidFormat": "Invalid data format",
+        "loadFailed": "Failed to load data"
+      },
+      "legend": {
+        "liquidity": "Liquidity",
+        "high": "High",
+        "low": "Low"
+      },
+      "chartTitle": "Chart {symbol}",
+      "chartLabel": "Chart {symbol}",
+      "axis": {
+        "date": "Date"
+      },
+      "loading": "Loading data",
+      "cards": {
+        "currentPrice": "Current price",
+        "change": "Change",
+        "open": "Open",
+        "close": "Close",
+        "highest": "High",
+        "lowest": "Low"
+      },
+      "actions": {
+        "shrinkChart": "Shrink chart",
+        "expandChart": "Expand chart"
+      }
+    }
   },
   "auth": {
     "socialLogin": "Social Login",
@@ -191,6 +236,15 @@
     "privacy": "Privacy Policy",
     "and": "and",
     "createAccount": "Create Account",
+    "creating": "Creating...",
+    "checking": "Checking...",
+    "serverError": "Server connection error!",
+    "signInFailed": "Sign-in failed!",
+    "signInSuccess": "Signed in successfully!",
+    "signUpFailed": "Sign-up failed!",
+    "signUpSuccess": "Signed up successfully!",
+    "signUpSuccessRedirect": "Sign-up successful! Please sign in now.",
+    "policyViewerTitle": "Policy viewer",
     "loginNow": "Login Now",
     "signIn": {
       "title": "Sign In",
@@ -216,16 +270,169 @@
     "categories": "Categories",
     "users": "Users",
     "reports": "Reports",
-    "settings": "Settings"
+    "settings": "Settings",
+    "layout": {
+      "pageTitle": "Admin Panel",
+      "menu": {
+        "overview": "Overview",
+        "users": "Users",
+        "reports": "Reports",
+        "categories": "Categories",
+        "feedbacks": "Feedback"
+      },
+      "signOut": "Sign out"
+    },
+    "dashboard": {
+      "loading": "Loading data...",
+      "stats": {
+        "people": "People",
+        "pendingReports": "Pending reports",
+        "publishedReports": "Published reports",
+        "categories": "Categories"
+      },
+      "auditLogTitle": "System audit logs",
+      "emptyLogs": "No audit logs yet",
+      "pagination": "Page {page} / {totalPages}",
+      "toast": {
+        "statsError": "Cannot load stats",
+        "logsError": "Cannot load audit logs"
+      }
+    },
+    "usersPage": {
+      "title": "User management",
+      "subtitle": "{count} users | Page {page}",
+      "loading": "Loading users...",
+      "table": {
+        "memberTitle": "Member & Title",
+        "contact": "Contact (Email)",
+        "role": "Role",
+        "actions": "Actions"
+      },
+      "pagination": "Page {page} / {totalPages}",
+      "confirmDelete": "Are you sure you want to delete user \"{userName}\"?",
+      "roleTitle": {
+        "ADMIN": "Administrator",
+        "CTV": "Contributor",
+        "MEMBER": "Member",
+        "USER": "New member"
+      },
+      "toast": {
+        "serverBusy": "Server is busy, please try again.",
+        "roleUpdated": "Role updated successfully!",
+        "roleUpdateError": "Failed to update role.",
+        "deleted": "{userName} has been removed.",
+        "deleteError": "Cannot delete another admin."
+      }
+    },
+    "categoriesPage": {
+      "title": "Category management",
+      "form": {
+        "title": "Add new category",
+        "name": "Category name",
+        "namePlaceholder": "Example: Banking",
+        "slugPlaceholder": "ex: banking",
+        "submit": "Add category"
+      },
+      "table": {
+        "category": "Category",
+        "actions": "Actions"
+      },
+      "confirmDelete": "Are you sure you want to delete category \"{catName}\"?",
+      "toast": {
+        "loadError": "Failed to load categories.",
+        "createSuccess": "Category created successfully!",
+        "createError": "Failed to create category.",
+        "deleteSuccess": "Deleted successfully!",
+        "deleteError": "Cannot delete category while reports still exist."
+      }
+    },
+    "feedbacks": {
+      "console": "Admin Console",
+      "consoleLoadError": "Load feedback error:",
+      "title": "Feedback management",
+      "tabs": {
+        "pending": "Pending",
+        "all": "All"
+      },
+      "loading": "Loading data...",
+      "status": {
+        "approved": "Approved",
+        "rejected": "Rejected"
+      },
+      "actions": {
+        "approve": "Approve",
+        "reject": "Reject",
+        "deleteFeedback": "Delete feedback"
+      },
+      "empty": "No feedback found",
+      "confirm": {
+        "title": "Confirm delete",
+        "body": "Are you sure you want to delete this feedback? This action cannot be undone.",
+        "cancel": "Cancel",
+        "deleteNow": "Delete now"
+      },
+      "toast": {
+        "approved": "Feedback approved!",
+        "rejected": "Feedback rejected!",
+        "actionError": "Action failed!",
+        "deleteSuccess": "Feedback deleted!",
+        "deleteError": "Failed to delete feedback."
+      }
+    },
+    "reportsPage": {
+      "title": "Control center",
+      "subtitle": "{count} reports (Page {page})",
+      "create": "Create new",
+      "loading": "Loading...",
+      "table": {
+        "document": "Document details",
+        "category": "Category",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "pagination": "Page {page} / {totalPages}",
+      "confirmDelete": "Delete this report?",
+      "pdfViewerTitle": "PDF Viewer",
+      "pdfMissing": "Error: PDF link is missing",
+      "coverLabel": "Visual cover",
+      "detailsLabel": "Details",
+      "noDescription": "No description available yet.",
+      "closePreview": "Close preview",
+      "row": {
+        "status": {
+          "approved": "Approved",
+          "pending": "Pending",
+          "rejected": "Rejected"
+        }
+      },
+      "toast": {
+        "connectionError": "Cannot connect to data source.",
+        "approved": "Approved successfully!",
+        "rejected": "Rejected successfully!",
+        "actionError": "Action failed!",
+        "deleted": "Deleted!",
+        "deleteError": "Delete failed!"
+      }
+    }
   },
   "investment_page": {
-    "title": "Investment Solutions",
-    "subtitle": "Investment Solutions",
-    "main_title": "Investment Solutions",
-    "main_title_sub": "Coming Soon",
-    "academic_db": "Academic Database",
-    "coming_soon": "Coming Soon",
-    "back_home": "Back Home"
+    "title": "Products & Services",
+    "layoutTag": "Products & Services Layout",
+    "layoutTitle": "A responsive-first layout for desktop, tablet, and mobile.",
+    "layoutDescription": "Current text is placeholder. The focus is the structural UX blocks: service catalog, detail view, process flow, and scalable responsive behavior.",
+    "metrics": {
+      "catalog": "Catalog",
+      "details": "Details",
+      "flow": "Flow"
+    },
+    "blocks": {
+      "bestFor": "Best for",
+      "expectedOutcomes": "Expected outcomes",
+      "deliveryFlow": "Delivery flow"
+    },
+    "flowStep": "Step {index}",
+    "scaffoldDescription": "This is a production-ready UI/UX scaffold. Real content (text/images) can be swapped later without redesigning layout architecture.",
+    "scalable": "Scalable"
   },
   "sector_page": {
     "title": "Sector Analysis",
@@ -240,29 +447,61 @@
     "prev": "Previous",
     "next": "Next",
     "page": "Page",
-    "modal_title": "Report Viewer"
-  },
-  "business_page": {
-    "title": "Business Solutions",
-    "subtitle": "For Enterprises",
-    "description": "Professional financial and investment solutions for businesses.",
-    "filters": {
-      "all": "All",
-      "banking": "Banking",
-      "real_estate": "Real Estate",
-      "agriculture": "Agriculture",
-      "tech": "Technology"
-    },
-    "by": "By",
-    "analyst": "Financial Analyst",
-    "view_pdf": "View PDF"
+    "modal_title": "Report Viewer",
+    "viewer_title": "Report viewer"
   },
   "profile": {
     "title": "My Profile",
     "fullName": "Full Name",
     "fullNamePlaceholder": "Enter your full name...",
+    "avatarCurrent": "Current avatar",
+    "avatarUrl": "Avatar URL",
+    "avatarUrlPlaceholder": "https://example.com/image.jpg",
     "email": "Email",
     "submit": "Save Changes",
-    "uploadHint": "Click camera to change photo"
+    "uploadHint": "Click camera to change photo",
+    "saving": "Saving...",
+    "updateFailed": "Profile update failed!",
+    "updateSuccess": "Profile saved successfully!",
+    "serverError": "Server connection error!",
+    "avatarTooLarge": "Image is too large! Please choose an image under 1MB."
+  },
+  "createReport": {
+    "back": "Back to list",
+    "titleCreate": "Strategic report setup",
+    "titleEdit": "Update report",
+    "subtitle": "Intelligence Configuration",
+    "fields": {
+      "title": "Report title",
+      "category": "Investment category",
+      "summary": "Summary",
+      "pdf": "Report file (PDF)",
+      "thumbnail": "Thumbnail"
+    },
+    "placeholders": {
+      "title": "Enter title...",
+      "selectCategory": "-- Select category --",
+      "summary": "Concise report description (max 2 lines)..."
+    },
+    "optionalChangeHint": "(Only select if you want to change)",
+    "currentImage": "CURRENT IMAGE",
+    "fileLabels": {
+      "uploadPdf": "UPLOAD STRATEGIC PDF",
+      "uploadNewPdf": "CLICK TO UPLOAD NEW FILE (OPTIONAL)",
+      "uploadImage": "CHOOSE REPORT COVER IMAGE",
+      "uploadNewImage": "CLICK TO UPLOAD NEW IMAGE (OPTIONAL)"
+    },
+    "processing": "PROCESSING...",
+    "saveChanges": "Save changes",
+    "publish": "Publish report",
+    "toast": {
+      "selectCategory": "Please select a category!",
+      "selectPdf": "Please select a PDF file!",
+      "updated": "Report updated successfully!",
+      "created": "Report published successfully!",
+      "systemError": "System error, please try again!",
+      "pdfTooLarge": "PDF exceeds 10MB!",
+      "imageTooLarge": "Image exceeds 2MB!"
+    }
   }
 }

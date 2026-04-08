@@ -1,5 +1,6 @@
 # API + Postgres (local / staging). FE: chạy trên máy host `cd yt2future-f2-v2 && npm run dev`
 # với NEXT_PUBLIC_BE_URL=http://localhost:5000 — tránh lỗi SSR trong container gọi sai host.
+# API sẽ đọc env từ `yt2future-be-v2/.env` (hỗ trợ dùng DB production/Supabase).
 services:
   postgres:
     image: postgres:16-alpine
@@ -21,13 +22,11 @@ services:
     build: ./yt2future-be-v2
     ports:
       - '5000:5000'
+    env_file:
+      - ./yt2future-be-v2/.env
     environment:
-      NODE_ENV: production
       PORT: '5000'
-      DATABASE_URL: postgresql://yt2future:yt2future@postgres:5432/yt2future
-    depends_on:
-      postgres:
-        condition: service_healthy
+      NODE_ENV: production
 
 volumes:
   pgdata:

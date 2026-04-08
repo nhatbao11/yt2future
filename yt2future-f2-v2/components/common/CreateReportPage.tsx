@@ -1,19 +1,31 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { reportService } from '@/services/reportService';
+import Image from 'next/image';
+import { reportService } from '@/features/reports/api/reportApi';
+import { categoryApi } from '@/features/categories/api/categoryApi';
 import { Send, ChevronLeft, FileText, Image as ImageIcon, CheckCircle2, Save } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import slugify from 'slugify';
+import { useTranslations } from 'next-intl';
 
 interface CreateReportProps {
   onClose?: () => void;
-  initialData?: any; // Dữ liệu cũ để sửa
+  initialData?: {
+    id: string;
+    title?: string;
+    slug?: string;
+    categoryId?: number | string;
+    description?: string;
+    pdfUrl?: string;
+    thumbnail?: string;
+  }; // Dữ liệu cũ để sửa
 }
 
 export default function CreateReportPage({ onClose, initialData }: CreateReportProps) {
   const router = useRouter();
-  const [categories, setCategories] = useState<any[]>([]);
+  const t = useTranslations('createReport');
+  const [categories, setCategories] = useState<Array<{ id: number; name: string }>>([]);
   const [loading, setLoading] = useState(false);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
@@ -28,14 +40,14 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
   const MAX_DESC_LENGTH = 160;
 
   useEffect(() => {
-    reportService.getCategories().then((res) => setCategories(res.categories || []));
+    categoryApi.getCategories().then((res) => setCategories(res.categories || []));
 
     // Nếu có dữ liệu cũ -> Fill vào form (Chế độ Edit)
     if (initialData) {
       setFormData({
         title: initialData.title || '',
         slug: initialData.slug || '',
-        categoryId: initialData.categoryId || '',
+        categoryId: initialData.categoryId != null ? String(initialData.categoryId) : '',
         description: initialData.description || '',
       });
     }
@@ -51,10 +63,10 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.categoryId) return toast.error('Vui lòng chọn ngành nghề!');
+    if (!formData.categoryId) return toast.error(t('toast.selectCategory'));
 
     // Nếu thêm mới thì bắt buộc file, sửa thì không
-    if (!initialData && !pdfFile) return toast.error('Vui lòng chọn file PDF!');
+    if (!initialData && !pdfFile) return toast.error(t('toast.selectPdf'));
 
     const data = new FormData();
     data.append('title', formData.title);
@@ -76,12 +88,12 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
       }
 
       if (res.success) {
-        toast.success(initialData ? 'Đã cập nhật báo cáo!' : 'Đã phát hành báo cáo!');
+        toast.success(initialData ? t('toast.updated') : t('toast.created'));
         if (onClose) onClose();
         else router.push('/sector');
       }
-    } catch (err) {
-      toast.error('Lỗi hệ thống, vui lòng thử lại!');
+    } catch {
+      toast.error(t('toast.systemError'));
     } finally {
       setLoading(false);
     }
@@ -96,7 +108,7 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
           onClick={() => router.back()}
           className="flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-[#001a41] transition-colors mb-6"
         >
-          <ChevronLeft size={18} /> Quay lại danh sách
+          <ChevronLeft size={18} /> {t('back')}
         </button>
       )}
 
@@ -104,10 +116,10 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
         {/* Header nhẹ nhàng, chuyên nghiệp */}
         <div className="bg-slate-50 border-b border-slate-200 p-6 md:p-8">
           <h1 className="text-xl md:text-2xl font-bold text-[#001a41] tracking-tight">
-            {initialData ? 'Cập nhật báo cáo' : 'Thiết lập báo cáo chiến lược'}
+            {initialData ? t('titleEdit') : t('titleCreate')}
           </h1>
           <p className="text-slate-500 text-sm mt-1 uppercase tracking-wider font-medium opacity-70">
-            Intelligence Configuration
+            {t('subtitle')}
           </p>
         </div>
 
@@ -117,12 +129,12 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
             <div className="space-y-6">
               <div className="space-y-2">
                 <label className="font-semibold text-[#001a41] uppercase text-[11px] tracking-widest">
-                  Tiêu đề báo cáo
+                  {t('fields.title')}
                 </label>
                 <input
                   required
                   type="text"
-                  placeholder="Nhập tiêu đề..."
+                  placeholder={t('placeholders.title')}
                   className="w-full border border-slate-300 rounded-lg p-3.5 focus:ring-2 focus:ring-[#001a41]/5 focus:border-[#001a41] outline-none transition-all placeholder:opacity-50"
                   value={formData.title}
                   onChange={(e) => handleTitleChange(e.target.value)}
@@ -131,7 +143,7 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
 
               <div className="space-y-2">
                 <label className="font-semibold text-[#001a41] uppercase text-[11px] tracking-widest">
-                  Danh mục đầu tư
+                  {t('fields.category')}
                 </label>
                 <select
                   required
@@ -139,7 +151,7 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
                   value={formData.categoryId}
                   onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                 >
-                  <option value="">-- Chọn danh mục --</option>
+                  <option value="">{t('placeholders.selectCategory')}</option>
                   {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
                       {cat.name}
@@ -151,7 +163,7 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
               <div className="space-y-2">
                 <div className="flex justify-between items-center mb-1">
                   <label className="font-semibold text-[#001a41] uppercase text-[11px] tracking-widest">
-                    Tóm tắt nội dung
+                    {t('fields.summary')}
                   </label>
                   <span
                     className={`text-[10px] font-bold ${formData.description.length >= MAX_DESC_LENGTH ? 'text-rose-500' : 'text-slate-400'}`}
@@ -163,7 +175,7 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
                   required
                   maxLength={MAX_DESC_LENGTH}
                   className="w-full border border-slate-300 rounded-lg p-4 h-32 focus:border-[#001a41] outline-none resize-none leading-relaxed italic"
-                  placeholder="Mô tả súc tích báo cáo (Tối đa 2 hàng)..."
+                  placeholder={t('placeholders.summary')}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   value={formData.description}
                 />
@@ -174,10 +186,10 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
             <div className="space-y-6">
               <div className="space-y-2">
                 <label className="font-semibold text-[#001a41] uppercase text-[11px] tracking-widest">
-                  File báo cáo (PDF){' '}
+                  {t('fields.pdf')}{' '}
                   {initialData && (
                     <span className="text-slate-400 normal-case font-normal">
-                      (Chỉ chọn nếu muốn thay đổi)
+                      {t('optionalChangeHint')}
                     </span>
                   )}
                 </label>
@@ -194,7 +206,7 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file && file.size > 10 * 1024 * 1024)
-                        return toast.error('File quá 10MB sếp ơi!');
+                        return toast.error(t('toast.pdfTooLarge'));
                       setPdfFile(file || null);
                     }}
                   />
@@ -209,18 +221,18 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
                     {pdfFile
                       ? pdfFile.name
                       : initialData
-                        ? 'BẤM ĐỂ TẢI FILE MỚI (NẾU CẦN)'
-                        : 'TẢI LÊN FILE PDF CHIẾN LƯỢC'}
+                        ? t('fileLabels.uploadNewPdf')
+                        : t('fileLabels.uploadPdf')}
                   </span>
                 </label>
               </div>
 
               <div className="space-y-2">
                 <label className="font-semibold text-[#001a41] uppercase text-[11px] tracking-widest">
-                  Ảnh bìa (Thumbnail){' '}
+                  {t('fields.thumbnail')}{' '}
                   {initialData && (
                     <span className="text-slate-400 normal-case font-normal">
-                      (Chỉ chọn nếu muốn thay đổi)
+                      {t('optionalChangeHint')}
                     </span>
                   )}
                 </label>
@@ -228,12 +240,15 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
                 {/* HIỂN THỊ ẢNH CŨ KHI SỬA */}
                 {initialData?.thumbnail && !thumbnailFile && (
                   <div className="mb-2 h-24 w-full bg-slate-50 border border-slate-200 rounded-lg overflow-hidden relative group">
-                    <img
+                    <Image
                       src={initialData.thumbnail}
-                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all"
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw, 600px"
+                      className="object-cover opacity-80 group-hover:opacity-100 transition-all"
                     />
                     <div className="absolute top-1 right-1 bg-black/50 text-white text-[9px] px-2 py-1 rounded">
-                      ẢNH HIỆN TẠI
+                      {t('currentImage')}
                     </div>
                   </div>
                 )}
@@ -250,7 +265,7 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file && file.size > 2 * 1024 * 1024)
-                        return toast.error('Ảnh quá 2MB sếp ơi!');
+                        return toast.error(t('toast.imageTooLarge'));
                       setThumbnailFile(file || null);
                     }}
                   />
@@ -263,8 +278,8 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
                     {thumbnailFile
                       ? thumbnailFile.name
                       : initialData
-                        ? 'BẤM ĐỂ TẢI ẢNH MỚI (NẾU CẦN)'
-                        : 'CHỌN ẢNH ĐẠI DIỆN BÁO CÁO'}
+                        ? t('fileLabels.uploadNewImage')
+                        : t('fileLabels.uploadImage')}
                   </span>
                 </label>
               </div>
@@ -279,11 +294,11 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
               className="w-full md:w-auto min-w-[240px] bg-[#001a41] text-white px-10 py-4 rounded-lg font-black uppercase tracking-widest hover:bg-slate-800 disabled:bg-slate-300 transition-all flex items-center justify-center gap-3 text-[11px]"
             >
               {loading ? (
-                'PROCESSING...'
+                t('processing')
               ) : (
                 <>
                   {initialData ? <Save size={16} /> : <Send size={16} />}{' '}
-                  {initialData ? 'Lưu thay đổi' : 'Phát hành báo cáo'}
+                  {initialData ? t('saveChanges') : t('publish')}
                 </>
               )}
             </button>

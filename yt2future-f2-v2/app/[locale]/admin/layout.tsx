@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from '@/components/common/Link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 import {
   LayoutDashboard,
   Users,
@@ -17,13 +18,29 @@ import Cookies from 'js-cookie';
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations('admin.layout');
+
+  const isMenuActive = (href: string) => {
+    const full = `/${locale}${href}`;
+    if (href === '/admin') return pathname === full;
+    return pathname === full || pathname.startsWith(`${full}/`);
+  };
 
   const menuItems = [
-    { icon: <LayoutDashboard size={18} />, label: 'Tổng quan', href: '/admin' },
-    { icon: <Users size={18} />, label: 'Người dùng', href: '/admin/users' },
-    { icon: <FileText size={18} />, label: 'Báo cáo', href: '/admin/reports' },
-    { icon: <Layers size={18} />, label: 'Danh mục', href: '/admin/categories' },
-    { icon: <MessageSquare size={18} />, label: 'Phản hồi', href: '/admin/feedbacks' },
+    { icon: <LayoutDashboard size={18} />, label: t('menu.overview'), href: '/admin' },
+    { icon: <Users size={18} />, label: t('menu.users'), href: '/admin/users' },
+    { icon: <FileText size={18} />, label: t('menu.reports'), href: '/admin/reports' },
+    {
+      icon: <Layers size={18} />,
+      label: t('menu.categories'),
+      href: '/admin/categories',
+    },
+    {
+      icon: <MessageSquare size={18} />,
+      label: t('menu.feedbacks'),
+      href: '/admin/feedbacks',
+    },
   ];
 
   const handleLogout = () => {
@@ -34,13 +51,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col antialiased">
-      <PageHeader title="Admin Panel" />
+      <PageHeader title={t('pageTitle')} />
       <div className="max-w-360 mx-auto w-full px-6 md:px-12 py-8 md:py-12 grow flex flex-col lg:flex-row gap-6 md:gap-10">
         <aside className="w-full lg:w-64 shrink-0">
           <div className="sticky top-24">
             <nav className="bg-white border border-gray-200 rounded-lg shadow-sm p-2 flex lg:flex-col overflow-x-auto lg:overflow-visible no-scrollbar gap-1">
               {menuItems.map((item) => {
-                const isActive = pathname === item.href;
+                const isActive = isMenuActive(item.href);
                 return (
                   <Link
                     key={item.href}
@@ -69,7 +86,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   className="w-full flex items-center gap-3 px-4 py-3 rounded-md text-red-600 hover:bg-red-50 transition-all font-semibold text-xs uppercase tracking-wide"
                 >
                   <LogOut size={18} />
-                  <span>Thoát hệ thống</span>
+                  <span>{t('signOut')}</span>
                 </button>
               </div>
             </nav>

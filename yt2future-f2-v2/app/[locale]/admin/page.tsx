@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState, useCallback } from 'react';
-import { adminService } from '@/services/adminService';
+import FallbackImage from '@/components/common/FallbackImage';
+import { adminService, type DashboardStatsPayload } from '@/features/admin/api/adminApi';
 import {
   Clock,
   Users,
@@ -11,10 +12,25 @@ import {
   Layers,
   RefreshCcw,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { toast } from 'react-hot-toast';
+import { ApiClientError } from '@/services/apiClient';
+import { useLocale, useTranslations } from 'next-intl';
+
+type AuditLog = {
+  id: string;
+  adminName?: string;
+  adminAvatarUrl?: string | null;
+  action: string;
+  target: string;
+  createdAt: string;
+};
 
 export default function AdminDashboard() {
-  const [logs, setLogs] = useState<any[]>([]);
-  const [stats, setStats] = useState({
+  const locale = useLocale();
+  const t = useTranslations('admin.dashboard');
+  const [logs, setLogs] = useState<AuditLog[]>([]);
+  const [stats, setStats] = useState<DashboardStatsPayload>({
     totalUsers: 0,
     totalReports: 0,
     pendingReports: 0,
@@ -32,28 +48,51 @@ export default function AdminDashboard() {
 
       try {
         const [statsData, logData] = await Promise.all([
-          adminService.getDashboardStats().catch(() => ({ stats: {} })),
-          adminService.getAuditLogs(page).catch(() => ({ logs: [], totalPages: 1 })),
+          adminService.getDashboardStats().catch((err: unknown) => {
+            if (!isSilent) {
+              const msg =
+                err instanceof ApiClientError
+                  ? err.message
+                  : err instanceof Error
+                    ? err.message
+                    : t('toast.statsError');
+              toast.error(msg);
+            }
+            return { success: false as const };
+          }),
+          adminService.getAuditLogs(page).catch((err: unknown) => {
+            if (!isSilent) {
+              const msg =
+                err instanceof ApiClientError
+                  ? err.message
+                  : err instanceof Error
+                    ? err.message
+                    : t('toast.logsError');
+              toast.error(msg);
+            }
+            return { logs: [], totalPages: 1 };
+          }),
         ]);
 
-        if (statsData.success) {
+        if (statsData.success && statsData.stats) {
           setStats(statsData.stats);
         }
 
-        setLogs(logData.logs || []);
+        setLogs((logData.logs || []) as AuditLog[]);
         setTotalPages(logData.totalPages || 1);
       } finally {
         setLoading(false);
         setRefreshing(false);
       }
     },
-    [page]
+    [page, t]
   );
 
   useEffect(() => {
     loadData();
-    window.addEventListener('refreshLogs', () => loadData(true));
-    return () => window.removeEventListener('refreshLogs', () => loadData(true));
+    const refreshHandler = () => loadData(true);
+    window.addEventListener('refreshLogs', refreshHandler);
+    return () => window.removeEventListener('refreshLogs', refreshHandler);
   }, [loadData]);
 
   if (loading)
@@ -61,7 +100,7 @@ export default function AdminDashboard() {
       <div className="flex flex-col h-[60vh] items-center justify-center space-y-6">
         <div className="w-12 h-12 border-3 border-gray-200 border-t-gray-900 animate-spin rounded-full"></div>
         <p className="font-semibold text-gray-600 uppercase text-xs tracking-wide">
-          Đang tải dữ liệu...
+          {t('loading')}
         </p>
       </div>
     );
@@ -71,29 +110,29 @@ export default function AdminDashboard() {
       {/* STAT CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          title="Nhân sự"
+          title={t('stats.people')}
           value={stats.totalUsers}
           Icon={Users}
           color="bg-blue-50"
           iconColor="text-blue-600"
         />
         <StatCard
-          title="Báo cáo đã đăng"
-          value={stats.totalReports}
+          title={t('stats.pendingReports')}
+          value={stats.pendingReports}
           Icon={ShieldCheck}
           color="bg-green-50"
           iconColor="text-green-600"
         />
         <StatCard
-          title="Chờ duyệt bài"
-          value={stats.pendingReports}
+          title={t('stats.publishedReports')}
+          value={stats.totalReports}
           Icon={FileText}
           color="bg-yellow-50"
           iconColor="text-yellow-600"
           pulse
         />
         <StatCard
-          title="Danh mục ngành"
+          title={t('stats.categories')}
           value={stats.totalCategories}
           Icon={Layers}
           color="bg-purple-50"
@@ -105,7 +144,7 @@ export default function AdminDashboard() {
       <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
           <h3 className="font-semibold text-gray-900 text-sm uppercase tracking-wide flex items-center gap-2">
-            <Clock size={16} className="text-gray-600" /> Nhật ký thao tác hệ thống
+            <Clock size={16} className="text-gray-600" /> {t('auditLogTitle')}
           </h3>
           <button
             onClick={() => loadData(true)}
@@ -125,11 +164,13 @@ export default function AdminDashboard() {
                     className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
                   >
                     <td className="p-4 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 bg-gray-100">
-                        <img
+                      <div className="relative w-10 h-10 rounded-full overflow-hidden border border-gray-200 bg-gray-100">
+                        <FallbackImage
                           src={log.adminAvatarUrl || '/Logo.jpg'}
-                          className="w-full h-full object-cover"
-                          onError={(e: any) => (e.target.src = '/Logo.jpg')}
+                          className="object-cover"
+                          alt=""
+                          fill
+                          sizes="40px"
                         />
                       </div>
                       <div className="flex flex-col">
@@ -137,7 +178,9 @@ export default function AdminDashboard() {
                           {log.adminName || 'Admin'}
                         </span>
                         <span className="text-xs text-gray-500">
-                          {new Date(log.createdAt).toLocaleString('vi-VN')}
+                          {new Date(log.createdAt).toLocaleString(
+                            locale === 'vi' ? 'vi-VN' : 'en-US'
+                          )}
                         </span>
                       </div>
                     </td>
@@ -161,7 +204,7 @@ export default function AdminDashboard() {
                     colSpan={2}
                     className="p-20 text-center text-xs font-semibold text-gray-400 uppercase tracking-wide"
                   >
-                    Hệ thống chưa ghi nhận thao tác
+                    {t('emptyLogs')}
                   </td>
                 </tr>
               )}
@@ -172,7 +215,7 @@ export default function AdminDashboard() {
         {/* PAGINATION */}
         <div className="px-6 py-4 bg-gray-50 flex justify-between items-center border-t border-gray-200">
           <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
-            Trang {page} / {totalPages}
+            {t('pagination', { page, totalPages })}
           </span>
           <div className="flex gap-2">
             <PaginationBtn
@@ -193,7 +236,21 @@ export default function AdminDashboard() {
 }
 
 // Helper Components
-function StatCard({ title, value, Icon, color, iconColor, pulse = false }: any) {
+function StatCard({
+  title,
+  value,
+  Icon,
+  color,
+  iconColor,
+  pulse = false,
+}: {
+  title: string;
+  value: number;
+  Icon: LucideIcon;
+  color: string;
+  iconColor: string;
+  pulse?: boolean;
+}) {
   return (
     <div
       className={`${color} p-5 rounded-lg border border-gray-200 flex items-center justify-between group hover:shadow-md transition-all`}
@@ -211,7 +268,15 @@ function StatCard({ title, value, Icon, color, iconColor, pulse = false }: any) 
   );
 }
 
-function PaginationBtn({ Icon, onClick, disabled }: any) {
+function PaginationBtn({
+  Icon,
+  onClick,
+  disabled,
+}: {
+  Icon: LucideIcon;
+  onClick: () => void;
+  disabled: boolean;
+}) {
   return (
     <button
       disabled={disabled}

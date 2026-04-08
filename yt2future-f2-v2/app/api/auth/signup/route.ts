@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authService } from '@/services/authService';
+import { authService } from '@/features/auth/api/authApi';
+
+const getErrorMessage = (error: unknown, fallback: string) =>
+  error instanceof Error ? error.message : fallback;
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,8 +28,11 @@ export async function POST(req: NextRequest) {
     await authService.register({ fullName, email, password });
 
     return NextResponse.json({ message: 'Đăng ký thành công!' });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Signup API Error:', error);
-    return NextResponse.json({ message: error.message || 'Đăng ký thất bại' }, { status: 500 });
+    return NextResponse.json(
+      { message: getErrorMessage(error, 'Đăng ký thất bại') },
+      { status: 500 }
+    );
   }
 }

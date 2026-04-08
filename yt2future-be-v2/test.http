@@ -1,23 +1,30 @@
 @baseUrl = http://localhost:5000
 
-### 1. KIỂM TRA SERVER (PING)
+### Health
 GET {{baseUrl}}/
 
-### 2. ĐĂNG KÝ TÀI KHOẢN ADMIN (Chạy cái này trước)
+### 404 (JSON envelope)
+GET {{baseUrl}}/api/does-not-exist
+
+### Register (replace with your own test email)
 POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
-    "email": "nhatbao@gmail.com",
-    "password": "nhatbao2212@",
-    "fullName": "Nhất Bảo Admin"
+    "email": "you@example.com",
+    "password": "your-secure-password",
+    "fullName": "Test User"
 }
 
-### 3. ĐĂNG NHẬP ĐỂ LẤY TOKEN
+### Login (cookie session)
 POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "nhatbao@gmail.com",
-    "password": "nhatbao2212@"
+    "email": "you@example.com",
+    "password": "your-secure-password"
 }
+
+### Upload PDF (requires Cookie: yt2future_token from login; multipart field name: pdfFile)
+# POST {{baseUrl}}/api/upload
+# Content-Type: multipart/form-data; boundary=----WebKitFormBoundary

@@ -23,7 +23,7 @@ export async function GET(request: Request) {
           email: user.email || '',
           name:
             user.user_metadata.full_name || user.user_metadata.name || user.email?.split('@')[0],
-          avatarUrl: user.user_metadata.avatar_url || user.user_metadata.picture || '',
+          picture: user.user_metadata.avatar_url || user.user_metadata.picture || undefined,
         };
 
         try {

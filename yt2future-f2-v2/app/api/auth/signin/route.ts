@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
+const getErrorMessage = (error: unknown, fallback: string) =>
+  error instanceof Error ? error.message : fallback;
+
 export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
@@ -41,10 +44,10 @@ export async function POST(req: NextRequest) {
     } else {
       return NextResponse.json({ message: 'Backend did not return token' }, { status: 500 });
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Login API Error:', error);
     return NextResponse.json(
-      { message: error.message || 'Internal Server Error' },
+      { message: getErrorMessage(error, 'Internal Server Error') },
       { status: 500 }
     );
   }

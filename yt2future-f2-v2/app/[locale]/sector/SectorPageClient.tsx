@@ -1,7 +1,9 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import Image from 'next/image';
 import PageHeader from '@/components/layout/PageHeader';
-import { reportService } from '@/services/reportService';
+import { reportService } from '@/features/reports/api/reportApi';
+import { categoryApi } from '@/features/categories/api/categoryApi';
 import { Search, PlusCircle, User, FileText, X, ChevronDown, Calendar } from 'lucide-react';
 import CreateReportPage from '@/components/common/CreateReportPage';
 import { useTranslations, useLocale } from 'next-intl';
@@ -10,8 +12,19 @@ export default function SectorPage() {
   const t = useTranslations('sector_page');
   const locale = useLocale();
 
-  const [reports, setReports] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [reports, setReports] = useState<
+    Array<{
+      id: string;
+      title: string;
+      description?: string;
+      thumbnail?: string;
+      pdfUrl: string;
+      createdAt: string;
+      category?: { name?: string };
+      user?: { fullName?: string };
+    }>
+  >([]);
+  const [categories, setCategories] = useState<Array<{ id: number; name: string }>>([]);
   const [activeCatId, setActiveCatId] = useState<number | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -32,17 +45,17 @@ export default function SectorPage() {
           setUserData(data.user);
         }
       } catch (err) {
-        console.error('Lỗi xác thực:', err);
+        console.error('Auth fetch error:', err);
       }
     };
     fetchUser();
-    reportService.getCategories().then((res) => {
+    categoryApi.getCategories().then((res) => {
       if (res.success) setCategories(res.categories);
     });
   }, []);
 
   // Tải báo cáo
-  const loadReports = async () => {
+  const loadReports = useCallback(async () => {
     setLoading(true);
     try {
       const data = await reportService.getPublicReports(page, activeCatId, searchQuery);
@@ -53,12 +66,12 @@ export default function SectorPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, activeCatId, searchQuery]);
 
   useEffect(() => {
     const timer = setTimeout(loadReports, 300);
     return () => clearTimeout(timer);
-  }, [page, activeCatId, searchQuery]);
+  }, [loadReports]);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -157,10 +170,12 @@ export default function SectorPage() {
                 className="group bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col cursor-pointer hover:shadow-xl hover:border-[#001a41]/30 transition-all duration-300"
               >
                 <div className="aspect-video relative overflow-hidden bg-slate-100 border-b border-slate-100">
-                  <img
+                  <Image
                     src={report.thumbnail || '/Logo.jpg'}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     alt={report.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute top-3 right-3 rounded-full bg-[#001a41] text-white text-[10px] font-semibold px-2.5 py-1">
                     {report.category?.name}
@@ -238,8 +253,6 @@ export default function SectorPage() {
                 </span>
 
                 <div className="flex items-center gap-3">
-                  {/* NÚT TẢI XUỐNG */}
-
                   <button
                     onClick={() => setReadingPdfUrl(null)}
                     className="bg-rose-600 p-2 border-2 border-slate-900 hover:rotate-90 transition-all"
@@ -250,9 +263,9 @@ export default function SectorPage() {
               </div>
 
               <iframe
-                src={`https://docs.google.com/viewer?url=${encodeURIComponent(readingPdfUrl)}&embedded=true`}
-                className="flex-1 w-full border-0"
-                title="Intelligence Viewer"
+                src={`/api/pdf-proxy?url=${encodeURIComponent(readingPdfUrl)}`}
+                className="flex-1 w-full border-0 bg-slate-100"
+                title={t('viewer_title')}
               />
             </div>
           </div>

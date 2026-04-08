@@ -31,8 +31,9 @@ class AuthService {
   async grantGoogleRole(profile: any) {
     // Bóc tách kỹ để không trượt phát nào, kể cả khi Google trả về cấu trúc khác nhau
     const email = profile.email;
-    const fullName = profile.name || profile.given_name || 'Người dùng Google';
-    const avatarUrl = profile.picture || profile.image || null;
+    const fullName =
+      profile.name || profile.given_name || email?.split('@')[0] || 'Người dùng Google';
+    const avatarUrl = profile.picture || profile.avatarUrl || profile.image || null;
 
     if (!email) throw new Error('auth.googleAuthError');
 
@@ -54,6 +55,19 @@ class AuthService {
           password: null,
         } as any,
       });
+    } else {
+      // Đồng bộ lại avatar/name từ Google nếu tài khoản cũ thiếu hoặc đã đổi ảnh.
+      const shouldUpdateName = !!fullName && fullName !== user.fullName;
+      const shouldUpdateAvatar = !!avatarUrl && avatarUrl !== user.avatarUrl;
+      if (shouldUpdateName || shouldUpdateAvatar) {
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            fullName: shouldUpdateName ? fullName : undefined,
+            avatarUrl: shouldUpdateAvatar ? avatarUrl : undefined,
+          },
+        });
+      }
     }
 
     // 3. Tạo Token với đầy đủ thông tin để Navbar hiện Avatar ngay

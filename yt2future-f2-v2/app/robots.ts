@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
+import { getCanonicalBaseUrl } from '@/lib/seo';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yt2future.com';
+  const baseUrl = getCanonicalBaseUrl();
 
   return {
     rules: {

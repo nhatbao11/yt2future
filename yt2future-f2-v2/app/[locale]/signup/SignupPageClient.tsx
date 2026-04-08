@@ -84,17 +84,16 @@ export default function SignupPageClient({ errorMessage, successMessage }: Signu
               const result = await res.json();
 
               if (!res.ok) {
-                toast.error(result.message || 'Đăng ký thất bại!');
+                toast.error(result.message || tAuth('signUpFailed'));
               } else {
-                toast.success(result.message || 'Đăng ký thành công!');
+                toast.success(result.message || tAuth('signUpSuccess'));
                 router.refresh();
                 router.push(
-                  '/signup?success=' +
-                    encodeURIComponent('Đăng ký thành công! Sếp đăng nhập ngay đi.')
+                  '/signup?success=' + encodeURIComponent(tAuth('signUpSuccessRedirect'))
                 );
               }
-            } catch (err) {
-              toast.error('Lỗi kết nối server!');
+            } catch {
+              toast.error(tAuth('serverError'));
             } finally {
               setLoading(false);
             }
@@ -164,7 +163,7 @@ export default function SignupPageClient({ errorMessage, successMessage }: Signu
 
           <div className="pt-2">
             <PrimaryButton
-              label={loading ? 'Creating...' : tAuth('createAccount')}
+              label={loading ? tAuth('creating') : tAuth('createAccount')}
               type="submit"
               fullWidth={true}
               disabled={loading}
@@ -213,9 +212,9 @@ export default function SignupPageClient({ errorMessage, successMessage }: Signu
             </div>
             <div className="flex-1 bg-gray-100">
               <iframe
-                src={`https://docs.google.com/viewer?url=${encodeURIComponent(activePdf.url)}&embedded=true`}
+                src={`/api/pdf-proxy?url=${encodeURIComponent(activePdf.url)}`}
                 className="w-full h-full border-0"
-                title="Policy Viewer"
+                title={tAuth('policyViewerTitle')}
               />
             </div>
           </div>

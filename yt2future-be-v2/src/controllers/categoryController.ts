@@ -1,45 +1,54 @@
-import type { Request, Response } from 'express';
-import { prisma } from '../lib/prisma.js';
-import { createLog } from '../services/logService.js'; // Đường dẫn tới file log của sếp
+import type { NextFunction, Request, Response } from 'express';
+import { createLog } from '../services/logService.js';
+import { AppError } from '../utils/AppError.js';
+import { getErrorMessage } from '../utils/errors.js';
+import * as categoryService from '../modules/categories/categoryService.js';
 
-// 1. Lấy tất cả danh mục (Dùng cho bộ lọc ở FE)
-export const getAllCategories = async (req: Request, res: Response) => {
+export const getAllCategories = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const categories = await prisma.category.findMany({
-      orderBy: { name: 'asc' },
-    });
+    const order = req.query.order === 'desc' ? 'desc' : 'asc';
+    const categories = await categoryService.listCategories(order);
     res.json({ success: true, categories });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Không thể lấy danh mục!' });
+  } catch (error: unknown) {
+    console.error('[CategoryController] getAllCategories failed:', getErrorMessage(error));
+    next(new AppError('Không thể lấy danh mục!', 500, 'CATEGORY_FETCH_FAILED'));
   }
 };
 
-// 2. Tạo danh mục mới (Chỉ dành cho ADMIN)
-export const createCategory = async (req: any, res: Response) => {
+export const createCategory = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { name, slug } = req.body;
 
-    // Kiểm tra xem slug đã tồn tại chưa để tránh crash DB
-    const existing = await prisma.category.findUnique({ where: { slug } });
-    if (existing) {
-      return res.status(400).json({ message: 'Slug này đã tồn tại sếp ơi!' });
-    }
+    const cat = await categoryService.createCategory({ name, slug });
 
-    const cat = await prisma.category.create({
-      data: { name, slug },
-    });
-
-    // Ghi lại nhật ký: Admin nào đã thêm danh mục gì
     if (req.user) {
       await createLog(req.user, 'THÊM DANH MỤC', name);
     }
 
     res.json({ success: true, category: cat });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: 'Lỗi tạo danh mục!',
-      error: error.message,
-    });
+  } catch (error: unknown) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    console.error('[CategoryController] createCategory failed:', getErrorMessage(error));
+    next(
+      new AppError('Lỗi tạo danh mục!', 500, 'CATEGORY_CREATE_FAILED', {
+        reason: getErrorMessage(error),
+      })
+    );
+  }
+};
+
+export const deleteCategory = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    await categoryService.deleteCategory(Number(id));
+    res.json({ success: true, message: 'Xóa danh mục thành công!' });
+  } catch (error: unknown) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    console.error('[CategoryController] deleteCategory failed:', getErrorMessage(error));
+    next(new AppError('Không thể xóa danh mục!', 500, 'CATEGORY_DELETE_FAILED'));
   }
 };

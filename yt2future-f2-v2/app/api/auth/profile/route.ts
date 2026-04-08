@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
 import { cookies } from 'next/headers';
 
+const getErrorMessage = (error: unknown, fallback: string) =>
+  error instanceof Error ? error.message : fallback;
+
 export async function PUT(req: NextRequest) {
   try {
     // 1. Config Cloudinary
@@ -30,16 +33,20 @@ export async function PUT(req: NextRequest) {
       const buffer = Buffer.from(arrayBuffer);
 
       try {
-        const uploadResult: any = await new Promise((resolve, reject) => {
+        const uploadResult = (await new Promise((resolve, reject) => {
           const stream = cloudinary.uploader.upload_stream(
             {
               folder: 'avatars',
               upload_preset: 'yt2future',
             },
-            (error, result) => (error ? reject(error) : resolve(result))
+            (error, result) => {
+              if (error) reject(error);
+              else if (result?.secure_url) resolve(result);
+              else reject(new Error('Cloudinary upload returned no URL'));
+            }
           );
           stream.end(buffer);
-        });
+        })) as { secure_url: string };
         avatarUrl = uploadResult.secure_url;
       } catch (error) {
         console.error('Cloudinary Upload Error:', error);
@@ -67,10 +74,10 @@ export async function PUT(req: NextRequest) {
     }
 
     return NextResponse.json({ message: 'Update successful', avatarUrl });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('API Error:', error);
     return NextResponse.json(
-      { message: error.message || 'Internal Server Error' },
+      { message: getErrorMessage(error, 'Internal Server Error') },
       { status: 500 }
     );
   }

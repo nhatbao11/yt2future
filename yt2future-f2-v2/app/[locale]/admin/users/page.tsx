@@ -1,30 +1,42 @@
 'use client';
-import React, { useEffect, useState, useMemo } from 'react';
-import { adminService } from '@/services/adminService';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import FallbackImage from '@/components/common/FallbackImage';
+import { adminService } from '@/features/admin/api/adminApi';
 import { Trash2, RefreshCcw, ChevronLeft, ChevronRight, UserCog, ShieldCheck } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
+
+type AdminUser = {
+  id: string;
+  fullName: string;
+  email: string;
+  avatarUrl?: string | null;
+  role: 'ADMIN' | 'CTV' | 'MEMBER' | 'USER';
+  roleTitle?: string;
+};
 
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<any[]>([]);
+  const t = useTranslations('admin.usersPage');
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       const data = await adminService.getAllUsers();
       setUsers(data || []);
-    } catch (err) {
-      toast.error('Máy chủ đang bận, vui lòng đợi!');
+    } catch {
+      toast.error(t('toast.serverBusy'));
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetchUsers]);
 
   const totalPages = Math.ceil(users.length / itemsPerPage);
   const paginatedUsers = useMemo(() => {
@@ -32,12 +44,12 @@ export default function AdminUsersPage() {
     return users.slice(startIndex, startIndex + itemsPerPage);
   }, [users, currentPage]);
 
-  const handleUpdateRole = async (userId: string, newRole: string) => {
-    const roleTitleMap: Record<string, string> = {
-      ADMIN: 'Quản trị viên',
-      CTV: 'Cộng tác viên',
-      MEMBER: 'Hội viên chính thức',
-      USER: 'Thành viên mới',
+  const handleUpdateRole = async (userId: string, newRole: AdminUser['role']) => {
+    const roleTitleMap: Record<AdminUser['role'], string> = {
+      ADMIN: t('roleTitle.ADMIN'),
+      CTV: t('roleTitle.CTV'),
+      MEMBER: t('roleTitle.MEMBER'),
+      USER: t('roleTitle.USER'),
     };
 
     try {
@@ -50,26 +62,26 @@ export default function AdminUsersPage() {
       const res = await adminService.updateUserRole(userId, newRole);
 
       if (res.success) {
-        toast.success(`Đã cập nhật quyền thành công!`);
+        toast.success(t('toast.roleUpdated'));
         window.dispatchEvent(new Event('refreshLogs'));
       }
-    } catch (err) {
+    } catch {
       fetchUsers();
-      toast.error('Lỗi cập nhật quyền hạn!');
+      toast.error(t('toast.roleUpdateError'));
     }
   };
 
   const handleDelete = async (userId: string, userName: string) => {
-    if (window.confirm(`Bạn chắc chắn muốn xóa user "${userName}"?`)) {
+    if (window.confirm(t('confirmDelete', { userName }))) {
       try {
         await adminService.deleteUser(userId);
-        toast.success(`Đã xóa ${userName} khỏi hệ thống!`);
+        toast.success(t('toast.deleted', { userName }));
         const newList = users.filter((u) => u.id !== userId);
         setUsers(newList);
         const newTotalPages = Math.ceil(newList.length / itemsPerPage);
         if (currentPage > newTotalPages && newTotalPages > 0) setCurrentPage(newTotalPages);
-      } catch (err) {
-        toast.error('Không thể xóa Admin khác!');
+      } catch {
+        toast.error(t('toast.deleteError'));
       }
     }
   };
@@ -80,10 +92,10 @@ export default function AdminUsersPage() {
       <div className="flex justify-between items-center pb-4 border-b border-gray-200">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-            <UserCog size={28} className="text-gray-600" /> Quản trị nhân sự
+            <UserCog size={28} className="text-gray-600" /> {t('title')}
           </h2>
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mt-1">
-            {users.length} người dùng | Trang {currentPage}
+            {t('subtitle', { count: users.length, page: currentPage })}
           </p>
         </div>
         <button
@@ -99,7 +111,7 @@ export default function AdminUsersPage() {
         <div className="flex flex-col items-center justify-center py-32 space-y-4">
           <div className="w-12 h-12 border-3 border-gray-200 border-t-gray-900 animate-spin rounded-full"></div>
           <p className="font-semibold text-gray-600 uppercase text-xs tracking-wide">
-            Đang tải danh sách...
+            {t('loading')}
           </p>
         </div>
       ) : (
@@ -109,10 +121,10 @@ export default function AdminUsersPage() {
             <table className="w-full text-left min-w-[800px] border-collapse">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr className="text-xs font-semibold uppercase tracking-wide text-gray-700">
-                  <th className="p-4">Thành viên & Chức danh</th>
-                  <th className="p-4">Liên hệ (Email)</th>
-                  <th className="p-4 text-center">Phân quyền (Role)</th>
-                  <th className="p-4 text-right">Kiểm soát</th>
+                  <th className="p-4">{t('table.memberTitle')}</th>
+                  <th className="p-4">{t('table.contact')}</th>
+                  <th className="p-4 text-center">{t('table.role')}</th>
+                  <th className="p-4 text-right">{t('table.actions')}</th>
                 </tr>
               </thead>
               <tbody className="text-sm text-gray-900">
@@ -122,17 +134,19 @@ export default function AdminUsersPage() {
                     className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
                   >
                     <td className="p-4 flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-full overflow-hidden border border-gray-200 bg-gray-100">
-                        <img
+                      <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-200 bg-gray-100">
+                        <FallbackImage
                           src={user.avatarUrl || '/Logo.jpg'}
-                          className="w-full h-full object-cover"
+                          className="object-cover"
                           alt="avatar"
+                          fill
+                          sizes="44px"
                         />
                       </div>
                       <div>
                         <div className="font-semibold text-gray-900">{user.fullName}</div>
                         <div className="text-xs text-yellow-600 font-medium flex items-center gap-1 mt-0.5">
-                          <ShieldCheck size={10} /> {user.roleTitle || 'Thành viên mới'}
+                          <ShieldCheck size={10} /> {user.roleTitle || t('roleTitle.USER')}
                         </div>
                       </div>
                     </td>
@@ -140,7 +154,9 @@ export default function AdminUsersPage() {
                     <td className="p-4 text-center">
                       <select
                         value={user.role}
-                        onChange={(e) => handleUpdateRole(user.id, e.target.value)}
+                        onChange={(e) =>
+                          handleUpdateRole(user.id, e.target.value as AdminUser['role'])
+                        }
                         className={`px-4 py-2 rounded-md text-xs font-semibold border border-gray-300 outline-none cursor-pointer transition-all ${
                           user.role === 'ADMIN'
                             ? 'bg-red-50 text-red-700'
@@ -174,7 +190,7 @@ export default function AdminUsersPage() {
           {/* PAGINATION */}
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
             <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
-              Trang {currentPage} / {totalPages || 1}
+              {t('pagination', { page: currentPage, totalPages: totalPages || 1 })}
             </span>
             <div className="flex gap-2">
               <button

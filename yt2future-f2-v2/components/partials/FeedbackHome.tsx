@@ -1,5 +1,6 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { MessageSquarePlus, Send, X, Star, ChevronDown, ChevronUp } from 'lucide-react';
@@ -8,18 +9,40 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import { useTranslations } from 'next-intl';
+import { getApiBaseURL } from '@/services/apiClient';
+
+function FeedbackAuthorAvatar({ url, name }: { url?: string | null; name: string }) {
+  const [failed, setFailed] = useState(false);
+  const src = failed || !url?.trim() ? '/Logo.jpg' : url;
+  return (
+    <Image
+      src={src}
+      alt={name}
+      fill
+      sizes="40px"
+      className="object-cover"
+      onError={() => setFailed(true)}
+    />
+  );
+}
 
 export default function FeedbackHome() {
   const t = useTranslations('feedback');
   const tCommon = useTranslations('common');
-  const [feedbacks, setFeedbacks] = useState<any[]>([]);
+  const [feedbacks, setFeedbacks] = useState<
+    Array<{
+      id: string;
+      content: string;
+      rating: number;
+      user?: { fullName?: string; avatarUrl?: string | null };
+    }>
+  >([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(5);
   const [loading, setLoading] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
   const MAX_LENGTH = 250;
 
   const getLocale = () => {
@@ -29,28 +52,28 @@ export default function FeedbackHome() {
     return 'vi';
   };
 
-  const loadFeedbacks = async () => {
+  const loadFeedbacks = useCallback(async () => {
     try {
-      const res = await fetch(`${BACKEND_URL}/feedback/home`, {
+      const res = await fetch(`${getApiBaseURL()}/feedback/home`, {
         headers: { 'Accept-Language': getLocale() },
       });
       const data = await res.json();
       if (data.success) setFeedbacks(data.feedbacks || []);
     } catch (err) {
-      console.error('Lỗi API:', err);
+      console.error('Feedback API error:', err);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadFeedbacks();
-  }, []);
+  }, [loadFeedbacks]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!content.trim()) return;
     setLoading(true);
     try {
-      const res = await fetch(`${BACKEND_URL}/feedback/send`, {
+      const res = await fetch(`${getApiBaseURL()}/feedback/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +103,7 @@ export default function FeedbackHome() {
       } else {
         toast.error(data.message || t('failure'));
       }
-    } catch (err) {
+    } catch {
       toast.error(t('error'));
     } finally {
       setLoading(false);
@@ -149,11 +172,11 @@ export default function FeedbackHome() {
                           >
                             {isExpanded ? (
                               <>
-                                Show less <ChevronUp size={14} />
+                                {t('showLess')} <ChevronUp size={14} />
                               </>
                             ) : (
                               <>
-                                Read more <ChevronDown size={14} />
+                                {t('readMore')} <ChevronDown size={14} />
                               </>
                             )}
                           </button>
@@ -163,17 +186,15 @@ export default function FeedbackHome() {
 
                     {/* Author Info */}
                     <div className="flex items-center gap-3 mt-6 pt-4 border-t border-slate-100">
-                      <div className="w-10 h-10 rounded-full bg-slate-100 overflow-hidden flex-shrink-0">
-                        <img
-                          src={fb.user?.avatarUrl || '/Logo.jpg'}
-                          className="w-full h-full object-cover"
-                          onError={(e: any) => (e.target.src = '/Logo.jpg')}
-                          alt={fb.user?.fullName}
+                      <div className="relative w-10 h-10 rounded-full bg-slate-100 overflow-hidden flex-shrink-0">
+                        <FeedbackAuthorAvatar
+                          url={fb.user?.avatarUrl}
+                          name={fb.user?.fullName || t('userFallback')}
                         />
                       </div>
                       <div className="overflow-hidden">
                         <h4 className="font-bold text-sm text-slate-900 truncate">
-                          {fb.user?.fullName || 'Anonymous'}
+                          {fb.user?.fullName || t('anonymous')}
                         </h4>
                         <p className="text-xs text-slate-500">{t('role')}</p>
                       </div>
@@ -225,7 +246,9 @@ export default function FeedbackHome() {
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
               {/* Rating */}
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-3">Rating</label>
+                <label className="block text-sm font-semibold text-slate-700 mb-3">
+                  {t('ratingLabel')}
+                </label>
                 <div className="flex justify-center gap-2">
                   {[1, 2, 3, 4, 5].map((num) => (
                     <button
@@ -247,7 +270,7 @@ export default function FeedbackHome() {
               {/* Textarea */}
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Your feedback
+                  {t('feedbackLabel')}
                 </label>
                 <div className="relative">
                   <textarea

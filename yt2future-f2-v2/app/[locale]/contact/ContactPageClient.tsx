@@ -84,7 +84,7 @@ export default function ContactPage() {
                     </label>
                     <input
                       type="text"
-                      placeholder="Your Name"
+                      placeholder={t('placeholders.name')}
                       className="w-full bg-gray-50 border border-gray-200 p-4 text-sm outline-none focus:border-yellow-500 focus:bg-white transition-all"
                     />
                   </div>
@@ -94,7 +94,7 @@ export default function ContactPage() {
                     </label>
                     <input
                       type="email"
-                      placeholder="Your Email"
+                      placeholder={t('placeholders.email')}
                       className="w-full bg-gray-50 border border-gray-200 p-4 text-sm outline-none focus:border-yellow-500 focus:bg-white transition-all"
                     />
                   </div>
@@ -106,7 +106,7 @@ export default function ContactPage() {
                   </label>
                   <input
                     type="text"
-                    placeholder="Subject"
+                    placeholder={t('placeholders.subject')}
                     className="w-full bg-gray-50 border border-gray-200 p-4 text-sm outline-none focus:border-yellow-500 focus:bg-white transition-all"
                   />
                 </div>
@@ -117,7 +117,7 @@ export default function ContactPage() {
                   </label>
                   <textarea
                     rows={4}
-                    placeholder="Your Message"
+                    placeholder={t('placeholders.message')}
                     className="w-full bg-gray-50 border border-gray-200 p-4 text-sm outline-none focus:border-yellow-500 focus:bg-white transition-all resize-none"
                   ></textarea>
                 </div>
@@ -139,7 +139,7 @@ export default function ContactPage() {
               allowFullScreen={true}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="YT2Future Location"
+              title={t('mapTitle')}
               /* lg:grayscale: Chỉ xám trên Laptop, Mobile & Tablet hiện màu chuẩn */
               className="grayscale-0 lg:grayscale lg:group-hover:grayscale-0 transition-all duration-1000 ease-in-out scale-[1.01]"
             ></iframe>

@@ -1,6 +1,7 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { adminService } from '@/services/adminService';
+import React, { useCallback, useEffect, useState } from 'react';
+import FallbackImage from '@/components/common/FallbackImage';
+import { adminService } from '@/features/admin/api/adminApi';
 import {
   Check,
   X,
@@ -8,20 +9,31 @@ import {
   ListFilter,
   Clock,
   CheckCircle2,
-  User,
   Calendar,
   Star,
   Trash2,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useLocale, useTranslations } from 'next-intl';
 
 export default function AdminFeedback() {
-  const [list, setList] = useState<any[]>([]);
+  const locale = useLocale();
+  const t = useTranslations('admin.feedbacks');
+  const [list, setList] = useState<
+    Array<{
+      id: string;
+      content: string;
+      rating: number;
+      status: 'PENDING' | 'APPROVED' | 'REJECTED';
+      createdAt: string;
+      user?: { fullName?: string; avatarUrl?: string | null };
+    }>
+  >([]);
   const [filter, setFilter] = useState<'PENDING' | 'ALL'>('PENDING');
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setLoading(true);
     try {
       const feedbacks =
@@ -30,34 +42,34 @@ export default function AdminFeedback() {
           : await adminService.getAllFeedbacks();
       setList(feedbacks || []);
     } catch (err) {
-      console.error('Lỗi rồi sếp:', err);
+      console.error(t('consoleLoadError'), err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter, t]);
 
   useEffect(() => {
     loadData();
-  }, [filter]);
+  }, [loadData]);
 
   const handleAction = async (id: string, status: 'APPROVED' | 'REJECTED') => {
     try {
       await adminService.reviewFeedback(id, status);
-      toast.success(status === 'APPROVED' ? 'Đã duyệt phản hồi!' : 'Đã từ chối phản hồi!');
+      toast.success(status === 'APPROVED' ? t('toast.approved') : t('toast.rejected'));
       loadData();
-    } catch (err) {
-      toast.error('Lỗi thao tác!');
+    } catch {
+      toast.error(t('toast.actionError'));
     }
   };
 
   const handleDelete = async (id: string) => {
     try {
       await adminService.deleteFeedback(id);
-      toast.success('Đã xóa phản hồi!');
+      toast.success(t('toast.deleteSuccess'));
       setDeleteConfirm(null);
       loadData();
-    } catch (err) {
-      toast.error('Lỗi xóa phản hồi!');
+    } catch {
+      toast.error(t('toast.deleteError'));
     }
   };
 
@@ -67,10 +79,10 @@ export default function AdminFeedback() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-gray-200">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 text-gray-700 font-semibold text-xs uppercase tracking-wide">
-            Admin Console
+            {t('console')}
           </div>
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <MessageSquare size={28} className="text-gray-600" /> Quản lý đánh giá
+            <MessageSquare size={28} className="text-gray-600" /> {t('title')}
           </h1>
         </div>
 
@@ -84,7 +96,7 @@ export default function AdminFeedback() {
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            <Clock size={14} /> Chờ duyệt
+            <Clock size={14} /> {t('tabs.pending')}
           </button>
           <button
             onClick={() => setFilter('ALL')}
@@ -94,7 +106,7 @@ export default function AdminFeedback() {
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            <ListFilter size={14} /> Tất cả
+            <ListFilter size={14} /> {t('tabs.all')}
           </button>
         </div>
       </div>
@@ -103,7 +115,7 @@ export default function AdminFeedback() {
         <div className="flex flex-col items-center justify-center py-32 space-y-4">
           <div className="w-10 h-10 border-3 border-gray-300 border-t-gray-900 animate-spin rounded-full"></div>
           <p className="font-semibold text-gray-600 uppercase text-xs tracking-wide">
-            Đang tải dữ liệu...
+            {t('loading')}
           </p>
         </div>
       ) : (
@@ -116,15 +128,22 @@ export default function AdminFeedback() {
               <div className="p-5 space-y-4 flex-1">
                 <div className="flex justify-between items-start">
                   <div className="flex items-center gap-3">
-                    <img
-                      src={fb.user?.avatarUrl || '/Logo.jpg'}
-                      className="w-11 h-11 rounded-full object-cover border border-gray-200"
-                      alt="User"
-                    />
+                    <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-gray-200">
+                      <FallbackImage
+                        src={fb.user?.avatarUrl || '/Logo.jpg'}
+                        className="object-cover"
+                        alt="User"
+                        fill
+                        sizes="44px"
+                      />
+                    </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 text-sm">{fb.user?.fullName}</h4>
                       <div className="flex items-center gap-1 text-gray-500 text-xs mt-0.5">
-                        <Calendar size={11} /> {new Date(fb.createdAt).toLocaleDateString('vi-VN')}
+                        <Calendar size={11} />{' '}
+                        {new Date(fb.createdAt).toLocaleDateString(
+                          locale === 'vi' ? 'vi-VN' : 'en-US'
+                        )}
                       </div>
                     </div>
                   </div>
@@ -137,7 +156,7 @@ export default function AdminFeedback() {
                           : 'bg-red-50 text-red-700'
                       }`}
                     >
-                      {fb.status === 'APPROVED' ? 'Đã duyệt' : 'Đã loại'}
+                      {fb.status === 'APPROVED' ? t('status.approved') : t('status.rejected')}
                     </span>
                   ) : (
                     <div className="bg-yellow-50 text-yellow-600 p-1.5 rounded-md">
@@ -172,13 +191,13 @@ export default function AdminFeedback() {
                       onClick={() => handleAction(fb.id, 'APPROVED')}
                       className="flex items-center justify-center gap-2 bg-green-50 text-green-700 py-3.5 font-semibold text-xs uppercase hover:bg-green-100 transition-colors"
                     >
-                      <Check size={16} /> Duyệt
+                      <Check size={16} /> {t('actions.approve')}
                     </button>
                     <button
                       onClick={() => handleAction(fb.id, 'REJECTED')}
                       className="flex items-center justify-center gap-2 bg-red-50 text-red-700 py-3.5 font-semibold text-xs uppercase hover:bg-red-100 transition-colors border-l border-gray-200"
                     >
-                      <X size={16} /> Từ chối
+                      <X size={16} /> {t('actions.reject')}
                     </button>
                   </div>
                 ) : (
@@ -186,7 +205,7 @@ export default function AdminFeedback() {
                     onClick={() => setDeleteConfirm(fb.id)}
                     className="w-full flex items-center justify-center gap-2 bg-gray-50 text-gray-700 py-3.5 font-semibold text-xs uppercase hover:bg-red-50 hover:text-red-700 transition-colors"
                   >
-                    <Trash2 size={16} /> Xóa phản hồi
+                    <Trash2 size={16} /> {t('actions.deleteFeedback')}
                   </button>
                 )}
               </div>
@@ -197,7 +216,7 @@ export default function AdminFeedback() {
             <div className="col-span-full py-32 border-2 border-dashed border-gray-200 rounded-lg flex flex-col items-center">
               <CheckCircle2 size={48} className="text-gray-300 mb-3" />
               <p className="text-gray-400 font-semibold uppercase text-xs tracking-wide">
-                Không có dữ liệu đánh giá
+                {t('empty')}
               </p>
             </div>
           )}
@@ -209,25 +228,23 @@ export default function AdminFeedback() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
           <div className="bg-white w-full max-w-md rounded-lg shadow-xl border border-gray-200 overflow-hidden">
             <div className="p-6 border-b border-gray-200">
-              <h3 className="font-bold text-gray-900 text-lg">Xác nhận xóa</h3>
+              <h3 className="font-bold text-gray-900 text-lg">{t('confirm.title')}</h3>
             </div>
             <div className="p-6">
-              <p className="text-gray-700 text-sm leading-relaxed">
-                Bạn có chắc chắn muốn xóa phản hồi này? Hành động này không thể hoàn tác.
-              </p>
+              <p className="text-gray-700 text-sm leading-relaxed">{t('confirm.body')}</p>
             </div>
             <div className="p-6 bg-gray-50 flex gap-3 justify-end border-t border-gray-200">
               <button
                 onClick={() => setDeleteConfirm(null)}
                 className="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 font-semibold text-sm rounded-md hover:bg-gray-50 transition-colors"
               >
-                Hủy
+                {t('confirm.cancel')}
               </button>
               <button
                 onClick={() => handleDelete(deleteConfirm)}
                 className="px-5 py-2.5 bg-red-600 text-white font-semibold text-sm rounded-md hover:bg-red-700 transition-colors"
               >
-                Xóa ngay
+                {t('confirm.deleteNow')}
               </button>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret_key_cua_yt_capital';
@@ -29,7 +29,7 @@ export const verifyToken = (req: any, res: Response, next: NextFunction) => {
     };
 
     next();
-  } catch (err) {
+  } catch {
     return res.status(403).json({
       success: false,
       message: 'Phiên đăng nhập hết hạn hoặc không hợp lệ!',

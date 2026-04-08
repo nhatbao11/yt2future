@@ -1,9 +1,9 @@
 function fePaths(files) {
-  return files.map((f) => f.replace(/^yt2future-f2-v2\//, '')).join(' ');
+  return files.join(' ');
 }
 
 function bePaths(files) {
-  return files.map((f) => f.replace(/^yt2future-be-v2\//, '')).join(' ');
+  return files.join(' ');
 }
 
 export default {
@@ -13,7 +13,7 @@ export default {
   '.github/**/*.{yml,yaml}': 'prettier --write',
   '.vscode/*.json': 'prettier --write',
   'yt2future-f2-v2/**/*.{ts,tsx,mjs}': (files) =>
-    files.length ? `cd yt2future-f2-v2 && npx eslint --fix ${fePaths(files)}` : [],
+    files.length ? `npm --prefix yt2future-f2-v2 run lint -- --fix ${fePaths(files)}` : [],
   'yt2future-be-v2/**/*.{ts,tsx}': (files) =>
-    files.length ? `cd yt2future-be-v2 && npx eslint --fix ${bePaths(files)}` : [],
+    files.length ? `npm --prefix yt2future-be-v2 run lint -- --fix ${bePaths(files)}` : [],
 };

@@ -1,147 +1,111 @@
 import type { Request, Response } from 'express';
-import AuthService from '../services/authService.js';
 import rateLimit from 'express-rate-limit';
-import { createLog } from '../services/logService.js';
 import { Role } from '@prisma/client';
-import { prisma } from '../lib/prisma.js';
+import { createLog } from '../services/logService.js';
+import { AppError } from '../utils/AppError.js';
+import { getErrorMessage } from '../utils/errors.js';
+import * as adminService from '../modules/admin/adminService.js';
 
-// Giới hạn thao tác Admin để bảo mật
 export const adminLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
   max: 30,
-  message: (req: any) => ({ message: req.t('admin.rateLimitExceeded') }),
+  message: (req: Request) => ({ message: req.t('admin.rateLimitExceeded') }),
 });
 
-// 1. Lấy danh sách User - Cập nhật để lấy thêm roleTitle
 export const listUsers = async (req: Request, res: Response) => {
   try {
-    // Sếp nên dùng prisma trực tiếp ở đây hoặc cập nhật AuthService để lấy đủ trường
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        fullName: true,
-        email: true,
-        avatarUrl: true,
-        role: true,
-        roleTitle: true, // Thêm trường này để hiển thị "Macro Lead", "Researcher"
-      },
-      orderBy: { fullName: 'asc' },
-    });
+    const users = await adminService.listUsers();
     res.json({ success: true, users });
-  } catch (error: any) {
-    res.status(500).json({ message: req.t('user.listError') });
+  } catch (error: unknown) {
+    console.error('[AdminController] listUsers failed:', getErrorMessage(error));
+    throw new AppError(req.t('user.listError'), 500, 'ADMIN_USERS_LIST_FAILED');
   }
 };
 
-// src/controllers/adminController.ts
-
-// src/controllers/adminController.ts
-
-export const updateRole = async (req: any, res: Response) => {
-  const { userId, role } = req.body;
+export const updateRole = async (req: Request, res: Response) => {
+  const { userId, role } = req.body as { userId: string; role: Role };
   try {
-    const roleTitleMap: Record<string, string> = {
-      ADMIN: 'Quản trị viên',
-      CTV: 'Cộng tác viên',
-      MEMBER: 'Hội viên chính thức',
-      USER: 'Thành viên mới',
-    };
+    const updatedUser = await adminService.updateUserRole(userId, role);
 
-    // Update đồng thời cả Role và Title trong DB
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: {
-        role: role as Role,
-        roleTitle: roleTitleMap[role] || 'Thành viên',
-      },
-    });
-
-    // Ghi Log lịch sử
     const logDetail = req.t('admin.roleUpdated', { email: updatedUser.email, role });
     await createLog(req.user, 'CẬP NHẬT VAI TRÒ', logDetail);
 
-    res.json({ success: true, user: updatedUser, message: req.t('user.roleUpdated') }); // Trả về object đã update
-  } catch (error) {
-    res.status(400).json({ success: false });
+    res.json({ success: true, user: updatedUser, message: req.t('user.roleUpdated') });
+  } catch (error: unknown) {
+    console.error('[AdminController] updateRole failed:', getErrorMessage(error));
+    throw new AppError(req.t('user.roleUpdateError'), 400, 'ADMIN_USER_ROLE_UPDATE_FAILED');
   }
 };
 
-// 3. Xóa người dùng - Giữ nguyên logic bảo vệ admin của sếp
-export const removeUser = async (req: any, res: Response) => {
+export const removeUser = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const adminId = req.user.userId;
+  const adminId = req.user!.id;
 
   try {
-    const userToDelete = await prisma.user.findUnique({ where: { id } });
+    const result = await adminService.removeUser(id!, adminId);
 
-    if (!userToDelete) return res.status(404).json({ message: req.t('user.userNotExists') });
-
-    // BẢO VỆ TỐI CAO: Chặn tự xóa hoặc xóa Admin khác
-    if (id === adminId) {
-      return res.status(400).json({ message: req.t('user.cannotDeleteSelf') });
+    if (!result.ok) {
+      if (result.code === 'NOT_FOUND') {
+        throw new AppError(req.t('user.userNotExists'), 404, 'ADMIN_USER_NOT_FOUND');
+      }
+      if (result.code === 'SELF') {
+        throw new AppError(req.t('user.cannotDeleteSelf'), 400, 'ADMIN_CANNOT_DELETE_SELF');
+      }
+      if (result.code === 'ADMIN_TARGET') {
+        throw new AppError(req.t('user.cannotDeleteAdmin'), 403, 'ADMIN_CANNOT_DELETE_ADMIN');
+      }
+      throw new AppError(req.t('user.deleteError'), 400, 'ADMIN_USER_DELETE_FAILED');
     }
-    if (userToDelete.role === 'ADMIN') {
-      return res.status(403).json({ message: req.t('user.cannotDeleteAdmin') });
-    }
 
-    await prisma.user.delete({ where: { id } });
-
-    const logDetail = req.t('admin.userDeleted', { email: userToDelete.email });
+    const logDetail = req.t('admin.userDeleted', { email: result.email });
     await createLog(req.user, 'XÓA NGƯỜI DÙNG', logDetail);
 
     res.json({ success: true, message: req.t('success.deleted') });
-  } catch (error: any) {
-    res.status(400).json({ message: req.t('user.deleteError') });
+  } catch (error: unknown) {
+    if (error instanceof AppError) throw error;
+    console.error('[AdminController] removeUser failed:', getErrorMessage(error));
+    throw new AppError(req.t('user.deleteError'), 400, 'ADMIN_USER_DELETE_FAILED');
   }
 };
 
-// 4. Lấy nhật ký hệ thống - Phân trang 5 log
 export const getAuditLogs = async (req: Request, res: Response) => {
   try {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = 5;
-    const skip = (page - 1) * limit;
-
-    const [logs, total] = await prisma.$transaction([
-      prisma.auditLog.findMany({
-        orderBy: { createdAt: 'desc' },
-        skip: skip,
-        take: limit,
-      }),
-      prisma.auditLog.count(),
-    ]);
-
+    const page = Number(req.query.page || 1);
+    const { logs, totalPages, currentPage } = await adminService.getAuditLogsPage(page);
     res.json({
       success: true,
       logs,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
+      totalPages,
+      currentPage,
     });
-  } catch (error) {
-    res.status(500).json({ message: req.t('admin.logsError') });
+  } catch (error: unknown) {
+    console.error('[AdminController] getAuditLogs failed:', getErrorMessage(error));
+    throw new AppError(req.t('admin.logsError'), 500, 'ADMIN_LOGS_FETCH_FAILED');
   }
 };
 
-// 5. Lấy thống kê Dashboard (MỚI)
 export const getDashboardStats = async (req: Request, res: Response) => {
   try {
-    const [totalUsers, totalReports, pendingReports, totalCategories] = await Promise.all([
-      prisma.user.count(),
-      prisma.report.count({ where: { status: 'APPROVED' } }), // Chỉ đếm bài đã duyệt là "Báo cáo đã đăng"
-      prisma.report.count({ where: { status: 'PENDING' } }),
-      prisma.category.count(),
-    ]);
-
+    const stats = await adminService.getDashboardStats();
     res.json({
       success: true,
-      stats: {
-        totalUsers,
-        totalReports,
-        pendingReports,
-        totalCategories,
-      },
+      stats,
     });
-  } catch (error) {
-    res.status(500).json({ message: req.t('admin.statsError') });
+  } catch (error: unknown) {
+    const reason = getErrorMessage(error);
+    console.error('[AdminController] getDashboardStats failed:', reason);
+
+    if (reason.includes('max clients') || reason.includes('MaxClientsInSessionMode')) {
+      throw new AppError(
+        'Database đang quá tải kết nối. Vui lòng thử lại sau ít giây.',
+        503,
+        'DB_CONNECTION_LIMIT',
+        { reason }
+      );
+    }
+
+    throw new AppError('Không thể tải thống kê dashboard.', 500, 'ADMIN_STATS_FETCH_FAILED', {
+      reason,
+    });
   }
 };

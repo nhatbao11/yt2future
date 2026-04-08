@@ -15,7 +15,7 @@ export default function AvatarUpload({ initialAvatar }: { initialAvatar: string 
     if (file) {
       if (file.size > 1 * 1024 * 1024) {
         // 1MB
-        toast.error('Ảnh quá lớn! Vui lòng chọn ảnh < 1MB sếp ơi!');
+        toast.error(t('avatarTooLarge'));
         e.target.value = ''; // Xóa file vừa chọn để không gửi lên server
         return;
       }

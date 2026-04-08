@@ -8,7 +8,11 @@ import PrimaryButton from '@/components/common/PrimaryButton';
 import AvatarUpload from '@/components/partials/AvatarUpload';
 
 interface ProfilePageClientProps {
-  profile: any;
+  profile: {
+    fullName?: string;
+    email?: string;
+    avatarUrl?: string | null;
+  } | null;
 }
 
 export default function ProfilePageClient({ profile }: ProfilePageClientProps) {
@@ -31,14 +35,14 @@ export default function ProfilePageClient({ profile }: ProfilePageClientProps) {
       const result = await response.json();
 
       if (!response.ok) {
-        toast.error(result.message || 'Cập nhật thất bại sếp ơi!');
+        toast.error(result.message || t('updateFailed'));
       } else {
-        toast.success('Đã lưu vào DB thành công!');
+        toast.success(t('updateSuccess'));
         router.refresh();
       }
     } catch (error) {
       console.error('Profile Update Error:', error);
-      toast.error('Lỗi kết nối server!');
+      toast.error(t('serverError'));
     } finally {
       setLoading(false);
     }
@@ -75,7 +79,7 @@ export default function ProfilePageClient({ profile }: ProfilePageClientProps) {
 
       <div className="pt-4">
         <PrimaryButton
-          label={loading ? 'Đang lưu...' : t('submit')}
+          label={loading ? t('saving') : t('submit')}
           type="submit"
           fullWidth={true}
           className="py-4 shadow-lg shadow-yellow-200"

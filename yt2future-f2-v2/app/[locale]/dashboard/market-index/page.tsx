@@ -1,40 +1,20 @@
 'use client';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Chart } from 'react-chartjs-2';
+import dynamic from 'next/dynamic';
 import PageHeader from '@/components/layout/PageHeader';
-import {
-  Chart as ChartJS,
-  LineController,
-  BarController,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Decimation,
-  Filler,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
 import type { ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import { Expand, Shrink } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { getApiBaseURL } from '@/services/apiClient';
 
-ChartJS.register(
-  LineController,
-  BarController,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Decimation,
-  Filler,
-  Title,
-  Tooltip,
-  Legend
-);
+const MarketIndexChartBlock = dynamic(() => import('./MarketIndexChartBlock'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-full min-h-[320px] items-center justify-center rounded-lg bg-slate-50">
+      <span className="h-8 w-8 animate-spin rounded-full border-2 border-slate-200 border-t-slate-700" />
+    </div>
+  ),
+});
 
 interface MarketIndex {
   id: number;
@@ -69,9 +49,9 @@ const TIME_RANGES = [
 
 type TimeRangeValue = (typeof TIME_RANGES)[number]['value'];
 
-function formatNumber(value: number | null | undefined) {
+function formatNumber(value: number | null | undefined, locale: string) {
   if (value == null) return '-';
-  return value.toLocaleString('vi-VN', { maximumFractionDigits: 2 });
+  return value.toLocaleString(locale === 'vi' ? 'vi-VN' : 'en-US', { maximumFractionDigits: 2 });
 }
 
 function formatPercent(value: number | null | undefined) {
@@ -84,8 +64,43 @@ function formatMillion(value: number | null | undefined) {
   return `${(value / 1_000_000).toFixed(2)}M`;
 }
 
+/** API mới: object theo mã. API cũ / fallback: mảng phẳng (gom theo `symbol`). */
+function normalizeMarketIndexPayload(
+  payload: unknown,
+  symbols: string[]
+): Record<string, MarketIndex[]> | null {
+  const empty = (): Record<string, MarketIndex[]> => {
+    const o: Record<string, MarketIndex[]> = {};
+    for (const s of symbols) o[s] = [];
+    return o;
+  };
+
+  if (payload == null || typeof payload !== 'object') return null;
+
+  if (Array.isArray(payload)) {
+    const out = empty();
+    for (const row of payload) {
+      if (!row || typeof row !== 'object' || !('symbol' in row)) continue;
+      const sym = String((row as MarketIndex).symbol);
+      if (out[sym]) {
+        out[sym].push(row as MarketIndex);
+      }
+    }
+    return out;
+  }
+
+  const out = empty();
+  for (const sym of symbols) {
+    const rows = (payload as Record<string, unknown>)[sym];
+    out[sym] = Array.isArray(rows) ? (rows as MarketIndex[]) : [];
+  }
+  return out;
+}
+
 export default function MarketIndexDashboard() {
+  const locale = useLocale();
   const t = useTranslations('dashboard');
+  const m = useTranslations('dashboard.marketIndex');
   const [data, setData] = useState<Record<string, MarketIndex[]>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -98,32 +113,45 @@ export default function MarketIndexDashboard() {
 
   useEffect(() => {
     const controller = new AbortController();
+    setError(null);
     setLoading(true);
-    Promise.all(
-      SYMBOLS.map((symbol) =>
-        fetch(
-          `${process.env.NEXT_PUBLIC_BE_URL || 'http://localhost:5000'}/api/market-index?symbol=${symbol}`,
-          { signal: controller.signal }
-        )
-          .then((res) => res.json())
-          .then((arr) => ({ symbol, arr }))
-      )
-    )
-      .then((results) => {
-        const obj: Record<string, MarketIndex[]> = {};
-        results.forEach(({ symbol, arr }) => {
-          obj[symbol] = arr;
-        });
+    const base = getApiBaseURL();
+    const symbolsParam = SYMBOLS.join(',');
+    fetch(`${base}/market-index?symbols=${encodeURIComponent(symbolsParam)}`, {
+      signal: controller.signal,
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(String(res.status));
+        return res.json() as Promise<Record<string, MarketIndex[]> | MarketIndex[]>;
+      })
+      .then((payload) => {
+        const apiError =
+          payload && typeof payload === 'object' && !Array.isArray(payload)
+            ? (payload as { error?: unknown }).error
+            : undefined;
+
+        if (typeof apiError === 'string') {
+          setError(apiError || m('errors.api'));
+          setLoading(false);
+          return;
+        }
+
+        const obj = normalizeMarketIndexPayload(payload, SYMBOLS);
+        if (!obj) {
+          setError(m('errors.invalidFormat'));
+          setLoading(false);
+          return;
+        }
         setData(obj);
         setLoading(false);
       })
       .catch((err: { name?: string }) => {
         if (err?.name === 'AbortError') return;
-        setError('Lỗi tải dữ liệu');
+        setError(m('errors.loadFailed'));
         setLoading(false);
       });
     return () => controller.abort();
-  }, []);
+  }, [m]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -135,7 +163,8 @@ export default function MarketIndexDashboard() {
   }, []);
 
   const selectedRows = useMemo(() => {
-    const rows = data[selectedSymbol] ?? [];
+    const rows = data[selectedSymbol];
+    if (!Array.isArray(rows)) return [];
     return [...rows].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [data, selectedSymbol]);
   const latestRow = selectedRows.length > 0 ? selectedRows[selectedRows.length - 1] : undefined;
@@ -232,14 +261,13 @@ export default function MarketIndexDashboard() {
     });
     const closePointRadius = filteredRows.map((_, index) => (activeIndex === index ? 4 : 1.5));
     const closePointHoverRadius = filteredRows.map((_, index) => (activeIndex === index ? 5 : 2.5));
-    const highlightLine = activeIndex != null ? filteredRows[activeIndex] : null;
 
     return {
       labels,
       datasets: [
         {
           type: 'bar' as const,
-          label: 'Thanh khoản',
+          label: m('legend.liquidity'),
           data: filteredRows.map((row) => row.volume ?? 0),
           yAxisID: 'yVolume',
           backgroundColor: volumeColors,
@@ -252,7 +280,7 @@ export default function MarketIndexDashboard() {
           order: 10,
         },
         {
-          label: 'Mức cao',
+          label: m('legend.high'),
           data: filteredRows.map((row) => row.high ?? null),
           yAxisID: 'yPrice',
           borderColor: 'rgba(15,23,42,0.25)',
@@ -263,7 +291,7 @@ export default function MarketIndexDashboard() {
           fill: false,
         },
         {
-          label: 'Mức thấp',
+          label: m('legend.low'),
           data: filteredRows.map((row) => row.low ?? null),
           yAxisID: 'yPrice',
           borderColor: 'rgba(15,23,42,0.25)',
@@ -299,90 +327,97 @@ export default function MarketIndexDashboard() {
         },
       ],
     };
-  }, [filteredRows, hoveredIndex, selectedSymbol]);
+  }, [filteredRows, hoveredIndex, m, selectedSymbol]);
 
   const maxVolume = useMemo(
     () => Math.max(...filteredRows.map((row) => row.volume ?? 0), 0),
     [filteredRows]
   );
 
-  const chartOptions: ChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: {
-      duration: 360,
-      easing: 'easeOutQuart' as const,
-    },
-    normalized: true,
-    interaction: {
-      mode: 'index' as const,
-      intersect: false,
-    },
-    onHover: (_event: unknown, elements: Array<{ index: number }>) => {
-      if (elements && elements.length > 0) {
-        setHoveredIndex(elements[0].index);
-      }
-    },
-    onClick: (_event: unknown, elements: Array<{ index: number }>) => {
-      if (elements && elements.length > 0) {
-        setHoveredIndex(elements[0].index);
-      }
-    },
-    plugins: {
-      decimation: {
-        enabled: true,
-        algorithm: 'lttb' as const,
-        samples: 120,
+  const chartPointCount = filteredRows.length;
+
+  const chartOptions: ChartOptions<'line' | 'bar'> = useMemo(
+    () => ({
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: {
+        duration: chartPointCount > 180 ? 0 : 360,
+        easing: 'easeOutQuart' as const,
       },
-      legend: {
-        display: !isMobileView,
-        labels: {
-          filter: (item: { text?: string }) =>
-            item.text !== 'Mức cao' && item.text !== 'Mức thấp' && item.text !== 'focus-line',
+      normalized: true,
+      interaction: {
+        mode: 'index' as const,
+        intersect: false,
+      },
+      onHover: (_event: unknown, elements: Array<{ index: number }>) => {
+        if (elements && elements.length > 0) {
+          setHoveredIndex(elements[0].index);
+        }
+      },
+      onClick: (_event: unknown, elements: Array<{ index: number }>) => {
+        if (elements && elements.length > 0) {
+          setHoveredIndex(elements[0].index);
+        }
+      },
+      plugins: {
+        decimation: {
+          enabled: chartPointCount > 80,
+          algorithm: 'lttb' as const,
+          samples: Math.min(200, Math.max(80, Math.floor(chartPointCount / 2))),
         },
-      },
-      title: {
-        display: !isMobileView,
-        text: `Biểu đồ ${selectedSymbol}`,
-        font: {
-          size: 18,
-          weight: 'bold' as const,
+        legend: {
+          display: !isMobileView,
+          labels: {
+            filter: (item: { text?: string }) =>
+              item.text !== m('legend.high') &&
+              item.text !== m('legend.low') &&
+              item.text !== 'focus-line',
+          },
         },
-      },
-      tooltip: {
-        filter: (context) => context.dataset.label !== 'focus-line',
-        callbacks: {
-          label: (context: TooltipItem<'line' | 'bar'>) => {
-            const label = context.dataset.label ?? '';
-            const y = context.parsed.y;
-            if (y == null) return `${label}: -`;
-            if (label === 'Thanh khoản') {
-              return `${label}: ${formatMillion(y)}`;
-            }
-            return `${label}: ${formatNumber(y)}`;
+        title: {
+          display: !isMobileView,
+          text: m('chartTitle', { symbol: selectedSymbol }),
+          font: {
+            size: 18,
+            weight: 'bold' as const,
+          },
+        },
+        tooltip: {
+          filter: (context) => context.dataset.label !== 'focus-line',
+          callbacks: {
+            label: (context: TooltipItem<'line' | 'bar'>) => {
+              const label = context.dataset.label ?? '';
+              const y = context.parsed.y;
+              if (y == null) return `${label}: -`;
+              if (label === m('legend.liquidity')) {
+                return `${label}: ${formatMillion(y)}`;
+              }
+              return `${label}: ${formatNumber(y, locale)}`;
+            },
           },
         },
       },
-    },
-    scales: {
-      x: {
-        title: { display: true, text: 'Ngày' },
-        ticks: { maxTicksLimit: 6 },
+      scales: {
+        x: {
+          title: { display: true, text: m('axis.date') },
+          ticks: { maxTicksLimit: 6 },
+        },
+        yPrice: {
+          display: true,
+          position: 'right' as const,
+          title: { display: false, text: 'Close' },
+        },
+        yVolume: {
+          display: false,
+          position: 'right' as const,
+          min: 0,
+          max: maxVolume > 0 ? maxVolume * 4 : 1,
+          grid: { display: false },
+        },
       },
-      yPrice: {
-        display: true,
-        position: 'right' as const,
-        title: { display: false, text: 'Close' },
-      },
-      yVolume: {
-        display: false,
-        position: 'right' as const,
-        min: 0,
-        max: maxVolume > 0 ? maxVolume * 4 : 1,
-        grid: { display: false },
-      },
-    },
-  };
+    }),
+    [chartPointCount, isMobileView, locale, m, maxVolume, selectedSymbol]
+  );
 
   if (loading) {
     return (
@@ -391,7 +426,7 @@ export default function MarketIndexDashboard() {
         <div className="max-w-360 mx-auto px-6 md:px-12 py-20 flex items-center justify-center">
           <div className="inline-flex items-center gap-3 rounded-xl border border-[#001a41]/10 bg-white px-5 py-3 shadow-sm">
             <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#001a41]/20 border-t-[#001a41]" />
-            <span className="text-sm font-semibold text-[#001a41]">Đang tải dữ liệu</span>
+            <span className="text-sm font-semibold text-[#001a41]">{m('loading')}</span>
           </div>
         </div>
       </div>
@@ -427,7 +462,7 @@ export default function MarketIndexDashboard() {
             <p className="text-sm font-semibold text-slate-200">{selectedSymbol}</p>
             <p className="text-xs font-medium text-slate-400">
               {latestRow?.date
-                ? new Date(latestRow.date).toLocaleDateString('vi-VN', {
+                ? new Date(latestRow.date).toLocaleDateString(locale === 'vi' ? 'vi-VN' : 'en-US', {
                     day: '2-digit',
                     month: '2-digit',
                     year: 'numeric',
@@ -437,20 +472,20 @@ export default function MarketIndexDashboard() {
           </div>
           <div className="mt-3 grid grid-cols-2 items-end gap-4 md:flex md:flex-wrap md:items-end md:gap-6">
             <div className="min-w-0">
-              <p className="text-xs text-slate-400">Giá hiện tại</p>
+              <p className="text-xs text-slate-400">{m('cards.currentPrice')}</p>
               <p className="text-2xl md:text-3xl font-bold text-white">
-                {formatNumber(latestRow?.close)}
+                {formatNumber(latestRow?.close, locale)}
               </p>
             </div>
             <div className="min-w-0">
-              <p className="text-xs text-slate-400">Tăng/Giảm</p>
+              <p className="text-xs text-slate-400">{m('cards.change')}</p>
               <p
                 className={`text-xl md:text-3xl font-bold whitespace-nowrap md:whitespace-normal ${
                   (dailyChangePct ?? 0) >= 0 ? 'text-emerald-400' : 'text-rose-400'
                 }`}
               >
                 {dailyChangeValue != null
-                  ? `${dailyChangeValue > 0 ? '+' : ''}${formatNumber(dailyChangeValue)}`
+                  ? `${dailyChangeValue > 0 ? '+' : ''}${formatNumber(dailyChangeValue, locale)}`
                   : '-'}
                 {' / '}
                 {formatPercent(dailyChangePct)}
@@ -461,27 +496,27 @@ export default function MarketIndexDashboard() {
 
         <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
           <div className="rounded-lg bg-slate-50 p-3 shadow-sm ring-1 ring-slate-200">
-            <p className="text-[11px] text-slate-600">Giá mở</p>
+            <p className="text-[11px] text-slate-600">{m('cards.open')}</p>
             <p className="mt-0.5 text-base font-semibold text-slate-900">
-              {formatNumber(latestRow?.open)}
+              {formatNumber(latestRow?.open, locale)}
             </p>
           </div>
           <div className="rounded-lg bg-slate-50 p-3 shadow-sm ring-1 ring-slate-200">
-            <p className="text-[11px] text-slate-600">Giá đóng</p>
+            <p className="text-[11px] text-slate-600">{m('cards.close')}</p>
             <p className="mt-0.5 text-base font-semibold text-slate-900">
-              {formatNumber(latestRow?.close)}
+              {formatNumber(latestRow?.close, locale)}
             </p>
           </div>
           <div className="rounded-lg bg-slate-50 p-3 shadow-sm ring-1 ring-slate-200">
-            <p className="text-[11px] text-slate-600">Giá cao nhất</p>
+            <p className="text-[11px] text-slate-600">{m('cards.highest')}</p>
             <p className="mt-0.5 text-base font-semibold text-slate-900">
-              {formatNumber(latestRow?.high)}
+              {formatNumber(latestRow?.high, locale)}
             </p>
           </div>
           <div className="rounded-lg bg-slate-50 p-3 shadow-sm ring-1 ring-slate-200">
-            <p className="text-[11px] text-slate-600">Giá thấp nhất</p>
+            <p className="text-[11px] text-slate-600">{m('cards.lowest')}</p>
             <p className="mt-0.5 text-base font-semibold text-slate-900">
-              {formatNumber(latestRow?.low)}
+              {formatNumber(latestRow?.low, locale)}
             </p>
           </div>
         </div>
@@ -510,15 +545,15 @@ export default function MarketIndexDashboard() {
               type="button"
               onClick={() => setIsExpanded((prev) => !prev)}
               className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
-              title={isExpanded ? 'Thu nhỏ biểu đồ' : 'Phóng to biểu đồ'}
-              aria-label={isExpanded ? 'Thu nhỏ biểu đồ' : 'Phóng to biểu đồ'}
+              title={isExpanded ? m('actions.shrinkChart') : m('actions.expandChart')}
+              aria-label={isExpanded ? m('actions.shrinkChart') : m('actions.expandChart')}
             >
               {isExpanded ? <Shrink size={16} /> : <Expand size={16} />}
             </button>
           </div>
 
           <p className="mb-2 ml-3 text-lg font-bold text-slate-700 md:hidden">
-            Biểu đồ {selectedSymbol}
+            {m('chartLabel', { symbol: selectedSymbol })}
           </p>
           <div ref={chartScrollRef} className="overflow-x-auto">
             <div
@@ -526,7 +561,10 @@ export default function MarketIndexDashboard() {
                 isExpanded ? 'h-[70vh]' : 'h-[320px] md:h-[420px]'
               }`}
             >
-              <Chart type="line" data={chartData as ChartData<'line'>} options={chartOptions} />
+              <MarketIndexChartBlock
+                data={chartData as ChartData<'line'>}
+                options={chartOptions as ChartOptions<'line' | 'bar'>}
+              />
             </div>
           </div>
 
@@ -547,7 +585,7 @@ export default function MarketIndexDashboard() {
                   <span className="inline-block h-2.5 w-2 rounded-sm bg-emerald-500/80" />
                   <span className="inline-block h-2.5 w-2 rounded-sm bg-rose-500/80" />
                 </span>
-                <span>Thanh khoản</span>
+                <span>{m('legend.liquidity')}</span>
               </div>
             </div>
           )}

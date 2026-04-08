@@ -1,223 +1,135 @@
-import { v2 as cloudinary } from 'cloudinary';
-import { prisma } from '../lib/prisma.js';
-import _slugify from 'slugify';
-import fs from 'fs';
+import type { NextFunction, Request, Response } from 'express';
+import { AppError } from '../utils/AppError.js';
+import { getErrorMessage } from '../utils/errors.js';
+import * as reportService from '../modules/reports/reportService.js';
 
-const slugify = _slugify as unknown as (string: string, options?: any) => string;
-
-export const createReport = async (req: any, res: any) => {
+export const createReport = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { title, categoryId, description, status } = req.body;
-    const userId = req.user.id;
+    const userId = req.user!.id;
 
     if (!title) {
-      return res.status(400).json({ message: req.t('report.titleRequired') });
+      return next(new AppError(req.t('report.titleRequired'), 400, 'REPORT_TITLE_REQUIRED'));
     }
 
-    // 1. Tạo slug tự động
-    const rawSlug = slugify(title, {
-      lower: true,
-      locale: 'vi',
-      strict: true,
-    });
-    const slug = `${rawSlug}-${Date.now()}`;
-
-    let thumbnail = '';
-    let pdfUrl = '';
-
-    // 2. XỬ LÝ FILE THEO HỆ express-fileupload (KHÔNG DÙNG MULTER NỮA)
-    if (req.files) {
-      // Xử lý Upload Ảnh đại diện (Thumbnail)
-      if (req.files.thumbnail) {
-        const thumbFile = req.files.thumbnail;
-        const result = await cloudinary.uploader.upload(thumbFile.tempFilePath, {
-          folder: 'yt_reports/thumbnails',
-        });
-        thumbnail = result.secure_url;
-        fs.unlink(thumbFile.tempFilePath, () => {}); // Xóa temp file sau upload
-      }
-
-      // Xử lý Upload file PDF (pdfFile)
-      if (req.files.pdfFile) {
-        const pdfFile = req.files.pdfFile;
-        const result = await cloudinary.uploader.upload(pdfFile.tempFilePath, {
-          folder: 'yt_reports/pdf',
-          resource_type: 'raw',
-          use_filename: true,
-          unique_filename: false,
-        });
-        pdfUrl = result.secure_url;
-        fs.unlink(pdfFile.tempFilePath, () => {}); // Xóa temp file sau upload
-      }
-    }
-
-    // 3. Lưu vào DB
-    const newReport = await prisma.report.create({
-      data: {
-        title,
-        slug,
-        description,
-        thumbnail,
-        pdfUrl: pdfUrl || '',
-        status: status || 'PENDING',
-        categoryId: Number(categoryId),
-        userId: userId,
-      },
+    const newReport = await reportService.createReport({
+      userId,
+      title,
+      categoryId: Number(categoryId),
+      description,
+      status,
+      files: req.files,
     });
 
     res.json({ success: true, report: newReport, message: req.t('report.createSuccess') });
-  } catch (error: any) {
-    console.error('Lỗi Controller:', error);
-    res.status(500).json({ message: req.t('report.createError', { error: error.message }) });
+  } catch (error: unknown) {
+    console.error('[ReportController] createReport failed:', getErrorMessage(error));
+    next(
+      new AppError(
+        req.t('report.createError', { error: getErrorMessage(error) }),
+        500,
+        'REPORT_CREATE_FAILED'
+      )
+    );
   }
 };
 
-// --- CÁC HÀM KHÁC GIỮ NGUYÊN LOGIC CỦA SẾP ---
-
-export const getAllReportsAdmin = async (req: any, res: any) => {
+export const getAllReportsAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { page = 1 } = req.query;
-    const limit = 5;
-    const skip = (Number(page) - 1) * limit;
-
-    const [reports, total] = await Promise.all([
-      prisma.report.findMany({
-        include: {
-          category: { select: { name: true } },
-          user: { select: { fullName: true, avatarUrl: true } },
-        },
-        orderBy: { createdAt: 'desc' },
-        take: limit,
-        skip: skip,
-      }),
-      prisma.report.count(),
-    ]);
-
+    const page = Number(req.query.page ?? 1);
+    const result = await reportService.getAllReportsAdmin(page);
     res.json({
       success: true,
-      reports,
-      totalPages: Math.ceil(total / limit),
-      currentPage: Number(page),
+      reports: result.reports,
+      totalPages: result.totalPages,
+      currentPage: result.currentPage,
     });
-  } catch (error) {
-    res.status(500).json({ message: req.t('report.fetchError') });
+  } catch (error: unknown) {
+    console.error('[ReportController] getAllReportsAdmin failed:', getErrorMessage(error));
+    next(new AppError(req.t('report.fetchError'), 500, 'REPORT_ADMIN_LIST_FAILED'));
   }
 };
 
-export const reviewReport = async (req: any, res: any) => {
+export const reviewReport = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id, status } = req.body;
-    const updated = await prisma.report.update({
-      where: { id },
-      data: { status },
-    });
+    const { id, status } = req.body as { id: string; status: string };
+    const updated = await reportService.reviewReport(id, status);
     res.json({ success: true, report: updated });
-  } catch (error) {
-    res.status(500).json({ message: req.t('report.reviewError') });
+  } catch (error: unknown) {
+    console.error('[ReportController] reviewReport failed:', getErrorMessage(error));
+    next(
+      new AppError(req.t('report.reviewError'), 500, 'REPORT_REVIEW_FAILED', {
+        reason: getErrorMessage(error),
+      })
+    );
   }
 };
 
-export const getPublicReports = async (req: any, res: any) => {
+export const getPublicReports = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { page = 1, categoryId, search = '' } = req.query;
-    const limit = 6;
-    const skip = (Number(page) - 1) * limit;
-
-    const whereCondition: any = {
-      status: 'APPROVED',
-      ...(categoryId ? { categoryId: Number(categoryId) } : {}),
-      ...(search
-        ? {
-            title: { contains: String(search), mode: 'insensitive' },
-          }
-        : {}),
+    const {
+      page = 1,
+      categoryId,
+      search = '',
+    } = req.query as unknown as {
+      page: number;
+      categoryId?: number;
+      search?: string;
     };
-
-    const [reports, total] = await Promise.all([
-      prisma.report.findMany({
-        where: whereCondition,
-        include: {
-          category: { select: { name: true } },
-          user: { select: { fullName: true } },
-        },
-        orderBy: { createdAt: 'desc' },
-        take: limit,
-        skip: skip,
-      }),
-      prisma.report.count({ where: whereCondition }),
-    ]);
-
+    const result = await reportService.getPublicReports({
+      page: Number(page),
+      search: String(search ?? ''),
+      ...(categoryId != null ? { categoryId: Number(categoryId) } : {}),
+    });
     res.json({
       success: true,
-      reports,
-      totalPages: Math.ceil(total / limit),
-      currentPage: Number(page),
+      reports: result.reports,
+      totalPages: result.totalPages,
+      currentPage: result.currentPage,
     });
-  } catch (error: any) {
-    res.status(500).json({ message: req.t('report.publicFetchError', { error: error.message }) });
+  } catch (error: unknown) {
+    console.error('[ReportController] getPublicReports failed:', getErrorMessage(error));
+    next(
+      new AppError(
+        req.t('report.publicFetchError', { error: getErrorMessage(error) }),
+        500,
+        'REPORT_PUBLIC_FETCH_FAILED'
+      )
+    );
   }
 };
 
-export const deleteReport = async (req: any, res: any) => {
+export const deleteReport = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
-    await prisma.report.delete({ where: { id } });
+    await reportService.deleteReport(id!);
     res.json({ success: true, message: req.t('report.deleteSuccess') });
-  } catch (error) {
-    res.status(500).json({ message: req.t('report.deleteError') });
+  } catch (error: unknown) {
+    console.error('[ReportController] deleteReport failed:', getErrorMessage(error));
+    next(new AppError(req.t('report.deleteError'), 500, 'REPORT_DELETE_FAILED'));
   }
 };
 
-export const updateReport = async (req: any, res: any) => {
+export const updateReport = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const { title, categoryId, description } = req.body;
 
-    const oldReport = await prisma.report.findUnique({ where: { id } });
-    if (!oldReport) return res.status(404).json({ message: req.t('report.notFound') });
-
-    const updateData: any = {
+    const updatedReport = await reportService.updateReport({
+      id: id!,
       title,
-      description,
       categoryId: Number(categoryId),
-    };
-
-    if (title && title !== oldReport.title) {
-      const rawSlug = slugify(title, { lower: true, locale: 'vi', strict: true });
-      updateData.slug = `${rawSlug}-${Date.now()}`;
-    }
-
-    if (req.files) {
-      if (req.files.thumbnail) {
-        const thumbFile = req.files.thumbnail;
-        const result = await cloudinary.uploader.upload(thumbFile.tempFilePath, {
-          folder: 'yt_reports/thumbnails',
-        });
-        updateData.thumbnail = result.secure_url;
-        fs.unlink(thumbFile.tempFilePath, () => {}); // Xóa temp file sau upload
-      }
-
-      if (req.files.pdfFile) {
-        const pdfFile = req.files.pdfFile;
-        const result = await cloudinary.uploader.upload(pdfFile.tempFilePath, {
-          folder: 'yt_reports/pdf',
-          resource_type: 'raw',
-          use_filename: true,
-          unique_filename: false,
-        });
-        updateData.pdfUrl = result.secure_url;
-        fs.unlink(pdfFile.tempFilePath, () => {}); // Xóa temp file sau upload
-      }
-    }
-
-    const updatedReport = await prisma.report.update({
-      where: { id },
-      data: updateData,
+      description,
+      files: req.files,
     });
 
+    if (!updatedReport) {
+      return next(new AppError(req.t('report.notFound'), 404, 'REPORT_NOT_FOUND'));
+    }
+
     res.json({ success: true, report: updatedReport, message: req.t('report.updateSuccess') });
-  } catch (error: any) {
-    console.error('Lỗi update:', error);
-    res.status(500).json({ message: req.t('report.updateError') });
+  } catch (error: unknown) {
+    console.error('[ReportController] updateReport failed:', getErrorMessage(error));
+    next(new AppError(req.t('report.updateError'), 500, 'REPORT_UPDATE_FAILED'));
   }
 };

@@ -1,12 +1,13 @@
 'use client';
 
 import { useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
-import { locales } from '@/i18n/request';
 import { useEffect } from 'react';
 
 export default function LanguageSwitcher() {
   const locale = useLocale();
+  const t = useTranslations('common');
   const router = useRouter();
   const pathname = usePathname();
 
@@ -42,7 +43,7 @@ export default function LanguageSwitcher() {
     <button
       onClick={switchLocale}
       className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-yellow-100 text-[#001a41] border border-gray-200 hover:border-yellow-200 transition-all font-black text-[10px] tracking-widest shadow-sm"
-      aria-label="Switch Language"
+      aria-label={t('switchLanguage')}
     >
       {locale === 'vi' ? 'VI' : 'EN'}
     </button>
