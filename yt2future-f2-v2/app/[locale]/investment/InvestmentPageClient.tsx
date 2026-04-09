@@ -243,36 +243,42 @@ export default function InvestmentSolutions() {
     <div className="min-h-screen bg-[#f4f7ff]">
       <PageHeader title={t('title')} />
 
-      <main className="max-w-360 mx-auto px-4 md:px-10 xl:px-12 py-8 md:py-12 space-y-6 md:space-y-8">
-        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#001a41] via-[#13356f] to-[#1f4fa0] p-5 md:p-9 text-white shadow-2xl shadow-blue-900/20">
+      <main className="max-w-360 mx-auto px-3 sm:px-4 md:px-10 xl:px-12 py-6 sm:py-8 md:py-12 space-y-5 sm:space-y-6 md:space-y-8">
+        <section className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#001a41] via-[#13356f] to-[#1f4fa0] p-4 sm:p-6 md:p-8 lg:p-9 text-white shadow-2xl shadow-blue-900/20">
           <div className="absolute -top-12 -right-10 h-44 w-44 rounded-full bg-white/10 blur-2xl" />
           <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-black/15 to-transparent" />
-          <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
-            <div className="lg:col-span-7">
-              <p className="text-sm md:text-base uppercase tracking-[0.22em] font-bold text-yellow-300">
-                {content.heroTag}
-              </p>
-              <h1 className="mt-3 text-2xl md:text-4xl font-black tracking-tight leading-tight text-balance">
-                {content.heroTitle}
-              </h1>
-              <p className="mt-4 text-sm md:text-base text-blue-100 leading-relaxed max-w-4xl">
-                {content.heroDescription}
-              </p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {content.heroStats.map((item) => (
-                  <span
-                    key={item}
-                    className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-blue-50"
-                  >
-                    {item}
-                  </span>
-                ))}
+          <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 lg:gap-8 items-center">
+            <div className="lg:col-span-7 min-w-0">
+              {/*
+                Một cột đọc thống nhất: cùng max-width để mép phải các khối chữ thẳng hàng;
+                text-justify + hyphens giúp dòng đều hơn (dòng cuối vẫn có thể ngắn hơn — đặc tính CSS).
+              */}
+              <div className="w-full max-w-2xl xl:max-w-[44rem]">
+                <p className="text-sm sm:text-base md:text-xl lg:text-2xl uppercase tracking-[0.12em] sm:tracking-[0.16em] md:tracking-[0.2em] font-extrabold text-yellow-300 leading-snug">
+                  {content.heroTag}
+                </p>
+                <h1 className="mt-2 sm:mt-3 text-[1.35rem] sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-tight leading-[1.15] sm:leading-tight text-pretty max-w-full">
+                  {content.heroTitle}
+                </h1>
+                <p className="mt-3 sm:mt-4 text-xs sm:text-sm md:text-base text-blue-100/95 leading-relaxed sm:leading-relaxed text-justify hyphens-auto break-words max-w-full">
+                  {content.heroDescription}
+                </p>
+                <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-2.5">
+                  {content.heroStats.map((item) => (
+                    <span
+                      key={item}
+                      className="inline-flex w-full sm:w-auto items-center justify-center sm:justify-start rounded-full border border-white/20 bg-white/10 px-3 py-2 sm:py-1.5 text-[11px] sm:text-xs font-semibold text-blue-50 leading-snug text-center sm:text-left"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
             <button
               type="button"
               onClick={() => setVideoOpen(true)}
-              className="lg:col-span-5 group rounded-2xl border border-white/20 bg-black/25 p-2 hover:bg-black/35 transition text-left focus:outline-none focus:ring-2 focus:ring-yellow-300/80"
+              className="lg:col-span-5 min-w-0 group rounded-xl sm:rounded-2xl border border-white/20 bg-black/25 p-1.5 sm:p-2 hover:bg-black/35 transition text-left focus:outline-none focus:ring-2 focus:ring-yellow-300/80"
             >
               <div className="relative overflow-hidden rounded-xl aspect-video">
                 <video
@@ -287,15 +293,17 @@ export default function InvestmentSolutions() {
                   <source src="/Videohome.mp4" type="video/mp4" />
                 </video>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent" />
-                <div className="absolute left-3 right-3 bottom-3 flex items-end justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-bold text-yellow-300 uppercase tracking-wider">
+                <div className="absolute left-2 right-2 sm:left-3 sm:right-3 bottom-2 sm:bottom-3 flex items-end justify-between gap-2 sm:gap-3">
+                  <div className="min-w-0 pr-1">
+                    <p className="text-[10px] sm:text-xs font-bold text-yellow-300 uppercase tracking-wider truncate sm:overflow-visible sm:whitespace-normal sm:text-wrap">
                       {content.videoPreviewLabel}
                     </p>
-                    <p className="text-xs text-slate-200">{content.videoPreviewHint}</p>
+                    <p className="text-[10px] sm:text-xs text-slate-200 leading-snug line-clamp-2 sm:line-clamp-none">
+                      {content.videoPreviewHint}
+                    </p>
                   </div>
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur text-white group-hover:scale-105 transition">
-                    <Play size={16} />
+                  <span className="inline-flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur text-white group-hover:scale-105 transition">
+                    <Play className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.25} />
                   </span>
                 </div>
               </div>
@@ -303,19 +311,22 @@ export default function InvestmentSolutions() {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 md:p-7">
+        <section className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 md:p-7">
           <SectionTitle icon={<BadgeCheck size={20} />} title={content.fitTitle} />
           <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
             <div className="flex flex-col gap-4">
-              <h3 className="text-sm font-bold text-[#001a41] border-l-4 border-[#1f4fa0] pl-3">
+              <h3 className="text-xs sm:text-sm font-bold text-[#001a41] border-l-4 border-[#1f4fa0] pl-3">
                 {content.fitBuyerLabel}
               </h3>
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 md:p-5">
                 <ul className="space-y-3">
                   {content.fitBuyer.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
-                      <CircleCheck size={14} className="mt-1 shrink-0 text-emerald-600" />
-                      <span>{item}</span>
+                    <li
+                      key={item}
+                      className="flex items-start gap-2 text-xs sm:text-sm text-slate-700"
+                    >
+                      <CircleCheck size={14} className="mt-0.5 sm:mt-1 shrink-0 text-emerald-600" />
+                      <span className="flex-1 text-justify">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -324,21 +335,24 @@ export default function InvestmentSolutions() {
                 <p className="text-xs uppercase tracking-wider text-yellow-300 font-bold">
                   {isVi ? 'Điểm nhấn nhanh' : 'Quick highlight'}
                 </p>
-                <p className="mt-3 text-sm leading-relaxed text-blue-100">
+                <p className="mt-3 text-xs sm:text-sm leading-relaxed text-blue-100 text-justify">
                   {content.fitBuyerHighlight}
                 </p>
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              <h3 className="text-sm font-bold text-[#001a41] border-l-4 border-[#1f4fa0] pl-3">
+              <h3 className="text-xs sm:text-sm font-bold text-[#001a41] border-l-4 border-[#1f4fa0] pl-3">
                 {content.fitSellerLabel}
               </h3>
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 md:p-5">
                 <ul className="space-y-3">
                   {content.fitSeller.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
-                      <CircleCheck size={14} className="mt-1 shrink-0 text-emerald-600" />
-                      <span>{item}</span>
+                    <li
+                      key={item}
+                      className="flex items-start gap-2 text-xs sm:text-sm text-slate-700"
+                    >
+                      <CircleCheck size={14} className="mt-0.5 sm:mt-1 shrink-0 text-emerald-600" />
+                      <span className="flex-1 text-justify">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -347,7 +361,7 @@ export default function InvestmentSolutions() {
                 <p className="text-xs uppercase tracking-wider text-yellow-300 font-bold">
                   {isVi ? 'Điểm nhấn nhanh' : 'Quick highlight'}
                 </p>
-                <p className="mt-3 text-sm leading-relaxed text-blue-100">
+                <p className="mt-3 text-xs sm:text-sm leading-relaxed text-blue-100 text-justify">
                   {content.fitSellerHighlight}
                 </p>
               </div>
@@ -355,7 +369,7 @@ export default function InvestmentSolutions() {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 md:p-7">
+        <section className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 md:p-7">
           <SectionTitle icon={<HandCoins size={20} />} title={content.benefitsTitle} />
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {content.benefitGroups.map((group) => (
@@ -363,12 +377,15 @@ export default function InvestmentSolutions() {
                 key={group.title}
                 className="rounded-xl border border-slate-200 bg-slate-50 p-4 md:p-5 hover:border-[#1f4fa0]/30 hover:shadow-md transition"
               >
-                <h3 className="text-sm font-bold text-[#001a41]">{group.title}</h3>
+                <h3 className="text-xs sm:text-sm font-bold text-[#001a41]">{group.title}</h3>
                 <ul className="mt-3 space-y-2">
                   {group.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
-                      <CircleCheck size={14} className="mt-1 shrink-0 text-sky-600" />
-                      <span>{item}</span>
+                    <li
+                      key={item}
+                      className="flex items-start gap-2 text-xs sm:text-sm text-slate-700"
+                    >
+                      <CircleCheck size={14} className="mt-0.5 sm:mt-1 shrink-0 text-sky-600" />
+                      <span className="flex-1 text-justify">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -377,7 +394,7 @@ export default function InvestmentSolutions() {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 md:p-7">
+        <section className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 md:p-7">
           <SectionTitle icon={<Clock3 size={20} />} title={content.contextTitle} />
           <div className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-5">
             <div className="lg:col-span-7 space-y-3">
@@ -387,32 +404,41 @@ export default function InvestmentSolutions() {
                   {index < content.contextNarrative.length - 1 ? (
                     <span className="absolute left-[7px] top-6 h-[calc(100%-12px)] w-[2px] bg-slate-200" />
                   ) : null}
-                  <p className="text-sm text-slate-700 leading-relaxed">{item}</p>
+                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
+                    {item}
+                  </p>
                 </div>
               ))}
             </div>
             <div className="lg:col-span-5 rounded-xl border border-rose-200 bg-rose-50 p-4 md:p-5">
-              <h3 className="text-sm font-bold text-rose-700 mb-3">
+              <h3 className="text-xs sm:text-sm font-bold text-rose-700 mb-3">
                 {isVi ? 'Tác động thực tế' : 'Real impacts'}
               </h3>
               <ul className="space-y-2">
                 {content.contextImpacts.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-rose-900">
-                    <CircleCheck size={14} className="mt-1 shrink-0 text-rose-600" />
-                    <span>{item}</span>
+                  <li
+                    key={item}
+                    className="flex items-start gap-2 text-xs sm:text-sm text-rose-900"
+                  >
+                    <CircleCheck size={14} className="mt-0.5 sm:mt-1 shrink-0 text-rose-600" />
+                    <span className="flex-1 text-justify">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
           <div className="mt-5 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3">
-            <p className="text-sm font-semibold text-indigo-800">{content.contextCoreLine}</p>
+            <p className="text-xs sm:text-sm font-semibold text-indigo-800 text-justify leading-relaxed">
+              {content.contextCoreLine}
+            </p>
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 md:p-7">
+        <section className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 md:p-7">
           <SectionTitle icon={<TrendingUp size={20} />} title={content.processTitle} />
-          <p className="mt-3 text-sm text-slate-600 leading-relaxed">{content.processIntro}</p>
+          <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed text-justify">
+            {content.processIntro}
+          </p>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
             {content.processSteps.map((step, index) => (
               <div
@@ -420,23 +446,29 @@ export default function InvestmentSolutions() {
                 className="rounded-xl border border-slate-200 bg-slate-50 p-4 relative overflow-hidden"
               >
                 <span className="absolute -right-4 -top-4 h-14 w-14 rounded-full bg-yellow-200/40" />
-                <p className="text-sm md:text-base font-black uppercase tracking-[0.12em] text-yellow-600">
+                <p className="text-xs sm:text-sm md:text-base font-black uppercase tracking-[0.12em] text-yellow-600">
                   {isVi ? `Bước ${index + 1}` : `Step ${index + 1}`}
                 </p>
-                <p className="mt-3 text-sm text-slate-700 leading-relaxed">{step}</p>
+                <p className="mt-3 text-xs sm:text-sm text-slate-700 leading-relaxed text-justify">
+                  {step}
+                </p>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 md:p-7">
+        <section className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 md:p-7">
           <SectionTitle icon={<Building2 size={20} />} title={content.partnersTitle} />
-          <p className="mt-2 text-sm font-semibold text-slate-600">{content.partnersSubtitle}</p>
-          <div className="mt-6 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50/80 px-6 py-10 md:py-14 text-center">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#001a41]/10 text-[#001a41] mb-4">
-              <Landmark size={24} />
+          <p className="mt-2 text-xs sm:text-sm font-semibold text-slate-600 text-justify">
+            {content.partnersSubtitle}
+          </p>
+          <div className="mt-6 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50/80 px-6 py-10 md:py-14">
+            <div className="flex justify-center mb-4">
+              <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#001a41]/10 text-[#001a41]">
+                <Landmark size={24} />
+              </div>
             </div>
-            <p className="text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed text-justify">
               {content.partnersPlaceholder}
             </p>
           </div>
@@ -485,9 +517,9 @@ export default function InvestmentSolutions() {
 
 function SectionTitle({ icon, title }: { icon: React.ReactNode; title: string }) {
   return (
-    <h2 className="flex items-center gap-3 text-xl md:text-2xl lg:text-[1.65rem] font-black uppercase tracking-[0.06em] text-[#001a41]">
-      <span className="text-[#1f4fa0] shrink-0">{icon}</span>
-      <span className="leading-snug">{title}</span>
+    <h2 className="flex items-start sm:items-center gap-2.5 sm:gap-3 text-lg sm:text-xl md:text-2xl lg:text-[1.65rem] font-black uppercase tracking-[0.05em] sm:tracking-[0.06em] text-[#001a41]">
+      <span className="text-[#1f4fa0] shrink-0 mt-0.5 sm:mt-0">{icon}</span>
+      <span className="leading-snug min-w-0">{title}</span>
     </h2>
   );
 }
