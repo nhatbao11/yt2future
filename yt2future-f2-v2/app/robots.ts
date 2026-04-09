@@ -8,8 +8,18 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/', '/dashboard/', '/profile/'],
+      disallow: [
+        '/*/admin',
+        '/*/admin/',
+        '/*/profile',
+        '/*/profile/',
+        '/admin/',
+        '/profile/',
+        '/api',
+        '/api/',
+      ],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl.replace(/^https?:\/\//, ''),
   };
 }

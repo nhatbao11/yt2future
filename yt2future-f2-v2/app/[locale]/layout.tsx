@@ -10,14 +10,9 @@ import { notFound } from 'next/navigation';
 import { locales } from '@/i18n/request';
 import ScrollToTop from '@/components/partials/ScrollToTop';
 import { getTranslations } from 'next-intl/server';
-import { getCanonicalBaseUrl } from '@/lib/seo';
+import { getCanonicalBaseUrl, seoNoindexEn } from '@/lib/seo';
 
 const inter = Inter({ subsets: ['latin'] });
-
-/** Bật = true: không cho Google index bản tiếng Anh (/en/*), tránh trùng kết quả với /vi — vẫn cho user mở /en bình thường. */
-function seoNoindexEn(): boolean {
-  return process.env.SEO_NOINDEX_EN === 'true' || process.env.NEXT_PUBLIC_SEO_NOINDEX_EN === 'true';
-}
 
 export async function generateMetadata({
   params,
@@ -41,7 +36,6 @@ export async function generateMetadata({
     openGraph: {
       type: 'website',
       locale: locale,
-      url: `${baseUrl}/${locale}`,
       siteName: 'YT2Future',
       title: defaultTitle,
       description: defaultDescription,
@@ -100,6 +94,7 @@ export default async function LocaleLayout({
     { name: navT('home'), url: `${baseUrl}/${locale}` },
     { name: navT('about'), url: `${baseUrl}/${locale}/about` },
     { name: navT('investment'), url: `${baseUrl}/${locale}/services` },
+    { name: navT('dashboard'), url: `${baseUrl}/${locale}/dashboard` },
     { name: navT('sector'), url: `${baseUrl}/${locale}/sector` },
     { name: navT('contact'), url: `${baseUrl}/${locale}/contact` },
   ];

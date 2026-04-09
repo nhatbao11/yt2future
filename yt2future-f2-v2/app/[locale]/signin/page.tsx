@@ -1,5 +1,26 @@
 import Image from 'next/image';
 import SigninPageClient from './SigninPageClient';
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'auth' });
+  const title = t('signIn.title');
+  const description =
+    locale === 'vi'
+      ? 'Đăng nhập tài khoản YT2Future để truy cập báo cáo và tính năng dành cho thành viên.'
+      : 'Sign in to your YT2Future account for reports and member features.';
+  return {
+    title,
+    description,
+    robots: { index: false, follow: true },
+  };
+}
 
 export default async function SigninPage({
   searchParams,

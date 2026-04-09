@@ -1,6 +1,27 @@
 import Image from 'next/image';
 import SuccessRedirect from '@/components/partials/SuccessRedirect';
 import SignupPageClient from './SignupPageClient';
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'auth' });
+  const title = t('signUp.title');
+  const description =
+    locale === 'vi'
+      ? 'Đăng ký tài khoản YT2Future để làm thành viên và truy cập nội dung đầy đủ.'
+      : 'Create a YT2Future account to join as a member and unlock full content.';
+  return {
+    title,
+    description,
+    robots: { index: false, follow: true },
+  };
+}
 
 export default async function SignupPage({
   searchParams,

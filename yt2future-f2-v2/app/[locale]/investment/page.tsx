@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'investment_page' });
 
-  const title = t('title') + ' | YT2Future';
+  const title = t('title');
   const description =
     locale === 'vi'
       ? 'Danh mục sản phẩm dịch vụ tài chính dành cho doanh nghiệp tại YT2Future.'
@@ -19,6 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    robots: { index: false, follow: true },
     openGraph: {
       title,
       description,

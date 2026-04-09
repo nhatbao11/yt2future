@@ -1,18 +1,15 @@
 import { MetadataRoute } from 'next';
 import { locales } from '@/i18n/request';
-import { getCanonicalBaseUrl } from '@/lib/seo';
+import { getCanonicalBaseUrl, seoNoindexEn } from '@/lib/seo';
 
 const baseUrl = getCanonicalBaseUrl();
-
-function seoNoindexEn(): boolean {
-  return process.env.SEO_NOINDEX_EN === 'true' || process.env.NEXT_PUBLIC_SEO_NOINDEX_EN === 'true';
-}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const indexLocales = seoNoindexEn() ? (['vi'] as const) : locales;
 
   // Common routes in the application
-  const routes = ['', '/about', '/services', '/contact', '/sector', '/signin', '/signup'];
+  // Không đưa signin/signup: trang auth thường noindex, không cần ưu tiên trong sitemap
+  const routes = ['', '/about', '/services', '/contact', '/sector', '/dashboard'];
 
   const sitemapEntries: MetadataRoute.Sitemap = [];
 
@@ -34,6 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
               languages: {
                 vi: `${baseUrl}/vi${route}`,
                 en: `${baseUrl}/en${route}`,
+                'x-default': `${baseUrl}/vi${route}`,
               },
             },
       });

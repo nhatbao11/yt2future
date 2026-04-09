@@ -2,6 +2,20 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import ProfilePageClient from './ProfilePageClient';
+import type { Metadata } from 'next';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'profile' });
+  return {
+    title: t('title'),
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function ProfilePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -9,7 +23,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
   const cookieStore = await cookies();
   const token = cookieStore.get('yt2future_token')?.value;
 
-  if (!token) redirect('/signin');
+  if (!token) redirect(`/${locale}/signin`);
 
   // Gọi Backend để lấy profile hiện tại
   const res = await fetch(
@@ -20,7 +34,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
     }
   );
 
-  if (!res.ok) redirect('/signin');
+  if (!res.ok) redirect(`/${locale}/signin`);
   const { user: profile } = await res.json();
 
   return (
