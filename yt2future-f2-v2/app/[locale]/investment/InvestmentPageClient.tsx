@@ -3,17 +3,16 @@ import React, { useMemo, useState } from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import {
   BadgeCheck,
+  Building2,
   CircleCheck,
   Clock3,
   HandCoins,
+  Landmark,
   Play,
-  Sparkles,
   TrendingUp,
   X,
 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-
-type PartyKey = 'seller' | 'buyer';
 
 type SectionContent = {
   heroTag: string;
@@ -29,14 +28,16 @@ type SectionContent = {
   fitBuyerLabel: string;
   fitSeller: string[];
   fitBuyer: string[];
+  fitSellerHighlight: string;
+  fitBuyerHighlight: string;
   benefitsTitle: string;
   benefitGroups: Array<{ title: string; items: string[] }>;
   processTitle: string;
   processIntro: string;
   processSteps: string[];
-  pitchingTitle: string;
-  pitchingBody: string;
-  storyCards: string[];
+  partnersTitle: string;
+  partnersSubtitle: string;
+  partnersPlaceholder: string;
   videoPreviewLabel: string;
   videoPreviewHint: string;
 };
@@ -45,7 +46,6 @@ export default function InvestmentSolutions() {
   const t = useTranslations('investment_page');
   const locale = useLocale();
   const isVi = locale !== 'en';
-  const [activeParty, setActiveParty] = useState<PartyKey>('seller');
   const [videoOpen, setVideoOpen] = useState(false);
 
   const content = useMemo<SectionContent>(
@@ -55,7 +55,7 @@ export default function InvestmentSolutions() {
             heroTag: 'Giải pháp tài trợ thương mại',
             heroTitle: 'Mua hẳn Bộ chứng từ: mở khóa dòng tiền, tăng tốc tăng trưởng',
             heroDescription:
-              'Giải pháp dành cho doanh nghiệp có doanh thu tốt nhưng bị giam vốn do bán hàng trả chậm. Mục tiêu là biến doanh thu thành tiền mặt sớm, giảm áp lực dòng tiền và mở rộng quy mô giao dịch.',
+              'Giải pháp dành cho doanh nghiệp bán hàng trả chậm. Giúp chuyển đổi doanh thu thành tiền mặt nhanh hơn, cải thiện dòng tiền và duy trì hoạt động kinh doanh ổn định.',
             heroStats: [
               'Thu tiền sớm sau giao hàng',
               'Giảm giam vốn 30-90 ngày',
@@ -74,7 +74,7 @@ export default function InvestmentSolutions() {
               'Phụ thuộc vay ngân hàng: cần tài sản đảm bảo, mất thời gian phê duyệt và chịu áp lực lãi vay.',
             ],
             contextCoreLine:
-              'Anh đang bán hàng tốt, nhưng dòng tiền của anh lại bị khách hàng giữ hộ trong 60 ngày. Thời gian = chi phí cơ hội = tốc độ tăng trưởng.',
+              'Bạn đang bán hàng tốt, nhưng dòng tiền của bạn lại bị khách hàng giữ hộ trong 60 ngày. Thời gian = chi phí cơ hội = tốc độ tăng trưởng.',
             fitTitle: 'Tính phù hợp',
             fitSellerLabel: 'Bên bán hàng',
             fitBuyerLabel: 'Bên mua hàng',
@@ -93,6 +93,10 @@ export default function InvestmentSolutions() {
               'Doanh nghiệp muốn tăng uy tín với nhà cung cấp qua LC.',
               'Doanh nghiệp muốn mở rộng quy mô mua hàng mà không cần thanh toán ngay toàn bộ.',
             ],
+            fitSellerHighlight:
+              'Phù hợp với doanh nghiệp có nhu cầu vốn lưu động cao để tài trợ đơn hàng, rút ngắn chu kỳ thu tiền, tăng tốc tăng trưởng và linh hoạt tiếp cận nguồn tài chính ngoài nguồn vốn vay từ ngân hàng.',
+            fitBuyerHighlight:
+              'Phù hợp với doanh nghiệp mua hàng cần tối ưu dòng tiền và mở rộng quy mô, thông qua việc kéo dài thời gian thanh toán, tăng uy tín với nhà cung cấp và linh hoạt trong quản lý vốn lưu động.',
             benefitsTitle: 'Lợi ích của các bên',
             benefitGroups: [
               {
@@ -128,19 +132,15 @@ export default function InvestmentSolutions() {
             processIntro:
               'Áp dụng cho trường hợp bên mua và bên bán mới giao dịch theo hợp đồng kinh tế, chưa có cam kết thanh toán LC từ trước.',
             processSteps: [
-              'Bước 1: Bên mua đề nghị Ngân hàng A phát hành LC. Lưu ý: chỉ phát hành LC sau khi được cấp hạn mức tín dụng; nội dung LC phải có điều khoản cho phép VIB mua hẳn Bộ chứng từ; Ngân hàng A thu phí phát hành LC theo thỏa thuận.',
-              'Bước 2: Bên bán gửi đề nghị mua hẳn Bộ chứng từ kèm hóa đơn và chứng từ vận tải phù hợp LC.',
-              'Bước 3: Ngân hàng A kiểm tra bộ chứng từ, gửi thông báo chấp nhận mua lại cho bên bán và thu phí theo thỏa thuận. Mức phí phụ thuộc giá trị đơn hàng, thời gian thanh toán LC và tỷ lệ phí sau thỏa thuận.',
-              'Bước 4: Đến hạn thanh toán LC, bên mua hoàn trả tiền cho ngân hàng theo quy định.',
+              'Bên mua đề nghị Ngân hàng A phát hành LC. Lưu ý: chỉ phát hành LC sau khi được cấp hạn mức tín dụng; nội dung LC phải có điều khoản cho phép VIB mua hẳn Bộ chứng từ; Ngân hàng A thu phí phát hành LC theo thỏa thuận.',
+              'Bên bán gửi đề nghị mua hẳn Bộ chứng từ kèm hóa đơn và chứng từ vận tải phù hợp LC.',
+              'Ngân hàng A kiểm tra bộ chứng từ, gửi thông báo chấp nhận mua lại cho bên bán và thu phí theo thỏa thuận. Mức phí phụ thuộc giá trị đơn hàng, thời gian thanh toán LC và tỷ lệ phí sau thỏa thuận.',
+              'Đến hạn thanh toán LC, bên mua hoàn trả tiền cho ngân hàng theo quy định.',
             ],
-            pitchingTitle: 'Pitching',
-            pitchingBody:
-              'Sản phẩm mua hẳn Bộ chứng từ đặc biệt phù hợp với doanh nghiệp có doanh thu tốt nhưng bị giam vốn do bán hàng trả chậm 30-90 ngày. Giải pháp giúp nhận tiền gần như ngay sau giao hàng mà không cần vay vốn hay tài sản đảm bảo. Nếu không dùng giải pháp này, mỗi đơn hàng có thể bị giam vốn 60 ngày, làm chậm xoay vòng vốn, bỏ lỡ cơ hội kinh doanh và khiến tốc độ tăng trưởng thấp hơn tiềm năng thực tế.',
-            storyCards: [
-              'Doanh thu đã có, tiền mặt chưa có',
-              '60 ngày chờ tiền = 60 ngày bỏ lỡ cơ hội',
-              'Thu tiền sớm giúp xoay vòng vốn nhanh hơn',
-            ],
+            partnersTitle: 'Đối tác',
+            partnersSubtitle: 'Các ngân hàng tại Việt Nam',
+            partnersPlaceholder:
+              'Khu vực hiển thị logo và tên các đối tác ngân hàng (cập nhật sau).',
             videoPreviewLabel: 'Video giới thiệu',
             videoPreviewHint: 'Bấm để mở toàn màn và xem rõ hơn',
           }
@@ -148,7 +148,7 @@ export default function InvestmentSolutions() {
             heroTag: 'Trade finance solution',
             heroTitle: 'Outright document purchase: unlock cash, accelerate growth',
             heroDescription:
-              'Designed for businesses with strong sales but trapped cash due to deferred payment terms. The goal is to convert revenue into cash sooner and expand transaction capacity.',
+              'For businesses selling on deferred terms. Converts revenue to cash faster, improves cash flow, and helps keep operations stable.',
             heroStats: [
               'Early cash after delivery',
               'Lower 30-90 day cash lock',
@@ -186,6 +186,10 @@ export default function InvestmentSolutions() {
               'Businesses strengthening supplier trust via LC.',
               'Businesses scaling procurement without full upfront cash.',
             ],
+            fitSellerHighlight:
+              'Ideal for businesses with high working-capital needs to fund orders, shorten collection cycles, accelerate growth, and access financing beyond traditional bank loans.',
+            fitBuyerHighlight:
+              'Ideal for buyers optimizing cash flow and scale via extended payment terms, stronger supplier credibility, and flexible working-capital management.',
             benefitsTitle: 'Benefits for all parties',
             benefitGroups: [
               {
@@ -221,26 +225,19 @@ export default function InvestmentSolutions() {
             processIntro:
               'For cases where buyer and seller only have commercial contract terms and have not yet put LC commitments in place.',
             processSteps: [
-              'Step 1: Buyer asks Bank A to issue LC. Notes: LC issuance requires approved credit limit; LC terms must allow VIB to purchase documents outright; Bank A charges LC issuance fees per agreement.',
-              'Step 2: Seller submits an outright purchase request with invoice and transport documents compliant with LC terms.',
-              'Step 3: Bank A reviews document set, sends acceptance notice to seller, and charges agreed fees. Fee level depends on transaction value, LC tenor, and negotiated fee ratio.',
-              'Step 4: At LC maturity, buyer repays the bank under agreed conditions.',
+              'Buyer asks Bank A to issue LC. Notes: LC issuance requires approved credit limit; LC terms must allow VIB to purchase documents outright; Bank A charges LC issuance fees per agreement.',
+              'Seller submits an outright purchase request with invoice and transport documents compliant with LC terms.',
+              'Bank A reviews document set, sends acceptance notice to seller, and charges agreed fees. Fee level depends on transaction value, LC tenor, and negotiated fee ratio.',
+              'At LC maturity, buyer repays the bank under agreed conditions.',
             ],
-            pitchingTitle: 'Pitching',
-            pitchingBody:
-              'Outright document purchase is ideal for businesses with healthy sales but constrained cash due to deferred terms. It enables near-immediate cash after delivery without collateral-heavy borrowing, unlocking growth opportunities and sustainable scale-up.',
-            storyCards: [
-              'Revenue is booked, but cash is delayed',
-              '60 waiting days means 60 missed opportunities',
-              'Early cash enables faster turnover and scale',
-            ],
+            partnersTitle: 'Partners',
+            partnersSubtitle: 'Banks in Vietnam',
+            partnersPlaceholder: 'Area for partner bank logos and names (to be updated).',
             videoPreviewLabel: 'Intro video',
             videoPreviewHint: 'Tap to open larger player',
           },
     [isVi]
   );
-
-  const fittingItems = activeParty === 'seller' ? content.fitSeller : content.fitBuyer;
 
   return (
     <div className="min-h-screen bg-[#f4f7ff]">
@@ -252,7 +249,7 @@ export default function InvestmentSolutions() {
           <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-black/15 to-transparent" />
           <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
             <div className="lg:col-span-7">
-              <p className="text-[11px] uppercase tracking-[0.25em] font-bold text-yellow-300">
+              <p className="text-sm md:text-base uppercase tracking-[0.22em] font-bold text-yellow-300">
                 {content.heroTag}
               </p>
               <h1 className="mt-3 text-2xl md:text-4xl font-black tracking-tight leading-tight text-balance">
@@ -307,23 +304,81 @@ export default function InvestmentSolutions() {
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-5 md:p-7">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {content.storyCards.map((item, idx) => (
-              <article
-                key={item}
-                className="rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 px-4 py-4"
-              >
-                <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">
-                  {isVi ? `Điểm ${idx + 1}` : `Point ${idx + 1}`}
+          <SectionTitle icon={<BadgeCheck size={20} />} title={content.fitTitle} />
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+            <div className="flex flex-col gap-4">
+              <h3 className="text-sm font-bold text-[#001a41] border-l-4 border-[#1f4fa0] pl-3">
+                {content.fitBuyerLabel}
+              </h3>
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 md:p-5">
+                <ul className="space-y-3">
+                  {content.fitBuyer.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
+                      <CircleCheck size={14} className="mt-1 shrink-0 text-emerald-600" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-xl bg-gradient-to-br from-[#001a41] via-[#1b3d77] to-[#2856a3] p-4 md:p-5 text-white mt-auto">
+                <p className="text-xs uppercase tracking-wider text-yellow-300 font-bold">
+                  {isVi ? 'Điểm nhấn nhanh' : 'Quick highlight'}
                 </p>
-                <p className="mt-2 text-sm font-semibold text-[#001a41] leading-relaxed">{item}</p>
+                <p className="mt-3 text-sm leading-relaxed text-blue-100">
+                  {content.fitBuyerHighlight}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col gap-4">
+              <h3 className="text-sm font-bold text-[#001a41] border-l-4 border-[#1f4fa0] pl-3">
+                {content.fitSellerLabel}
+              </h3>
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 md:p-5">
+                <ul className="space-y-3">
+                  {content.fitSeller.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
+                      <CircleCheck size={14} className="mt-1 shrink-0 text-emerald-600" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-xl bg-gradient-to-br from-[#001a41] via-[#1b3d77] to-[#2856a3] p-4 md:p-5 text-white mt-auto">
+                <p className="text-xs uppercase tracking-wider text-yellow-300 font-bold">
+                  {isVi ? 'Điểm nhấn nhanh' : 'Quick highlight'}
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-blue-100">
+                  {content.fitSellerHighlight}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-white p-5 md:p-7">
+          <SectionTitle icon={<HandCoins size={20} />} title={content.benefitsTitle} />
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {content.benefitGroups.map((group) => (
+              <article
+                key={group.title}
+                className="rounded-xl border border-slate-200 bg-slate-50 p-4 md:p-5 hover:border-[#1f4fa0]/30 hover:shadow-md transition"
+              >
+                <h3 className="text-sm font-bold text-[#001a41]">{group.title}</h3>
+                <ul className="mt-3 space-y-2">
+                  {group.items.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
+                      <CircleCheck size={14} className="mt-1 shrink-0 text-sky-600" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </article>
             ))}
           </div>
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-5 md:p-7">
-          <SectionTitle icon={<Clock3 size={17} />} title={content.contextTitle} />
+          <SectionTitle icon={<Clock3 size={20} />} title={content.contextTitle} />
           <div className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-5">
             <div className="lg:col-span-7 space-y-3">
               {content.contextNarrative.map((item, index) => (
@@ -356,78 +411,7 @@ export default function InvestmentSolutions() {
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-5 md:p-7">
-          <SectionTitle icon={<BadgeCheck size={17} />} title={content.fitTitle} />
-          <div className="mt-4 inline-flex rounded-lg border border-slate-200 bg-slate-50 p-1 w-full sm:w-auto">
-            <button
-              type="button"
-              className={`rounded-md px-4 py-2 text-sm font-semibold transition flex-1 sm:flex-none ${
-                activeParty === 'seller' ? 'bg-[#001a41] text-white' : 'text-slate-700'
-              }`}
-              onClick={() => setActiveParty('seller')}
-            >
-              {content.fitSellerLabel}
-            </button>
-            <button
-              type="button"
-              className={`rounded-md px-4 py-2 text-sm font-semibold transition flex-1 sm:flex-none ${
-                activeParty === 'buyer' ? 'bg-[#001a41] text-white' : 'text-slate-700'
-              }`}
-              onClick={() => setActiveParty('buyer')}
-            >
-              {content.fitBuyerLabel}
-            </button>
-          </div>
-          <div className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-5">
-            <div className="lg:col-span-8 rounded-xl border border-slate-200 bg-slate-50 p-4 md:p-5">
-              <ul className="space-y-3">
-                {fittingItems.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
-                    <CircleCheck size={14} className="mt-1 shrink-0 text-emerald-600" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="lg:col-span-4 rounded-xl bg-gradient-to-br from-[#001a41] via-[#1b3d77] to-[#2856a3] p-4 text-white">
-              <p className="text-xs uppercase tracking-wider text-yellow-300 font-bold">
-                {isVi ? 'Điểm nhấn nhanh' : 'Quick highlight'}
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-blue-100">
-                {isVi
-                  ? 'Bán hàng tốt chưa đủ. Muốn tăng trưởng nhanh thì dòng tiền phải về nhanh.'
-                  : 'Strong sales are not enough. Fast growth needs faster cash conversion.'}
-              </p>
-              <div className="mt-4 rounded-lg border border-white/20 bg-white/10 p-3 text-xs leading-relaxed">
-                {content.contextCoreLine}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 md:p-7">
-          <SectionTitle icon={<HandCoins size={17} />} title={content.benefitsTitle} />
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {content.benefitGroups.map((group) => (
-              <article
-                key={group.title}
-                className="rounded-xl border border-slate-200 bg-slate-50 p-4 md:p-5 hover:border-[#1f4fa0]/30 hover:shadow-md transition"
-              >
-                <h3 className="text-sm font-bold text-[#001a41]">{group.title}</h3>
-                <ul className="mt-3 space-y-2">
-                  {group.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
-                      <CircleCheck size={14} className="mt-1 shrink-0 text-sky-600" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="rounded-3xl border border-slate-200 bg-white p-5 md:p-7">
-          <SectionTitle icon={<TrendingUp size={17} />} title={content.processTitle} />
+          <SectionTitle icon={<TrendingUp size={20} />} title={content.processTitle} />
           <p className="mt-3 text-sm text-slate-600 leading-relaxed">{content.processIntro}</p>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
             {content.processSteps.map((step, index) => (
@@ -436,31 +420,25 @@ export default function InvestmentSolutions() {
                 className="rounded-xl border border-slate-200 bg-slate-50 p-4 relative overflow-hidden"
               >
                 <span className="absolute -right-4 -top-4 h-14 w-14 rounded-full bg-yellow-200/40" />
-                <p className="text-[11px] uppercase tracking-[0.18em] font-bold text-yellow-600">
+                <p className="text-sm md:text-base font-black uppercase tracking-[0.12em] text-yellow-600">
                   {isVi ? `Bước ${index + 1}` : `Step ${index + 1}`}
                 </p>
-                <p className="mt-2 text-sm text-slate-700 leading-relaxed">{step}</p>
+                <p className="mt-3 text-sm text-slate-700 leading-relaxed">{step}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-5 md:p-7">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            <div className="lg:col-span-8">
-              <SectionTitle icon={<Sparkles size={17} />} title={content.pitchingTitle} />
-              <p className="mt-4 text-sm text-slate-700 leading-relaxed">{content.pitchingBody}</p>
+          <SectionTitle icon={<Building2 size={20} />} title={content.partnersTitle} />
+          <p className="mt-2 text-sm font-semibold text-slate-600">{content.partnersSubtitle}</p>
+          <div className="mt-6 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50/80 px-6 py-10 md:py-14 text-center">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#001a41]/10 text-[#001a41] mb-4">
+              <Landmark size={24} />
             </div>
-            <div className="lg:col-span-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <p className="text-xs uppercase tracking-wider font-bold text-slate-500">
-                {isVi ? 'Thông điệp ngắn' : 'Short message'}
-              </p>
-              <p className="mt-2 text-sm font-semibold text-[#001a41]">
-                {isVi
-                  ? 'Giải phóng vốn bị giam để mở rộng nhanh và bền vững.'
-                  : 'Release trapped capital to scale faster and stronger.'}
-              </p>
-            </div>
+            <p className="text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
+              {content.partnersPlaceholder}
+            </p>
           </div>
         </section>
       </main>
@@ -507,9 +485,9 @@ export default function InvestmentSolutions() {
 
 function SectionTitle({ icon, title }: { icon: React.ReactNode; title: string }) {
   return (
-    <h2 className="flex items-center gap-2 text-base md:text-lg font-black text-[#001a41]">
-      <span className="text-[#1f4fa0]">{icon}</span>
-      {title}
+    <h2 className="flex items-center gap-3 text-xl md:text-2xl lg:text-[1.65rem] font-black uppercase tracking-[0.06em] text-[#001a41]">
+      <span className="text-[#1f4fa0] shrink-0">{icon}</span>
+      <span className="leading-snug">{title}</span>
     </h2>
   );
 }
