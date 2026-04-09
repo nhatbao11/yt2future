@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
+import InvestmentPageClient from '../investment/InvestmentPageClient';
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -13,8 +13,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = t('title') + ' | YT2Future';
   const description =
     locale === 'vi'
-      ? 'Danh mục sản phẩm dịch vụ tài chính dành cho doanh nghiệp tại YT2Future.'
-      : 'Enterprise financial products and service offerings at YT2Future.';
+      ? 'Giải pháp sản phẩm dịch vụ tài trợ thương mại dành cho doanh nghiệp tại YT2Future.'
+      : 'Trade-finance products and service solutions for enterprises at YT2Future.';
 
   return {
     title,
@@ -30,7 +30,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function InvestmentPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  redirect(`/${locale}/services`);
+export default function ServicesPage() {
+  return <InvestmentPageClient />;
 }

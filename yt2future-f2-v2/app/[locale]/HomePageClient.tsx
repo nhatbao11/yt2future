@@ -81,7 +81,7 @@ export default function HomePage() {
                 {t('hero.subtitle')}
               </p>
               <div className="flex justify-center md:justify-start">
-                <PrimaryButton label={t('hero.cta')} href="/investment" />
+                <PrimaryButton label={t('hero.cta')} href="/services" />
               </div>
             </ScrollReveal>
           </div>

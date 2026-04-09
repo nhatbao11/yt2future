@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const indexLocales = seoNoindexEn() ? (['vi'] as const) : locales;
 
   // Common routes in the application
-  const routes = ['', '/about', '/investment', '/contact', '/sector', '/signin', '/signup'];
+  const routes = ['', '/about', '/services', '/contact', '/sector', '/signin', '/signup'];
 
   const sitemapEntries: MetadataRoute.Sitemap = [];
 

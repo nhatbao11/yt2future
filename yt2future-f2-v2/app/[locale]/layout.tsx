@@ -99,7 +99,7 @@ export default async function LocaleLayout({
   const navSchema = [
     { name: navT('home'), url: `${baseUrl}/${locale}` },
     { name: navT('about'), url: `${baseUrl}/${locale}/about` },
-    { name: navT('investment'), url: `${baseUrl}/${locale}/investment` },
+    { name: navT('investment'), url: `${baseUrl}/${locale}/services` },
     { name: navT('sector'), url: `${baseUrl}/${locale}/sector` },
     { name: navT('contact'), url: `${baseUrl}/${locale}/contact` },
   ];

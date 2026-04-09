@@ -32,7 +32,7 @@ export default function Navbar() {
   const navLinks = [
     { name: t('about'), href: '/about' },
     { name: t('dashboard'), href: '/dashboard' },
-    { name: t('investment'), href: '/investment' },
+    { name: t('investment'), href: '/services' },
     { name: t('sector'), href: '/sector' },
     { name: t('contact'), href: '/contact' },
   ];
