@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { verifyToken, isAdmin } from '../middlewares/authMiddleware.js';
 import * as adminController from '../controllers/adminController.js';
+import serviceAdminRoutes from '../modules/services/serviceAdminRoutes.js';
 import { z } from 'zod';
 import { validateBody, validateParams, validateQuery } from '../middlewares/validate.js';
 
@@ -18,6 +19,8 @@ const userIdParamsSchema = z.object({
 
 // Tất cả route admin đều phải qua 2 lớp bảo vệ
 router.use(verifyToken, isAdmin);
+
+router.use('/services', serviceAdminRoutes);
 
 router.get('/logs', validateQuery(auditLogsQuerySchema), adminController.getAuditLogs);
 router.get('/stats', adminController.getDashboardStats);

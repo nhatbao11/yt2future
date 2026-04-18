@@ -94,6 +94,25 @@ model Feedback {
   user      User?    @relation(fields: [userId], references: [id])
 }
 
+model Service {
+  id             String   @id @default(uuid())
+  slug           String   @unique
+  sortOrder      Int      @default(0)
+  published      Boolean  @default(false)
+  listTitleVi    String
+  listExcerptVi  String   @db.Text
+  listTitleEn    String?
+  listExcerptEn  String?  @db.Text
+  /** Ảnh thẻ /services (https hoặc /path). Tuỳ chọn. */
+  listImageUrl   String?  @db.VarChar(2000)
+  /** Tối đa 3 dòng pill trên thẻ catalog (thay danh sách section cũ). */
+  catalogPills   String[] @default([])
+  contentVi      Json
+  contentEn      Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
 // --- STOCK DATA MODELS ---
 model MarketIndexDaily {
   id         Int      @id @default(autoincrement())

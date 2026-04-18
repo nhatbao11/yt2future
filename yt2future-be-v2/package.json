@@ -9,6 +9,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "smoke:test": "tsx src/scripts/smokeTest.ts",
+    "seed:services": "tsx src/scripts/seedDefaultService.ts",
     "sync:market-index": "tsx src/scripts/syncMarketIndexDaily.ts",
     "sync:market-index:prod": "node dist/scripts/syncMarketIndexDaily.js",
     "sync:market-index:vnstock": "python3 scripts/sync_market_index_vnstock.py",

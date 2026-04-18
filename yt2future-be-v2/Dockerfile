@@ -1,11 +1,12 @@
+# Image production: luôn `npm run build` trong build — không mount `dist` từ host (.dockerignore đã loại dist).
+# Sau khi pull code mới: `docker compose build --no-cache api` rồi `docker compose up -d api`.
 FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
-COPY prisma ./prisma
-RUN npx prisma generate
+# Một lần copy toàn bộ source + prisma (dist/node_modules bị .dockerignore loại)
 COPY . .
-RUN npm run build
+RUN npx prisma generate && npm run build
 
 FROM node:22-alpine AS runner
 WORKDIR /app

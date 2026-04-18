@@ -15,6 +15,7 @@ import adminRoutes from './routes/adminRoutes.js';
 import feedbackRoutes from './modules/feedback/routes.js';
 import reportRoutes from './modules/reports/routes.js';
 import categoryRoutes from './modules/categories/routes.js';
+import servicePublicRoutes from './modules/services/servicePublicRoutes.js';
 import marketIndexRoutes from './routes/marketIndexRoutes.js';
 import uploadRoutes from './modules/upload/routes.js';
 
@@ -51,6 +52,7 @@ app.use('/api/feedback', feedbackRoutes);
 app.use('/api/admin/feedback', feedbackRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/services', servicePublicRoutes);
 app.use('/api/market-index', marketIndexRoutes);
 app.use('/api/upload', uploadRoutes);
 
