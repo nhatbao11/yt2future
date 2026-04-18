@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server';
-import InvestmentPageClient from '../investment/InvestmentPageClient';
+import ServicesListClient from './ServicesListClient';
 import type { Metadata } from 'next';
 import { absoluteUrl, buildLanguageAlternates } from '@/lib/seo';
 
@@ -10,12 +10,10 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'investment_page' });
+  const tList = await getTranslations({ locale, namespace: 'services_list' });
 
   const title = t('title');
-  const description =
-    locale === 'vi'
-      ? 'Giải pháp sản phẩm dịch vụ tài trợ thương mại dành cho doanh nghiệp tại YT2Future.'
-      : 'Trade-finance products and service solutions for enterprises at YT2Future.';
+  const description = tList('metaDescription');
 
   return {
     title,
@@ -36,5 +34,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function ServicesPage() {
-  return <InvestmentPageClient />;
+  return <ServicesListClient />;
 }

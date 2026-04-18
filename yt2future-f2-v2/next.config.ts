@@ -34,17 +34,19 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    // Chỉ dùng rewrite khi development (local)
-    // Production sẽ dùng Nginx làm reverse proxy
-    if (process.env.NODE_ENV === 'development') {
-      return [
-        {
-          source: '/api/:path*',
-          destination: 'http://localhost:5000/api/:path*',
-        },
-      ];
-    }
-    return [];
+    // Dev: luôn proxy tới backend local.
+    // Production: set `INTERNAL_API_ORIGIN` (vd. http://127.0.0.1:5000) nếu chạy monolith;
+    // hoặc để Nginx proxy + `app/api/[[...path]]/route.ts` xử lý khi không dùng rewrite.
+    const fromEnv = process.env.INTERNAL_API_ORIGIN?.trim().replace(/\/$/, '');
+    const target =
+      fromEnv || (process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : '');
+    if (!target) return [];
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${target}/api/:path*`,
+      },
+    ];
   },
   async redirects() {
     return [

@@ -8,6 +8,7 @@ import {
   Users,
   FileText,
   Layers,
+  Briefcase,
   MessageSquare,
   LogOut,
   ChevronRight,
@@ -35,6 +36,11 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
       icon: <Layers size={18} />,
       label: t('menu.categories'),
       href: '/admin/categories',
+    },
+    {
+      icon: <Briefcase size={18} />,
+      label: t('menu.services'),
+      href: '/admin/services',
     },
     {
       icon: <MessageSquare size={18} />,

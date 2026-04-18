@@ -135,7 +135,7 @@ export default function FeedbackHome() {
               640: { slidesPerView: 2, spaceBetween: 24 },
               1024: { slidesPerView: 3, spaceBetween: 30 },
             }}
-            className="pb-14"
+            className="pb-14 [&_.swiper-wrapper]:items-stretch [&_.swiper-slide]:flex [&_.swiper-slide]:h-auto"
           >
             {feedbacks.map((fb) => {
               const isExpanded = expandedId === fb.id;
@@ -143,9 +143,9 @@ export default function FeedbackHome() {
 
               return (
                 <SwiperSlide key={fb.id} className="h-auto">
-                  <div className="bg-white p-6 md:p-8 border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col justify-between">
+                  <div className="flex h-full min-h-[300px] w-full flex-col bg-white p-6 md:min-h-[320px] md:p-8 border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-300">
                     {/* Rating Stars */}
-                    <div>
+                    <div className="shrink-0">
                       <div className="flex gap-1 mb-4">
                         {[...Array(5)].map((_, i) => (
                           <Star
@@ -156,19 +156,26 @@ export default function FeedbackHome() {
                           />
                         ))}
                       </div>
+                    </div>
 
-                      {/* Content */}
-                      <div className="relative">
+                    {/* Nội dung: khối cố định — ngắn dài vẫn cùng kích thước */}
+                    <div className="flex min-h-0 flex-1 flex-col">
+                      <div
+                        className={`min-h-[6.25rem] max-h-[6.25rem] md:min-h-[7rem] md:max-h-[7rem] rounded-sm ${isExpanded ? 'overflow-y-auto' : 'overflow-hidden'}`}
+                      >
                         <p
                           className={`text-slate-700 text-sm leading-relaxed ${!isExpanded && needsExpand ? 'line-clamp-4' : ''}`}
                         >
-                          "{fb.content}"
+                          &ldquo;{fb.content}&rdquo;
                         </p>
+                      </div>
 
-                        {needsExpand && (
+                      <div className="mt-2 min-h-[1.75rem] shrink-0">
+                        {needsExpand ? (
                           <button
+                            type="button"
                             onClick={() => setExpandedId(isExpanded ? null : fb.id)}
-                            className="mt-2 text-xs font-semibold text-yellow-600 hover:text-yellow-700 transition-colors flex items-center gap-1"
+                            className="text-xs font-semibold text-yellow-600 hover:text-yellow-700 transition-colors inline-flex items-center gap-1"
                           >
                             {isExpanded ? (
                               <>
@@ -180,12 +187,12 @@ export default function FeedbackHome() {
                               </>
                             )}
                           </button>
-                        )}
+                        ) : null}
                       </div>
                     </div>
 
-                    {/* Author Info */}
-                    <div className="flex items-center gap-3 mt-6 pt-4 border-t border-slate-100">
+                    {/* Author Info — luôn đáy thẻ */}
+                    <div className="mt-auto flex shrink-0 items-center gap-3 border-t border-slate-100 pt-4">
                       <div className="relative w-10 h-10 rounded-full bg-slate-100 overflow-hidden flex-shrink-0">
                         <FeedbackAuthorAvatar
                           url={fb.user?.avatarUrl}
