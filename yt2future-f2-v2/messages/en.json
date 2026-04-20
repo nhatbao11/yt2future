@@ -22,7 +22,7 @@
     "home": "Home",
     "about": "About Us",
     "investment": "Products & Services",
-    "sector": "Sector Analysis",
+    "sector": "Smart Library",
     "contact": "Contact",
     "dashboard": "Dashboard",
     "profile": "Profile",
@@ -601,8 +601,8 @@
     "metaDescription": "Trade-finance products and service solutions for enterprises at YT2Future."
   },
   "sector_page": {
-    "title": "Sector Analysis",
-    "metaDescription": "Explore in-depth sector research and market reports on YT2Future.",
+    "title": "Smart Library",
+    "metaDescription": "Explore curated reports, market research, and financial knowledge in the YT2Future Smart Library.",
     "search_placeholder": "Search reports...",
     "category_select": "Select Category",
     "all_categories": "All Categories",

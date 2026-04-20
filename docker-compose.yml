@@ -1,6 +1,15 @@
 # API + Postgres (local / staging). FE: chạy trên máy host `cd yt2future-f2-v2 && npm run dev`
 # với NEXT_PUBLIC_BE_URL=http://localhost:5000 — tránh lỗi SSR trong container gọi sai host.
 # API sẽ đọc env từ `yt2future-be-v2/.env` (hỗ trợ dùng DB production/Supabase).
+#
+# Sau khi đổi code API (vd. thêm route /api/services): bắt buộc build lại image, không chỉ restart:
+#   docker compose build --no-cache api && docker compose up -d api
+# Áp dụng migration (bảng Service, …) vào DB đang trỏ trong .env:
+#   docker compose run --rm api npx prisma migrate deploy
+#
+# Hot-reload API khi dev (tsx watch + bind mount):
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build api
+# (xem `docker-compose.dev.yml`)
 services:
   postgres:
     image: postgres:16-alpine
@@ -20,6 +29,9 @@ services:
 
   api:
     build: ./yt2future-be-v2
+    depends_on:
+      postgres:
+        condition: service_healthy
     ports:
       - '5000:5000'
     env_file:

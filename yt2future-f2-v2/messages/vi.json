@@ -22,7 +22,7 @@
     "home": "Trang chủ",
     "about": "Về chúng tôi",
     "investment": "Sản phẩm dịch vụ",
-    "sector": "Phân tích ngành",
+    "sector": "Thư viện thông minh",
     "contact": "Liên hệ",
     "dashboard": "Bảng điều khiển",
     "profile": "Hồ sơ",
@@ -601,8 +601,8 @@
     "metaDescription": "Danh mục sản phẩm dịch vụ tài trợ thương mại và giải pháp cho doanh nghiệp tại YT2Future."
   },
   "sector_page": {
-    "title": "Phân tích ngành",
-    "metaDescription": "Khám phá các báo cáo nghiên cứu chuyên sâu về các lĩnh vực khác nhau tại YT2Future.",
+    "title": "Thư viện thông minh",
+    "metaDescription": "Khám phá báo cáo chọn lọc, nghiên cứu thị trường và kiến thức tài chính trong Thư viện thông minh YT2Future.",
     "search_placeholder": "Tìm kiếm báo cáo...",
     "category_select": "Chọn danh mục",
     "all_categories": "Tất cả danh mục",

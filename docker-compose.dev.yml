@@ -1,0 +1,22 @@
+# API hot-reload (tsx watch): mount source + prisma từ host vào image.
+#
+# Chạy (cùng Postgres trong compose gốc):
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up api
+#
+# Chỉ API (Postgres đã chạy):
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build api
+#
+# Sau khi sửa prisma/schema.prisma:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml exec api npx prisma generate
+#
+# Lần đầu / đổi migration:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml exec api npx prisma migrate deploy
+services:
+  api:
+    command: ['npm', 'run', 'dev']
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./yt2future-be-v2/src:/app/src
+      - ./yt2future-be-v2/prisma:/app/prisma
+      - ./yt2future-be-v2/tsconfig.json:/app/tsconfig.json
