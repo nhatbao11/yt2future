@@ -588,7 +588,7 @@
     "loading": "Loading services…",
     "loadError": "Could not load services. Check: (1) the API server is running (default port 5000), (2) run `npx prisma migrate deploy` and `npm run seed:services` in the backend folder, (3) if you use `next start` without Nginx, set `INTERNAL_API_ORIGIN` for Next (e.g. http://127.0.0.1:5000).",
     "empty": "No published services yet. Add one in admin or run the backend seed script.",
-    "heroEyebrow": "Trade finance solutions",
+    "heroEyebrow": "Trade finance advisory solutions",
     "intro": "Choose a service below for the full narrative, implementation flow, and practical benefits for your business.",
     "sectionTitle": "Service catalog",
     "cardCta": "View details",
