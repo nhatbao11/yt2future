@@ -14,6 +14,7 @@ import feedbackRoutes from './routes/feedbackRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import marketIndexRoutes from './routes/marketIndexRoutes.js';
+import servicePublicRoutes from './modules/services/servicePublicRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -68,6 +69,7 @@ app.use('/api/admin/feedback', feedbackRoutes);
 app.use('/api/reports', reportRoutes); // Đường dẫn này sẽ map với reportService bên FE
 app.use('/api/categories', categoryRoutes);
 app.use('/api/market-index', marketIndexRoutes);
+app.use('/api/services', servicePublicRoutes);
 
 app.get('/', (req, res) => {
   res.send('YT2Future API đang chạy với chế độ Cookie và Cloudinary sẵn sàng...');
