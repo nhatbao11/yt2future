@@ -22,7 +22,7 @@ export const DEFAULT_CATALOG_PILLS: readonly string[] = [
 ];
 
 export const DEFAULT_CONTENT_VI: Prisma.InputJsonValue = {
-  heroTag: 'Giải pháp tài trợ thương mại',
+  heroTag: 'Tư vấn giải pháp tài trợ thương mại',
   heroTitle: 'Mua hẳn Bộ chứng từ: mở khóa dòng tiền, tăng tốc tăng trưởng',
   heroDescription:
     'Giải pháp dành cho doanh nghiệp bán hàng trả chậm. Giúp chuyển đổi doanh thu thành tiền mặt nhanh hơn, cải thiện dòng tiền và duy trì hoạt động kinh doanh ổn định.',
