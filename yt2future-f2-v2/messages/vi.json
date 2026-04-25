@@ -588,7 +588,7 @@
     "loading": "Đang tải danh sách dịch vụ…",
     "loadError": "Không tải được danh sách dịch vụ. Kiểm tra: (1) backend API đang chạy (mặc định port 5000), (2) đã chạy `npx prisma migrate deploy` và `npm run seed:services` trong thư mục backend, (3) nếu chạy `next start` mà không dùng Nginx: đặt biến môi trường `INTERNAL_API_ORIGIN` trỏ tới backend (vd. http://127.0.0.1:5000).",
     "empty": "Chưa có dịch vụ công khai. Admin có thể thêm dịch vụ hoặc chạy lệnh seed trên backend.",
-    "heroEyebrow": "Giải pháp tài trợ thương mại",
+    "heroEyebrow": "Tư vấn giải pháp tài trợ thương mại",
     "intro": "Chọn một dịch vụ để xem mô tả đầy đủ, quy trình triển khai và lợi ích thực tế cho doanh nghiệp.",
     "sectionTitle": "Danh mục dịch vụ",
     "cardCta": "Xem chi tiết",
