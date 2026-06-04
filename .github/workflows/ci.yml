@@ -31,6 +31,8 @@ jobs:
         env:
           NEXT_PUBLIC_SITE_URL: https://example.com
           NEXT_PUBLIC_BE_URL: http://localhost:5000
+          NEXT_PUBLIC_SUPABASE_URL: https://dummy-project.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy-anon-key-for-ci-build-purposes
 
   backend:
     runs-on: ubuntu-latest
