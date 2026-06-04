@@ -1,6 +1,7 @@
 import createMiddleware from 'next-intl/middleware';
 import type { NextRequest } from 'next/server';
-import { locales } from '@/i18n/request';
+
+const locales = ['vi', 'en'];
 
 const handleI18nRouting = createMiddleware({
   locales,
