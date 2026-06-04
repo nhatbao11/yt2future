@@ -76,9 +76,12 @@ app.get('/', (req, res) => {
 });
 
 // D. START SERVER VÀ FIX TIMEOUT
-const server = app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  const server = app.listen(PORT, () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
+  });
+  // Chống đứt kết nối khi đang truyền file lớn
+  server.timeout = 600000;
+}
 
-// Chống đứt kết nối khi đang truyền file lớn
-server.timeout = 600000;
+export default app;
