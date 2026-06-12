@@ -7,6 +7,7 @@ import { pickDetailPresentation, pickListCard } from '@/features/services/pickSe
 import type { ServiceDetailRecord } from '@/features/services/types';
 import { absoluteUrl, buildLanguageAlternates } from '@/lib/seo';
 import { getServerPublicApiBase } from '@/lib/serverPublicApi';
+import { STATIC_SERVICES } from '@/features/services/staticServicesData';
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -18,6 +19,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const t = await getTranslations({ locale, namespace: 'investment_page' });
   const fallbackTitle = t('title');
+
+  // Check static services first
+  const staticSvc = STATIC_SERVICES.find((s) => s.slug === slug);
+  if (staticSvc) {
+    const { title, excerpt } = pickListCard(locale, staticSvc);
+    return {
+      title,
+      description: excerpt,
+      alternates: {
+        languages: buildLanguageAlternates(`/services/${slug}`),
+      },
+      openGraph: {
+        title,
+        description: excerpt,
+        url: absoluteUrl(locale, `/services/${slug}`),
+      },
+      twitter: { title, description: excerpt },
+    };
+  }
 
   try {
     const base = getServerPublicApiBase();
@@ -52,18 +72,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ServiceDetailPage({ params }: Props) {
   const { locale, slug } = await params;
-  const base = getServerPublicApiBase();
-  const res = await fetch(`${base}/services/${encodeURIComponent(slug)}`, {
-    cache: 'no-store',
-  });
-  if (!res.ok) {
-    notFound();
+
+  // Check static services first
+  const staticSvc = STATIC_SERVICES.find((s) => s.slug === slug);
+  let service: ServiceDetailRecord;
+
+  if (staticSvc) {
+    service = staticSvc;
+  } else {
+    try {
+      const base = getServerPublicApiBase();
+      const res = await fetch(`${base}/services/${encodeURIComponent(slug)}`, {
+        cache: 'no-store',
+      });
+      if (!res.ok) {
+        notFound();
+      }
+      const data = (await res.json()) as { success?: boolean; service?: ServiceDetailRecord };
+      if (!data.success || !data.service) {
+        notFound();
+      }
+      service = data.service;
+    } catch {
+      notFound();
+    }
   }
-  const data = (await res.json()) as { success?: boolean; service?: ServiceDetailRecord };
-  if (!data.success || !data.service) {
-    notFound();
-  }
-  const service = data.service;
+
   const { content, uiLang } = pickDetailPresentation(locale, service);
   const { title: headerTitle } = pickListCard(locale, service);
   /** Cùng logic với trang client — truyền snapshot để tránh hydration mismatch (HTML cache / khác trim). */

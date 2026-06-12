@@ -1,3 +1,10 @@
+import { notFound } from 'next/navigation';
+
+export default function InvestmentPage() {
+  notFound();
+}
+
+/*
 import { getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
@@ -35,3 +42,4 @@ export default async function InvestmentPage({ params }: { params: Promise<{ loc
   const { locale } = await params;
   redirect(`/${locale}/services`);
 }
+*/

@@ -21,15 +21,18 @@
   "nav": {
     "home": "Home",
     "about": "About Us",
-    "investment": "Products & Services",
-    "sector": "Smart Library",
+    "business": "Enterprise",
+    "acca": "ACCA Training",
+    "articles": "Articles",
     "contact": "Contact",
     "dashboard": "Dashboard",
     "profile": "Profile",
     "signIn": "Sign In",
     "signUp": "Sign Up",
     "signOut": "Sign Out",
-    "admin": "Admin"
+    "admin": "Admin",
+    "investment": "Products & Services",
+    "sector": "Smart Library"
   },
   "footer": {
     "slogan": "Shaping Tomorrow Through Agile Innovation.",

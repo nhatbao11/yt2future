@@ -21,15 +21,18 @@
   "nav": {
     "home": "Trang chủ",
     "about": "Về chúng tôi",
-    "investment": "Sản phẩm dịch vụ",
-    "sector": "Thư viện thông minh",
+    "business": "Doanh nghiệp",
+    "acca": "Đào tạo ACCA",
+    "articles": "Bài viết",
     "contact": "Liên hệ",
     "dashboard": "Bảng điều khiển",
     "profile": "Hồ sơ",
     "signIn": "Đăng nhập",
     "signUp": "Đăng ký",
     "signOut": "Đăng xuất",
-    "admin": "Quản trị"
+    "admin": "Quản trị",
+    "investment": "Sản phẩm dịch vụ",
+    "sector": "Thư viện thông minh"
   },
   "footer": {
     "slogan": "Kiến tạo tương lai bằng đổi mới linh hoạt.",

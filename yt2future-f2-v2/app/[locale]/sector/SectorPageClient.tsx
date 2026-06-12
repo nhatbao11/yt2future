@@ -1,6 +1,7 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import PageHeader from '@/components/layout/PageHeader';
 import { reportService } from '@/features/reports/api/reportApi';
 import { categoryApi } from '@/features/categories/api/categoryApi';
@@ -12,6 +13,8 @@ import { useTranslations, useLocale } from 'next-intl';
 export default function SectorPage() {
   const t = useTranslations('sector_page');
   const locale = useLocale();
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category');
 
   const [reports, setReports] = useState<
     Array<{
@@ -59,6 +62,31 @@ export default function SectorPage() {
       if (res.success) setCategories(res.categories);
     });
   }, []);
+
+  // Đồng bộ chuyên mục từ URL search params
+  useEffect(() => {
+    if (categories.length === 0) return;
+    if (categoryParam) {
+      const catId = parseInt(categoryParam, 10);
+      if (!isNaN(catId)) {
+        setActiveCatId(catId);
+      } else {
+        const matched = categories.find(
+          (c: any) =>
+            c.slug === categoryParam ||
+            c.name.toLowerCase().includes(categoryParam.toLowerCase()) ||
+            (categoryParam === 'doanh-nghiep' && c.name.toLowerCase().includes('doanh nghiệp')) ||
+            (categoryParam === 'acca' && c.name.toLowerCase().includes('acca'))
+        );
+        if (matched) {
+          setActiveCatId(matched.id);
+        }
+      }
+    } else {
+      setActiveCatId(undefined);
+    }
+    setPage(1);
+  }, [categories, categoryParam]);
 
   // Tải báo cáo
   const loadReports = useCallback(async () => {

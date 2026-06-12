@@ -4,7 +4,17 @@ import Link from '@/components/common/Link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
-import { Menu, X, User, LogOut, ShieldCheck, LayoutDashboard, Settings } from 'lucide-react';
+import {
+  Menu,
+  X,
+  User,
+  LogOut,
+  ShieldCheck,
+  LayoutDashboard,
+  Settings,
+  ArrowRight,
+  ChevronDown,
+} from 'lucide-react';
 import { createBrowserClient } from '@supabase/ssr';
 import { useTranslations, useLocale } from 'next-intl';
 import LanguageSwitcher from '@/components/common/LanguageSwitcher';
@@ -30,10 +40,44 @@ export default function Navbar() {
   );
 
   const navLinks = [
+    {
+      name: t('business'),
+      href: '/services',
+      dropdown: [
+        { name: 'Vay vốn doanh nghiệp', href: '/services/vay-von' },
+        { name: 'LC & Thanh toán quốc tế', href: '/services/lc-thanh-toan' },
+        { name: 'Bảo lãnh ngân hàng', href: '/services/bao-lanh' },
+        { name: 'Bảo hiểm doanh nghiệp', href: '/services/bao-hiem' },
+        { name: 'Thiết kế website', href: '/services/thiet-ke-web' },
+      ],
+      tagline:
+        'Giải pháp tối ưu về vốn, bảo lãnh, LC & thanh toán quốc tế, thiết kế website cho doanh nghiệp.',
+      bannerTitle: 'Doanh nghiệp',
+    },
+    {
+      name: t('acca'),
+      href: '/acca',
+      dropdown: [
+        { name: 'Lộ trình ACCA', href: '/acca#lo-trinh-acca' },
+        { name: 'F2', href: '/acca#f2' },
+        { name: 'F3', href: '/acca#f3' },
+        { name: 'F7', href: '/acca#f7' },
+        { name: 'F8', href: '/acca#f8' },
+      ],
+      tagline: 'Đào tạo ACCA thực chiến, lớp học nhỏ tương tác cao, tập trung vào bản chất.',
+      bannerTitle: 'Đào tạo ACCA',
+    },
+    {
+      name: t('articles'),
+      href: '/sector',
+      dropdown: [
+        { name: 'Tài chính doanh nghiệp', href: '/sector?category=doanh-nghiep' },
+        { name: 'ACCA & Kế toán', href: '/sector?category=acca' },
+      ],
+      tagline: 'Cập nhật tin tức, kiến thức tài chính vĩ mô, kế toán và kiểm toán thực tiễn.',
+      bannerTitle: 'Bài viết',
+    },
     { name: t('about'), href: '/about' },
-    { name: t('dashboard'), href: '/dashboard' },
-    { name: t('investment'), href: '/services' },
-    { name: t('sector'), href: '/sector' },
     { name: t('contact'), href: '/contact' },
   ];
 
@@ -87,6 +131,8 @@ export default function Navbar() {
       setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll);
+    // Trigger scroll handler initially
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, [pathname, fetchUser, isInitialRender]);
 
@@ -140,25 +186,46 @@ export default function Navbar() {
     }
   };
 
-  const getLinkStyle = (path: string, isMobile = false) => {
-    // Với next-intl, pathname có thể chứa locale prefix (ví dụ /en/about)
-    // path truyền vào là /about. Cần so sánh tương đối.
-    // Tuy nhiên đơn giản nhất là kiểm tra xem pathname có kết thúc bằng path không
-    // hoặc remove locale prefix từ pathname để so sánh.
-    // Nhưng Link component của chúng ta tự handle active state? Không, Link chỉ là a tag.
-    // Ta cần logic check active.
+  const handleNavLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('/#') || href.includes('#')) {
+      const hash = href.substring(href.indexOf('#'));
+      const qIndex = hash.indexOf('?');
+      const cleanHash = qIndex !== -1 ? hash.substring(0, qIndex) : hash;
+      const element = document.querySelector(cleanHash);
+      if (element) {
+        e.preventDefault();
+        setIsMenuOpen(false);
+        const yOffset = -75; // Account for sticky navbar height
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+        window.history.pushState(null, '', href);
+        window.dispatchEvent(new Event('popstate'));
+      }
+    }
+  };
 
-    // Clean pathname: remove locale prefix
+  const checkIsActive = (path: string) => {
     let cleanPath = pathname;
     if (cleanPath.startsWith('/en')) cleanPath = cleanPath.replace('/en', '');
     else if (cleanPath.startsWith('/vi')) cleanPath = cleanPath.replace('/vi', '');
     if (cleanPath === '') cleanPath = '/';
 
-    const isActive = cleanPath === path;
-    const baseStyle = `text-[12px] font-bold uppercase tracking-wider transition-all duration-200 rounded-sm cursor-pointer whitespace-nowrap`;
+    let isActive = false;
+    if (path.startsWith('/#')) {
+      isActive = false;
+    } else {
+      isActive = cleanPath === path;
+    }
+
+    return isActive;
+  };
+
+  const getLinkStyle = (path: string, isMobile = false) => {
+    const isActive = checkIsActive(path);
+    const baseStyle = `text-[11px] xl:text-[12px] font-bold uppercase tracking-wider transition-all duration-200 rounded-sm cursor-pointer whitespace-nowrap`;
     if (isMobile)
-      return `${baseStyle} w-full px-6 py-4 border-b border-gray-50 ${isActive ? 'bg-[#1a365d] text-white' : 'text-[#1a365d]'}`;
-    return `${baseStyle} px-4 py-2 ${isActive ? 'bg-[#1a365d] text-white shadow-md' : 'text-[#1a365d] hover:bg-[#1a365d] hover:text-white'}`;
+      return `${baseStyle} w-full px-6 py-4 border-b border-gray-50 ${isActive ? 'bg-[#1a365d] text-white font-extrabold' : 'text-[#1a365d]'}`;
+    return `${baseStyle} px-3 xl:px-4 py-1.5 xl:py-2 ${isActive ? 'bg-[#1a365d] text-white shadow-md' : 'text-[#1a365d] hover:bg-[#1a365d] hover:text-white'}`;
   };
 
   return (
@@ -177,16 +244,65 @@ export default function Navbar() {
           </div>
         </Link>
 
-        <div className="hidden lg:flex items-center gap-1">
+        {/* Desktop Menu */}
+        <div className="hidden xl:flex items-center gap-1">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className={getLinkStyle(link.href)}>
-              {link.name}
-            </Link>
+            <div key={link.name} className="relative group py-4">
+              <Link
+                href={link.href}
+                className={`${getLinkStyle(link.href)} flex items-center gap-1`}
+                onClick={(e) => handleNavLinkClick(e, link.href)}
+              >
+                <span>{link.name}</span>
+                {link.dropdown && (
+                  <ChevronDown
+                    size={13}
+                    className="transition-transform duration-300 group-hover:rotate-180 text-current shrink-0"
+                  />
+                )}
+              </Link>
+              {link.dropdown && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-[680px] bg-white border border-gray-100 rounded-xl shadow-xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-200 z-150 flex overflow-hidden">
+                  {/* Left Banner - 50% width */}
+                  <div className="w-1/2 bg-gradient-to-br from-[#1a365d] to-[#0f172a] p-8 text-white flex flex-col justify-between relative overflow-hidden">
+                    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-xl" />
+                    <div className="relative z-10">
+                      <h4 className="text-sm font-black uppercase tracking-wider text-yellow-500 mb-3">
+                        {link.bannerTitle}
+                      </h4>
+                      <p className="text-xs text-gray-300 leading-relaxed font-medium">
+                        {link.tagline}
+                      </p>
+                    </div>
+                    <div className="text-[10px] uppercase font-bold text-gray-400 tracking-widest mt-6 relative z-10">
+                      YT2Future
+                    </div>
+                  </div>
+                  {/* Right sub-menu list - 50% width */}
+                  <div className="w-1/2 p-6 flex flex-col gap-1.5 bg-white">
+                    {link.dropdown.map((subItem, index) => (
+                      <Link
+                        key={index}
+                        href={subItem.href}
+                        onClick={(e) => handleNavLinkClick(e, subItem.href)}
+                        className="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-[#1a365d]/5 text-slate-700 hover:text-[#1a365d] text-xs sm:text-sm font-bold transition-all duration-200 group/sub"
+                      >
+                        <span>{subItem.name}</span>
+                        <ArrowRight
+                          size={14}
+                          className="text-[#1a365d] group-hover/sub:text-orange-500 opacity-0 -translate-x-2 group-hover/sub:opacity-100 group-hover/sub:translate-x-0 transition-all"
+                        />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           ))}
         </div>
 
         <div className="flex items-center justify-end gap-2 z-110 min-w-30 md:min-w-45">
-          <div className="hidden lg:flex items-center border-r border-gray-200 pr-2 h-10">
+          <div className="hidden xl:flex items-center border-r border-gray-200 pr-2 h-10">
             {loading && !userData ? (
               <div className="w-9 h-9 rounded-full bg-gray-100 animate-pulse ml-2" />
             ) : userData ? (
@@ -245,17 +361,42 @@ export default function Navbar() {
           <LanguageSwitcher />
 
           <button
-            className="lg:hidden p-2 text-[#1a365d] shrink-0"
+            className="xl:hidden p-2 text-[#1a365d] shrink-0"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
           >
             {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
 
+        {/* Mobile Menu */}
         <div
-          className={`lg:hidden fixed inset-0 bg-white z-105 transition-transform duration-500 transform ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+          className={`xl:hidden fixed inset-0 bg-white z-[150] transition-transform duration-500 transform ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
         >
-          <div className="flex flex-col pt-24 h-full px-6 overflow-y-auto bg-white">
+          {/* Mobile Menu Header Bar */}
+          <div className="h-18 md:h-18.75 px-4 md:px-12 flex justify-between items-center border-b border-gray-100 bg-white">
+            <Link
+              href="/"
+              className="flex items-center gap-2 md:gap-3"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <div className="relative w-10 h-10 overflow-hidden rounded-full border border-gray-100 shrink-0 shadow-sm">
+                <Image src="/Logo.jpg" alt="Logo" fill sizes="40px" className="object-cover" />
+              </div>
+              <h1 className="text-[#1a365d] font-extrabold text-base tracking-tighter uppercase leading-none">
+                YT2FUTURE
+              </h1>
+            </Link>
+            <button
+              className="p-2 text-[#1a365d] shrink-0 cursor-pointer"
+              onClick={() => setIsMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              <X size={28} />
+            </button>
+          </div>
+
+          <div className="flex flex-col h-[calc(100%-4.5rem)] px-6 overflow-y-auto pt-8 pb-12 bg-white">
             {userData ? (
               <div className="flex flex-col gap-4 mb-8">
                 <div className="p-6 bg-slate-50 rounded-2xl flex items-center gap-4 border border-slate-100">
@@ -304,16 +445,39 @@ export default function Navbar() {
               </Link>
             )}
 
-            <div className="flex flex-col">
+            {/* Mobile Navigation List with Tree Branch styling */}
+            <div className="flex flex-col pb-12">
               {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={getLinkStyle(link.href, true)}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {link.name}
-                </Link>
+                <div key={link.name} className="flex flex-col w-full border-b border-gray-100 py-2">
+                  <Link
+                    href={link.href}
+                    className="text-[13px] font-bold uppercase tracking-wider text-[#1a365d] py-2 px-2 hover:bg-slate-50 rounded"
+                    onClick={(e) => {
+                      handleNavLinkClick(e, link.href);
+                      setIsMenuOpen(false);
+                    }}
+                  >
+                    {link.name}
+                  </Link>
+                  {link.dropdown && (
+                    <div className="pl-4 flex flex-col gap-2 mt-1 border-l border-slate-100 ml-3 py-1">
+                      {link.dropdown.map((subItem, idx) => (
+                        <Link
+                          key={idx}
+                          href={subItem.href}
+                          onClick={(e) => {
+                            handleNavLinkClick(e, subItem.href);
+                            setIsMenuOpen(false);
+                          }}
+                          className="text-xs text-slate-500 hover:text-[#1a365d] font-bold py-2 flex items-center gap-2 group/sub"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover/sub:bg-yellow-500 transition-colors shrink-0" />
+                          <span>{subItem.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
 
