@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import SectorPageClient from './SectorPageClient';
 import type { Metadata } from 'next';
 import { absoluteUrl, buildLanguageAlternates } from '@/lib/seo';
+import { Suspense } from 'react';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -33,5 +34,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function SectorPage() {
-  return <SectorPageClient />;
+  return (
+    <Suspense
+      fallback={
+        <div className="text-center py-20 text-sm animate-pulse text-slate-500">Loading...</div>
+      }
+    >
+      <SectorPageClient />
+    </Suspense>
+  );
 }
