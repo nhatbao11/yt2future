@@ -102,27 +102,62 @@
   },
   "home": {
     "hero": {
-      "title": "YT2",
-      "titleHighlight": "FUTURE",
-      "subtitle": "Kiến tạo tương lai\nbằng đổi mới linh hoạt",
-      "cta": "Bắt đầu hành trình"
+      "tagline": "Chiến lược YT2Future",
+      "title": "Kiến Tạo Tương Lai",
+      "titleHighlight": "Bằng Đổi Mới Linh Hoạt.",
+      "desc": "Chúng tôi đồng hành cùng doanh nghiệp vượt qua thách thức, tăng tốc phát triển và xây dựng lợi thế cạnh tranh bền vững.",
+      "cta1": "Dịch Vụ Của Chúng Tôi",
+      "cta2": "Khám Phá YT2Future"
     },
-    "about": {
-      "title": "Về",
-      "titleHighlight": "chúng tôi",
-      "tagline": "Về chúng tôi & Tầm nhìn",
-      "desc1": "YT2Future được xây dựng với niềm tin rằng tương lai tài chính bền vững bắt đầu từ tư duy linh hoạt và tinh thần đổi mới không ngừng. Chúng tôi cung cấp kiến thức đầu tư, phân tích thị trường và thông tin tài chính được chọn lọc, hướng tới việc giúp người đọc hiểu đúng bản chất của đầu tư và ra quyết định dựa trên tư duy dài hạn.",
-      "desc2": "YT2Future mong muốn đồng hành cùng cộng đồng trên hành trình học hỏi, thích nghi và kiến tạo tương lai bằng tri thức.",
-      "learnMore": "Tìm hiểu về đội ngũ"
+    "metrics": {
+      "capital": "$5B+",
+      "capitalLabel": "Vốn Quản Lý",
+      "clients": "120+",
+      "clientsLabel": "Khách Hàng Doanh Nghiệp",
+      "growth": "35%",
+      "growthLabel": "Tăng Trưởng TB",
+      "countries": "15+",
+      "countriesLabel": "Quốc Gia"
     },
-    "explore": {
-      "title": "Lĩnh vực",
-      "titleHighlight": "nghiên cứu",
-      "tagline": "Những gì chúng tôi khám phá",
-      "desc": "Chúng tôi tập trung vào những mảng thị trường cốt lõi, nơi sự đổi mới đang diễn ra mạnh mẽ nhất."
+    "expertise": {
+      "tagline": "Chuyên Môn Của Chúng Tôi",
+      "title": "Giải Pháp Chiến Lược Cho Thách Thức Phức Tạp",
+      "viewAll": "Xem Tất Cả Dịch Vụ",
+      "finance": "Tài Chính Doanh Nghiệp",
+      "financeDesc": "Tối ưu hóa cấu trúc vốn và thúc đẩy giá trị doanh nghiệp dài hạn thông qua phân tích chuyên sâu.",
+      "digital": "Chuyển Đổi Số",
+      "digitalDesc": "Ứng dụng công nghệ để tái thiết mô hình vận hành và tạo lợi thế cạnh tranh mới.",
+      "operations": "Vận Hành Tối Ưu",
+      "operationsDesc": "Tinh gọn quy trình để giảm chi phí, tăng tính linh hoạt và cải thiện chuỗi cung ứng.",
+      "people": "Con Người & Tổ Chức",
+      "peopleDesc": "Xây dựng văn hóa hiệu suất cao và phát triển năng lực lãnh đạo cho tương lai."
     },
-    "values": {
-      "tagline": "Giá trị của chúng tôi"
+    "philosophy": {
+      "tagline": "Triết Lý Của Chúng Tôi",
+      "title": "Mô Hình Kiến Tạo Giá Trị Mới",
+      "desc": "Mô hình tư vấn truyền thống không còn đủ. Chúng tôi kết hợp chuyên môn sâu với triển khai linh hoạt để mang lại kết quả thực tế nhanh chóng.",
+      "p1Title": "Định Hướng Dữ Liệu",
+      "p1Desc": "Mọi khuyến nghị đều được củng cố bởi phân tích định lượng và dữ liệu thị trường độc quyền.",
+      "p2Title": "Triển Khai Linh Hoạt",
+      "p2Desc": "Chúng tôi không chỉ viết báo cáo. Chúng tôi đồng hành cùng bạn để ứng dụng giải pháp linh hoạt.",
+      "p3Title": "Tác Động Bền Vững",
+      "p3Desc": "Mục tiêu là xây dựng năng lực dài hạn cho tổ chức, đảm bảo lợi thế cạnh tranh bền vững."
+    },
+    "spotlight": {
+      "tagline": "Dự Án Tiêu Biểu",
+      "title": "Chuyển Đổi Nhà Bán Lẻ Thành Kẻ Khổng Lồ E-commerce",
+      "desc": "Khám phá cách chúng tôi giúp chuỗi bán lẻ quốc gia tái thiết kế chuỗi cung ứng, giảm 40% thời gian giao hàng và tăng 200% doanh số trực tuyến.",
+      "cta": "Đọc Toàn Bộ Nghiên Cứu"
+    },
+    "insights": {
+      "tagline": "Góc Nhìn Nổi Bật",
+      "title": "Góc Nhìn Mới Nhất",
+      "explore": "Khám Phá Thư Viện"
+    },
+    "career": {
+      "title": "Kiến Tạo Sự Nghiệp Cùng Chúng Tôi",
+      "desc": "Gia nhập đội ngũ xuất sắc. Chúng tôi mang đến cơ hội phát triển vượt bậc và tác động ở quy mô lớn.",
+      "cta": "Khám Phá Cơ Hội"
     }
   },
   "about": {
