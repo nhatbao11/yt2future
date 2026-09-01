@@ -19,28 +19,28 @@ export default function PageHeader({ title, parent }: PageHeaderProps) {
   const t = useTranslations('nav');
 
   return (
-    <div className="w-full bg-[#001a41] py-3 md:py-4">
-      <div className="max-w-360 mx-auto px-6 md:px-12">
-        <nav className="flex flex-wrap items-center gap-x-2 gap-y-1 text-white/50 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em]">
-          <Link href="/" className="hover:text-yellow-500 transition-colors duration-200">
+    <div className="w-full bg-white py-4 md:py-5 border-b border-slate-200 shadow-sm">
+      <div className="max-w-360 mx-auto w-full px-4 md:px-12">
+        <nav className="flex flex-wrap items-center gap-x-3 gap-y-1 text-slate-400 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em]">
+          <Link href="/" className="hover:text-blue-600 transition-colors duration-200">
             {t('home')}
           </Link>
 
-          <span className="text-white/20 select-none font-light">/</span>
+          <span className="text-slate-300 select-none font-light">/</span>
 
           {parent ? (
             <>
               <Link
                 href={parent.href}
-                className="hover:text-yellow-500 transition-colors duration-200"
+                className="hover:text-blue-600 transition-colors duration-200"
               >
                 {parent.label}
               </Link>
-              <span className="text-white/20 select-none font-light">/</span>
+              <span className="text-slate-300 select-none font-light">/</span>
             </>
           ) : null}
 
-          <span className="text-yellow-500">{title}</span>
+          <span className="text-[#0a192f]">{title}</span>
         </nav>
       </div>
     </div>

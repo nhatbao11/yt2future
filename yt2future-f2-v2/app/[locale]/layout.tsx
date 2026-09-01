@@ -3,12 +3,12 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import ScrollToTop from '@/components/common/ScrollToTop';
 import { Toaster } from 'react-hot-toast';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n/request';
-import ScrollToTop from '@/components/partials/ScrollToTop';
 import { getTranslations } from 'next-intl/server';
 import { getCanonicalBaseUrl, seoNoindexEn } from '@/lib/seo';
 

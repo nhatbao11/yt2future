@@ -20,7 +20,6 @@ export default function AboutPage() {
       let currentIndex = 0;
       let minDistance = Infinity;
 
-      // Find currently centered item
       for (let i = 0; i < slider.children.length; i++) {
         const child = slider.children[i] as HTMLElement;
         const childCenter = child.offsetLeft + child.offsetWidth / 2;
@@ -31,12 +30,10 @@ export default function AboutPage() {
         }
       }
 
-      // Move to next item
       const nextIndex = (currentIndex + 1) % slider.children.length;
       const nextCard = slider.children[nextIndex] as HTMLElement;
 
       if (nextCard) {
-        // Calculate scroll position to center the next card
         const scrollTarget = nextCard.offsetLeft - (slider.clientWidth - nextCard.offsetWidth) / 2;
         slider.scrollTo({ left: scrollTarget, behavior: 'smooth' });
       }
@@ -47,17 +44,17 @@ export default function AboutPage() {
 
   const learningPillars = [
     {
-      icon: <BookOpen className="text-yellow-500" size={28} />,
+      icon: <BookOpen className="text-[#0a192f]" size={28} />,
       title: t('values.knowledge.title'),
       desc: t('values.knowledge.desc'),
     },
     {
-      icon: <Lightbulb className="text-yellow-500" size={28} />,
+      icon: <Lightbulb className="text-[#0a192f]" size={28} />,
       title: t('values.thinking.title'),
       desc: t('values.thinking.desc'),
     },
     {
-      icon: <Users className="text-yellow-500" size={28} />,
+      icon: <Users className="text-[#0a192f]" size={28} />,
       title: t('values.community.title'),
       desc: t('values.community.desc'),
     },
@@ -69,37 +66,37 @@ export default function AboutPage() {
 
       <main className="grow">
         {/* SECTION 1: GIỚI THIỆU */}
-        <section className="py-10 md:py-16">
-          <ScrollReveal className="max-w-360 mx-auto px-6 md:px-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-              <article className="space-y-8 order-1 lg:order-1">
+        <section className="py-20 md:py-32">
+          <ScrollReveal className="max-w-[1440px] mx-auto px-6 md:px-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+              <article className="space-y-10 order-1 lg:order-1">
                 <div className="space-y-4">
-                  <p className="text-yellow-500 font-bold uppercase tracking-[0.4em] text-[10px]">
+                  <p className="text-slate-500 font-bold uppercase tracking-[0.3em] text-[10px]">
                     {t('tagline')}
                   </p>
-                  <div className="text-2xl md:text-4xl font-black text-[#001a41] uppercase tracking-tight leading-snug">
+                  <div className="text-3xl md:text-5xl font-extrabold text-slate-900 uppercase tracking-tight leading-snug">
                     <h1>"{t('headline')}"</h1>
                   </div>
                 </div>
 
-                <div className="space-y-6 text-gray-500 font-light text-lg leading-relaxed border-l-2 border-gray-100 pl-8">
+                <div className="space-y-6 text-slate-600 font-medium text-lg leading-relaxed border-l border-slate-200 pl-8">
                   <p>{t('description')}</p>
                 </div>
 
-                <div className="pt-4">
-                  <blockquote className="text-[#001a41] text-xl md:text-2xl font-semibold italic border-l-4 border-yellow-500 pl-6 py-1 leading-snug">
+                <div className="pt-6">
+                  <blockquote className="text-[#0a192f] text-xl md:text-2xl font-bold italic border-l-4 border-[#0a192f] pl-8 py-2 leading-relaxed">
                     "{t('quote')}"
                   </blockquote>
                 </div>
               </article>
 
-              <div className="relative group overflow-hidden rounded-sm shadow-xl order-2 lg:order-2 aspect-video lg:aspect-square bg-gray-50">
+              <div className="relative group overflow-hidden border border-slate-200 shadow-xl order-2 lg:order-2 aspect-video lg:aspect-square bg-slate-100">
                 <Image
                   src="/group.png"
                   alt="Tầm nhìn và Sứ mệnh YT2Future"
                   fill
                   sizes="(max-width: 1023px) 100vw, 50vw"
-                  className="object-cover grayscale-0 transition-all duration-1000 ease-in-out scale-100 lg:scale-105 lg:group-hover:scale-100"
+                  className="object-cover grayscale-[20%] transition-all duration-1000 ease-in-out scale-100 lg:scale-105 lg:group-hover:scale-100"
                   priority
                 />
               </div>
@@ -108,28 +105,27 @@ export default function AboutPage() {
         </section>
 
         {/* SECTION 2: GIÁ TRỊ CỐT LÕI */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-360 mx-auto px-6 md:px-12">
-            <div className="mb-12 border-l-4 md:border-l-8 border-[#001a41] pl-4 md:pl-6 text-left">
-              <h2 className="font-black text-[#001a41] text-2xl md:text-5xl uppercase tracking-tighter leading-tight">
-                {t('values.title')} <span className="text-yellow-500">{t('values.subtitle')}</span>
+        <section className="py-24 bg-slate-50 border-y border-slate-200">
+          <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+            <div className="mb-16 max-w-2xl flex items-baseline gap-3">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#0a192f] tracking-tight uppercase">
+                {t('values.title')} <span className="text-blue-600">{t('values.subtitle')}</span>
               </h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-gray-200 border border-gray-200 shadow-sm rounded-sm overflow-hidden">
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {learningPillars.map((p, i) => (
                 <div
                   key={i}
-                  className="p-10 bg-white lg:hover:bg-[#001a41] group transition-all duration-500 cursor-default"
+                  className="bg-white border border-slate-200 p-10 hover:border-[#0a192f]/30 shadow-sm hover:shadow-lg group transition-all duration-300 cursor-default"
                 >
-                  <div className="mb-8 lg:group-hover:scale-110 transition-transform origin-left">
+                  <div className="mb-8 p-4 inline-flex bg-slate-50 rounded-xl group-hover:scale-110 transition-transform origin-left">
                     {p.icon}
                   </div>
-                  <h3 className="text-xl font-black text-[#001a41] group-hover:text-white uppercase tracking-tighter mb-4">
+                  <h4 className="text-xl font-bold text-slate-900 group-hover:text-[#0a192f] tracking-tight mb-4 transition-colors">
                     {p.title}
-                  </h3>
-                  <p className="text-gray-500 lg:group-hover:text-white/70 text-sm leading-loose tracking-wide">
-                    {p.desc}
-                  </p>
+                  </h4>
+                  <p className="text-slate-600 text-sm leading-relaxed">{p.desc}</p>
                 </div>
               ))}
             </div>
@@ -137,23 +133,22 @@ export default function AboutPage() {
         </section>
 
         {/* SECTION 3: ĐỘI NGŨ FOUNDERS */}
-        <section className="py-12 md:py-16 bg-gray-50">
+        <section className="py-24 bg-white">
           <ScrollReveal>
-            <div className="max-w-360 mx-auto px-6 md:px-12">
-              <div className="mb-12 border-l-4 md:border-l-8 border-[#001a41] pl-4 md:pl-6 text-left">
-                <h2 className="font-black text-[#001a41] text-2xl md:text-5xl uppercase tracking-tighter leading-tight">
-                  {t('founders.title')}
-                </h2>
-                <p className="text-[8px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">
+            <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+              <div className="mb-16 text-center max-w-2xl mx-auto">
+                <h2 className="text-sm font-bold tracking-[0.2em] text-[#0a192f] uppercase mb-4">
                   {t('founders.tagline')}
-                </p>
+                </h2>
+                <h3 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                  {t('founders.title')}
+                </h3>
               </div>
             </div>
 
-            {/* Mobile: Horizontal Scroll with Auto-slide | Desktop: Grid */}
             <div
               ref={sliderRef}
-              className="max-w-360 mx-auto flex overflow-x-auto pb-10 px-6 gap-6 md:grid md:grid-cols-3 md:px-12 md:gap-8 no-scrollbar snap-x snap-mandatory md:snap-none"
+              className="max-w-[1440px] mx-auto flex overflow-x-auto pb-10 px-6 gap-6 md:grid md:grid-cols-3 md:px-12 md:gap-8 no-scrollbar snap-x snap-mandatory md:snap-none"
             >
               <div className="min-w-[80vw] sm:min-w-[45%] md:min-w-full snap-center shrink-0">
                 <MemberCard
@@ -183,9 +178,8 @@ export default function AboutPage() {
               </div>
             </div>
 
-            {/* Gợi ý lướt (chỉ hiện trên mobile) */}
             <div className="md:hidden text-center mt-2">
-              <p className="text-[10px] font-black uppercase text-slate-300 tracking-widest italic animate-pulse">
+              <p className="text-[10px] font-bold uppercase text-slate-400 tracking-widest italic animate-pulse">
                 {t('founders.swipeHint')}
               </p>
             </div>
@@ -193,7 +187,6 @@ export default function AboutPage() {
         </section>
       </main>
 
-      {/* Style để ẩn thanh cuộn và căn chỉnh */}
       <style jsx global>{`
         .no-scrollbar::-webkit-scrollbar {
           display: none;

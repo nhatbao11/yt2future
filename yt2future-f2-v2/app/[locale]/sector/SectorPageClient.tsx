@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import PageHeader from '@/components/layout/PageHeader';
 import { reportService } from '@/features/reports/api/reportApi';
 import { categoryApi } from '@/features/categories/api/categoryApi';
-import { Search, PlusCircle, User, FileText, X, ChevronDown, Calendar } from 'lucide-react';
+import { Search, PlusCircle, X, ChevronDown, ArrowRight, BookOpen } from 'lucide-react';
 import CreateReportPage from '@/components/common/CreateReportPage';
 import InlinePdfViewer from '@/components/common/InlinePdfViewer';
 import { useTranslations, useLocale } from 'next-intl';
@@ -38,13 +38,13 @@ export default function SectorPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [readingPdfUrl, setReadingPdfUrl] = useState<string | null>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+
   const getPdfViewerSrc = (pdfUrl: string) =>
     `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0`;
   const openPdf = (pdfUrl: string) => {
     setReadingPdfUrl(pdfUrl);
   };
 
-  // Khởi tạo dữ liệu
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -63,7 +63,6 @@ export default function SectorPage() {
     });
   }, []);
 
-  // Đồng bộ chuyên mục từ URL search params
   useEffect(() => {
     if (categories.length === 0) return;
     if (categoryParam) {
@@ -88,7 +87,6 @@ export default function SectorPage() {
     setPage(1);
   }, [categories, categoryParam]);
 
-  // Tải báo cáo
   const loadReports = useCallback(async () => {
     setLoading(true);
     try {
@@ -108,14 +106,15 @@ export default function SectorPage() {
   }, [loadReports]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-white">
       <PageHeader title={t('title')} />
 
-      <main className="max-w-[1440px] mx-auto px-4 md:px-12 py-10">
-        {/* THANH ĐIỀU KHIỂN */}
-        <div className="mb-10 flex flex-col lg:flex-row items-center justify-between gap-6 border-b border-slate-200 pb-7">
-          <div className="flex flex-col md:flex-row items-center gap-4 w-full lg:w-auto">
-            <div className="relative w-full lg:w-80">
+      <main className="max-w-[1440px] mx-auto px-6 md:px-12 py-16">
+        {/* TOP CONTROLS */}
+        <div className="mb-16 flex flex-col lg:flex-row items-center justify-between gap-8 border-b border-slate-200 pb-8">
+          <div className="flex flex-col md:flex-row items-center gap-6 w-full lg:w-auto">
+            {/* Search Input */}
+            <div className="relative w-full lg:w-96">
               <input
                 type="text"
                 placeholder={t('search_placeholder')}
@@ -124,34 +123,35 @@ export default function SectorPage() {
                   setSearchQuery(e.target.value);
                   setPage(1);
                 }}
-                className="w-full rounded-xl bg-white border border-slate-300 pl-12 pr-4 py-3.5 text-sm text-slate-900 placeholder-slate-400 outline-none focus:border-[#001a41] focus:ring-2 focus:ring-[#001a41]/15 transition-all shadow-sm"
+                className="w-full bg-transparent border-b border-slate-300 pl-8 pr-4 py-3 text-sm text-[#0a192f] placeholder-slate-400 outline-none focus:border-[#0a192f] transition-all"
               />
               <Search
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-900"
-                size={18}
+                className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400"
+                size={16}
               />
             </div>
 
+            {/* Category Dropdown */}
             <div
-              className="relative w-full lg:w-auto"
+              className="relative w-full lg:w-64"
               onMouseEnter={() => setIsFilterOpen(true)}
               onMouseLeave={() => setIsFilterOpen(false)}
             >
               <button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className="w-full rounded-xl flex items-center justify-between gap-6 bg-white border border-slate-300 px-5 py-3.5 text-sm text-slate-900 hover:border-[#001a41] transition-all shadow-sm"
+                className="w-full flex items-center justify-between gap-4 border-b border-slate-300 px-2 py-3 text-sm text-[#0a192f] font-medium hover:border-[#0a192f] transition-all"
               >
-                <span>
+                <span className="truncate">
                   {categories.find((c) => c.id === activeCatId)?.name || t('category_select')}
                 </span>
                 <ChevronDown
-                  size={14}
-                  className={`text-slate-900 transition-transform duration-300 ${isFilterOpen ? 'rotate-180' : ''}`}
+                  size={16}
+                  className={`text-slate-400 transition-transform duration-300 ${isFilterOpen ? 'rotate-180' : ''}`}
                 />
               </button>
 
               <div
-                className={`absolute left-0 top-full mt-1 w-full lg:w-60 bg-white border border-slate-200 rounded-xl z-50 shadow-xl transition-all ${isFilterOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}
+                className={`absolute left-0 top-full mt-2 w-full bg-white border border-slate-200 shadow-xl transition-all z-50 ${isFilterOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}
               >
                 <button
                   onClick={() => {
@@ -159,7 +159,7 @@ export default function SectorPage() {
                     setPage(1);
                     setIsFilterOpen(false);
                   }}
-                  className="w-full text-left px-5 py-4 text-sm hover:bg-slate-50 border-b border-slate-100 text-slate-900"
+                  className="w-full text-left px-5 py-3 text-sm hover:bg-slate-50 border-b border-slate-100 text-slate-600 font-medium transition-colors"
                 >
                   {t('all_categories')}
                 </button>
@@ -171,7 +171,7 @@ export default function SectorPage() {
                       setPage(1);
                       setIsFilterOpen(false);
                     }}
-                    className="w-full text-left px-5 py-4 text-sm hover:bg-slate-50 border-b border-slate-100 text-slate-900 last:border-0"
+                    className="w-full text-left px-5 py-3 text-sm hover:bg-slate-50 border-b border-slate-100 text-slate-600 font-medium transition-colors last:border-0"
                   >
                     {cat.name}
                   </button>
@@ -180,67 +180,74 @@ export default function SectorPage() {
             </div>
           </div>
 
+          {/* Add Report Button for Admin/CTV */}
           {userData?.role === 'CTV' && (
             <button
               onClick={() => setIsModalOpen(true)}
-              className="w-full md:w-auto rounded-xl flex items-center justify-center gap-3 bg-[#001a41] text-white px-8 py-4 text-sm font-bold uppercase tracking-wider hover:bg-[#00275f] transition-all shadow-md"
+              className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#0a192f] text-white px-6 py-3 text-xs font-bold uppercase tracking-widest hover:bg-[#0f2445] transition-colors"
             >
-              <PlusCircle size={18} /> {t('add_report')}
+              <PlusCircle size={16} /> {t('add_report')}
             </button>
           )}
         </div>
 
-        {/* DANH SÁCH BÁO CÁO */}
+        {/* REPORTS GRID */}
         {loading ? (
-          <div className="text-center py-20 text-sm animate-pulse text-slate-500">
+          <div className="flex items-center justify-center py-32 text-sm text-slate-400 font-medium tracking-widest uppercase animate-pulse">
             {t('syncing')}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14">
             {reports.map((report) => (
               <div
                 key={report.id}
                 onClick={() => openPdf(report.pdfUrl)}
-                className="group bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col cursor-pointer hover:shadow-xl hover:border-[#001a41]/30 transition-all duration-300"
+                className="group flex flex-col cursor-pointer border border-slate-200 bg-white hover:border-[#0a192f]/30 transition-all duration-300 shadow-sm hover:shadow-lg"
               >
-                <div className="aspect-video relative overflow-hidden bg-slate-100 border-b border-slate-100">
+                {/* Image Wrapper */}
+                <div className="aspect-[4/3] relative overflow-hidden bg-slate-100 border-b border-slate-200">
                   <Image
                     src={report.thumbnail || '/Logo.jpg'}
                     alt={report.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute top-3 right-3 rounded-full bg-[#001a41] text-white text-[10px] font-semibold px-2.5 py-1">
-                    {report.category?.name}
-                  </div>
+                  <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
                 </div>
 
-                <div className="p-6 flex flex-col justify-between flex-1 space-y-5">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-[11px] text-slate-500 font-semibold">
-                      <Calendar size={14} className="text-amber-500" />
+                {/* Content */}
+                <div className="flex flex-col flex-1 p-6 lg:p-8">
+                  <div className="flex items-center gap-4 mb-4">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#0a192f]">
+                      {report.category?.name || 'Uncategorized'}
+                    </span>
+                    <span className="text-[10px] font-medium text-slate-400">
                       {new Date(report.createdAt).toLocaleDateString(
                         locale === 'vi' ? 'vi-VN' : 'en-US'
                       )}
-                    </div>
-                    <h3 className="text-lg font-bold leading-tight text-[#001a41] group-hover:text-[#002a66] transition-colors line-clamp-2 h-14">
-                      {report.title}
-                    </h3>
-                    <div className="relative group/desc">
-                      <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed border-l-2 border-slate-200 pl-3 min-h-[42px]">
-                        "{report.description || t('no_desc')}"
-                      </p>
-                    </div>
+                    </span>
                   </div>
 
-                  <div className="pt-5 flex items-center justify-between border-t border-slate-100">
-                    <span className="text-[11px] text-slate-500 flex items-center gap-2">
-                      <User size={12} className="text-[#001a41]" /> @{report.user?.fullName}
+                  <h3 className="text-xl md:text-2xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors leading-snug mb-4">
+                    {report.title}
+                  </h3>
+
+                  <p className="text-sm text-slate-600 line-clamp-3 leading-relaxed mb-6">
+                    {report.description || t('no_desc')}
+                  </p>
+
+                  <div className="mt-auto flex items-center justify-between border-t border-slate-200 pt-5">
+                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                      BY {report.user?.fullName}
                     </span>
-                    <div className="flex items-center gap-2 text-[#001a41] text-sm group-hover:text-[#002a66] transition-all font-semibold">
-                      <FileText size={14} /> {t('details')}
-                    </div>
+                    <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0a192f] group-hover:text-blue-600 transition-colors">
+                      {t('details')}{' '}
+                      <ArrowRight
+                        size={14}
+                        className="group-hover:translate-x-1 transition-transform"
+                      />
+                    </span>
                   </div>
                 </div>
               </div>
@@ -248,20 +255,20 @@ export default function SectorPage() {
           </div>
         )}
 
-        {/* PHÂN TRANG */}
+        {/* PAGINATION */}
         {totalPages > 1 && (
-          <div className="mt-14 flex justify-center items-center gap-4">
+          <div className="mt-24 flex justify-center items-center gap-6 border-t border-slate-200 pt-8">
             <button
               disabled={page === 1}
               onClick={(e) => {
                 e.stopPropagation();
                 setPage(page - 1);
               }}
-              className="px-6 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 hover:border-[#001a41] disabled:opacity-30 transition-all active:scale-95"
+              className="text-xs font-bold uppercase tracking-widest text-[#0a192f] disabled:opacity-30 hover:text-blue-600 transition-colors"
             >
               {t('prev')}
             </button>
-            <span className="text-[12px] text-slate-700">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
               {t('page')} {page} / {totalPages}
             </span>
             <button
@@ -270,57 +277,64 @@ export default function SectorPage() {
                 e.stopPropagation();
                 setPage(page + 1);
               }}
-              className="px-6 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-900 hover:border-[#001a41] disabled:opacity-30 transition-all active:scale-95"
+              className="text-xs font-bold uppercase tracking-widest text-[#0a192f] disabled:opacity-30 hover:text-blue-600 transition-colors"
             >
               {t('next')}
             </button>
           </div>
         )}
 
-        {/* MODAL XEM PDF CÓ NÚT TẢI XUỐNG */}
+        {/* CLEAN PDF VIEWER MODAL */}
         {readingPdfUrl && (
-          <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm animate-in fade-in duration-300 sm:flex sm:items-center sm:justify-center sm:p-3 lg:p-6">
-            <div className="bg-white w-full h-[100dvh] sm:h-[94dvh] sm:max-w-[96vw] lg:max-w-7xl lg:h-[90vh] flex flex-col relative shadow-2xl sm:rounded-lg overflow-hidden">
-              <div className="bg-[#001a41] px-3 py-2.5 md:p-4 flex justify-between items-center text-white border-b-2 border-slate-900 font-black">
-                <span className="text-[10px] md:text-xs tracking-widest flex items-center gap-2 md:gap-3 truncate pr-2">
-                  <FileText size={18} className="text-yellow-500" /> {t('modal_title')}
+          <div className="fixed inset-0 z-[9999] bg-slate-900/90 backdrop-blur-md animate-in fade-in duration-300 flex items-center justify-center p-4">
+            <div className="bg-white w-full max-w-7xl h-[95vh] flex flex-col relative shadow-2xl">
+              <div className="flex justify-between items-center px-6 py-4 border-b border-slate-200 bg-white">
+                <span className="text-xs font-bold tracking-widest uppercase flex items-center gap-3 text-[#0a192f]">
+                  <BookOpen size={16} className="text-blue-600" /> {t('modal_title')}
                 </span>
 
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => setReadingPdfUrl(null)}
-                    className="bg-rose-600 p-2 border-2 border-slate-900 hover:rotate-90 transition-all shrink-0"
-                  >
-                    <X size={22} />
-                  </button>
-                </div>
+                <button
+                  onClick={() => setReadingPdfUrl(null)}
+                  className="p-2 text-slate-400 hover:text-[#0a192f] hover:bg-slate-100 rounded-full transition-all"
+                >
+                  <X size={20} />
+                </button>
               </div>
 
-              <InlinePdfViewer
-                src={getPdfViewerSrc(readingPdfUrl)}
-                className="w-full h-[calc(100dvh-56px)] sm:h-[calc(94dvh-56px)] lg:h-auto lg:flex-1"
-                title={t('viewer_title')}
-              />
+              <div className="flex-1 overflow-hidden bg-slate-100">
+                <InlinePdfViewer
+                  src={getPdfViewerSrc(readingPdfUrl)}
+                  className="w-full h-full"
+                  title={t('viewer_title')}
+                />
+              </div>
             </div>
           </div>
         )}
 
-        {/* MODAL THÊM BÁO CÁO */}
+        {/* ADD REPORT MODAL */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
-            <div className="bg-white w-full max-w-5xl relative overflow-y-auto max-h-[95vh] border-4 border-slate-900">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="absolute top-4 right-4 z-50 p-2 bg-rose-600 text-white border-2 border-slate-900 hover:rotate-90 transition-all"
-              >
-                <X size={24} />
-              </button>
-              <CreateReportPage
-                onClose={() => {
-                  setIsModalOpen(false);
-                  loadReports();
-                }}
-              />
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md">
+            <div className="bg-white w-full max-w-5xl relative overflow-y-auto max-h-[95vh] shadow-2xl">
+              <div className="flex justify-between items-center px-6 py-4 border-b border-slate-200 bg-slate-50 sticky top-0 z-50">
+                <span className="text-xs font-bold tracking-widest uppercase text-[#0a192f]">
+                  Create Report
+                </span>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="p-2 text-slate-400 hover:text-[#0a192f] hover:bg-slate-200 rounded-full transition-all"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="p-6">
+                <CreateReportPage
+                  onClose={() => {
+                    setIsModalOpen(false);
+                    loadReports();
+                  }}
+                />
+              </div>
             </div>
           </div>
         )}

@@ -32,7 +32,14 @@
     "signOut": "Sign Out",
     "admin": "Admin",
     "investment": "Products & Services",
-    "sector": "Smart Library"
+    "sector": "Smart Library",
+    "services": "Our services",
+    "insights": "Our insights",
+    "career": "Career",
+    "company": "Our company",
+    "aboutYT": "About YT",
+    "clientImpact": "Client Impact",
+    "offices": "Offices"
   },
   "footer": {
     "slogan": "Shaping Tomorrow Through Agile Innovation.",
@@ -43,12 +50,16 @@
     "cookies": "Cookie Policy",
     "connect": "Connect With Us",
     "address": "Binh Tan, Ho Chi Minh City",
-    "copyright": "© 2025 YT2Future. Agile Innovation Team.",
+    "copyright": "© 2026 YT2Future. Agile Innovation Team.",
     "tagline": "Sustainable Future",
     "description": "Shaping tomorrow through agile thinking and continuous innovation.",
     "quickLinks": "Quick Links",
     "followUs": "Follow Us",
-    "policyViewerTitle": "Policy viewer"
+    "policyViewerTitle": "Policy viewer",
+    "subscribeSuccess": "Subscribed successfully!",
+    "subscribeError": "Failed to subscribe. Please try again.",
+    "subscribeEmpty": "Please enter your email.",
+    "subscribeDuplicate": "Email is already subscribed."
   },
   "sectors": {
     "stock": {
@@ -91,27 +102,62 @@
   },
   "home": {
     "hero": {
-      "title": "YT2",
-      "titleHighlight": "FUTURE",
-      "subtitle": "Shaping tomorrow\nthrough agile innovation",
-      "cta": "Start Journey"
+      "tagline": "YT2Future Strategy",
+      "title": "Shaping Tomorrow",
+      "titleHighlight": "Through Agile Innovation.",
+      "desc": "We empower enterprises to navigate complexity, accelerate growth, and build sustainable competitive advantage in an ever-evolving market.",
+      "cta1": "Our Services",
+      "cta2": "Discover YT2Future"
     },
-    "about": {
-      "title": "About",
-      "titleHighlight": "us",
-      "tagline": "About Us & Vision",
-      "desc1": "YT2Future is built on the belief that a sustainable financial future begins with agile thinking and a spirit of continuous innovation. We provide investment knowledge, market analysis, and curated financial information, aiming to help readers understand the true nature of investment and make decisions based on long-term thinking.",
-      "desc2": "YT2Future wishes to accompany the community on a journey of learning, adapting, and creating the future through knowledge.",
-      "learnMore": "Meet the Team"
+    "metrics": {
+      "capital": "$5B+",
+      "capitalLabel": "Capital Managed",
+      "clients": "120+",
+      "clientsLabel": "Enterprise Clients",
+      "growth": "35%",
+      "growthLabel": "Avg. Revenue Growth",
+      "countries": "15+",
+      "countriesLabel": "Global Markets"
     },
-    "explore": {
-      "title": "Core",
-      "titleHighlight": "Research",
-      "tagline": "What we explore",
-      "desc": "We focus on core market sectors where innovation is happening most vigorously."
+    "expertise": {
+      "tagline": "Our Expertise",
+      "title": "Strategic Solutions for Complex Challenges",
+      "viewAll": "View All Services",
+      "finance": "Corporate Finance & Strategy",
+      "financeDesc": "Optimizing capital structure and driving long-term enterprise value through rigorous analysis.",
+      "digital": "Digital Transformation",
+      "digitalDesc": "Leveraging technology to reinvent operating models and create new competitive advantages.",
+      "operations": "Operations Excellence",
+      "operationsDesc": "Streamlining processes to reduce costs, increase agility, and improve supply chain resilience.",
+      "people": "People & Organization",
+      "peopleDesc": "Building high-performance cultures and developing leadership capabilities for the future."
     },
-    "values": {
-      "tagline": "Our Values"
+    "philosophy": {
+      "tagline": "Our Philosophy",
+      "title": "A New Paradigm for Value Creation",
+      "desc": "Traditional consulting models are no longer sufficient. We combine deep industry expertise with agile execution to deliver measurable results faster than ever before.",
+      "p1Title": "Data-Driven Precision",
+      "p1Desc": "Every recommendation is backed by rigorous quantitative analysis and proprietary market intelligence.",
+      "p2Title": "Agile Execution",
+      "p2Desc": "We don't just write reports. We partner with you to implement solutions iteratively and adapt to market shifts.",
+      "p3Title": "Sustainable Impact",
+      "p3Desc": "Our goal is to build long-term capabilities within your organization, ensuring lasting competitive advantage."
+    },
+    "spotlight": {
+      "tagline": "Client Spotlight",
+      "title": "Transforming a Legacy Retailer into an E-commerce Powerhouse",
+      "desc": "See how we helped a national retail chain redesign their supply chain network, leading to a 40% reduction in delivery times and a 200% increase in online sales.",
+      "cta": "Read Full Case Study"
+    },
+    "insights": {
+      "tagline": "Featured Insights",
+      "title": "Latest Perspectives",
+      "explore": "Explore Library"
+    },
+    "career": {
+      "title": "Build Your Career With Us",
+      "desc": "Join a team of driven problem-solvers. We offer unparalleled opportunities for growth, mentorship, and impact at scale.",
+      "cta": "Explore Opportunities"
     }
   },
   "about": {
@@ -672,5 +718,44 @@
       "pdfTooLarge": "PDF exceeds 10MB!",
       "imageTooLarge": "Image exceeds 2MB!"
     }
+  },
+  "career_page": {
+    "title": "Career",
+    "hero_title": "Build Your Future With Us",
+    "hero_subtitle": "Join a team of driven problem-solvers. We offer unparalleled opportunities for growth, mentorship, and impact at scale.",
+    "values_title": "Why YT2Future?",
+    "values_subtitle": "Our Core Values",
+    "value_1_title": "Agile Innovation",
+    "value_1_desc": "We embrace change and leverage cutting-edge technology to deliver rapid, sustainable solutions.",
+    "value_2_title": "Global Impact",
+    "value_2_desc": "Your work here will directly influence the success of major enterprises across the globe.",
+    "value_3_title": "Continuous Growth",
+    "value_3_desc": "We invest heavily in our people, providing continuous mentorship and clear paths to leadership.",
+    "open_roles_title": "Open Positions",
+    "open_roles_subtitle": "Find your place in our team",
+    "apply_now": "Apply Now",
+    "location": "Location",
+    "type": "Type",
+    "department": "Department",
+    "no_openings": "There are currently no open positions. Please check back later."
+  },
+  "client_impact_page": {
+    "title": "Client Impact",
+    "hero_title": "Delivering Tangible Impact",
+    "hero_subtitle": "We don't just provide advice. We partner with our clients to deliver measurable, sustainable results that redefine their industries.",
+    "metrics_subtitle": "By The Numbers",
+    "metrics_title": "Our Track Record",
+    "metric_1_value": "$5B+",
+    "metric_1_label": "Capital Managed",
+    "metric_2_value": "120+",
+    "metric_2_label": "Enterprise Clients",
+    "metric_3_value": "35%",
+    "metric_3_label": "Avg. Revenue Growth",
+    "cases_subtitle": "Success Stories",
+    "cases_title": "Featured Case Studies",
+    "challenge": "The Challenge",
+    "solution": "Our Solution",
+    "impact": "The Impact",
+    "read_more": "Read Full Case Study"
   }
 }

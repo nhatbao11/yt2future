@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'home' });
   const ts = await getTranslations({ locale, namespace: 'seo' });
-  const description = t('about.desc1').replace(/\s+/g, ' ').trim().slice(0, 160);
+  const description = ts('defaultDescription');
 
   const documentTitle = ts('defaultTitle');
 

@@ -32,7 +32,14 @@
     "signOut": "Đăng xuất",
     "admin": "Quản trị",
     "investment": "Sản phẩm dịch vụ",
-    "sector": "Thư viện thông minh"
+    "sector": "Thư viện thông minh",
+    "services": "Dịch vụ của chúng tôi",
+    "insights": "Góc nhìn",
+    "career": "Tuyển dụng",
+    "company": "Công ty chúng tôi",
+    "aboutYT": "Về YT",
+    "clientImpact": "Tác động khách hàng",
+    "offices": "Văn phòng"
   },
   "footer": {
     "slogan": "Kiến tạo tương lai bằng đổi mới linh hoạt.",
@@ -43,12 +50,16 @@
     "cookies": "Chính sách Cookie",
     "connect": "Kết nối",
     "address": "Bình Tân, TP. Hồ Chí Minh",
-    "copyright": "© 2025 YT2Future. Đội ngũ Đổi mới Linh hoạt.",
+    "copyright": "© 2026 YT2Future. Đội ngũ Đổi mới Linh hoạt.",
     "tagline": "Tương lai bền vững",
     "description": "Kiến tạo tương lai bằng tư duy linh hoạt và đổi mới không ngừng.",
     "quickLinks": "Liên kết nhanh",
     "followUs": "Theo dõi chúng tôi",
-    "policyViewerTitle": "Trình xem chính sách"
+    "policyViewerTitle": "Trình xem chính sách",
+    "subscribeSuccess": "Đăng ký thành công!",
+    "subscribeError": "Có lỗi xảy ra. Vui lòng thử lại.",
+    "subscribeEmpty": "Vui lòng nhập email.",
+    "subscribeDuplicate": "Email này đã được đăng ký."
   },
   "sectors": {
     "stock": {
@@ -672,5 +683,44 @@
       "pdfTooLarge": "File quá 10MB!",
       "imageTooLarge": "Ảnh quá 2MB!"
     }
+  },
+  "career_page": {
+    "title": "Tuyển dụng",
+    "hero_title": "Kiến Tạo Sự Nghiệp Cùng YT2Future",
+    "hero_subtitle": "Gia nhập đội ngũ chuyên gia hàng đầu. Chúng tôi mang đến cơ hội phát triển đột phá, môi trường làm việc đẳng cấp và tác động ở quy mô toàn cầu.",
+    "values_title": "Tại sao chọn YT2Future?",
+    "values_subtitle": "Giá Trị Cốt Lõi",
+    "value_1_title": "Đổi Mới Linh Hoạt",
+    "value_1_desc": "Chúng tôi đón nhận sự thay đổi và ứng dụng công nghệ tiên tiến để mang lại các giải pháp bền vững.",
+    "value_2_title": "Tác Động Toàn Cầu",
+    "value_2_desc": "Công việc của bạn sẽ trực tiếp đóng góp vào sự thành công của các doanh nghiệp lớn trên thế giới.",
+    "value_3_title": "Phát Triển Không Ngừng",
+    "value_3_desc": "Chúng tôi đầu tư mạnh mẽ vào con người, cung cấp các chương trình đào tạo và lộ trình thăng tiến rõ ràng.",
+    "open_roles_title": "Vị Trí Đang Tuyển",
+    "open_roles_subtitle": "Tìm kiếm cơ hội của bạn",
+    "apply_now": "Ứng Tuyển Ngay",
+    "location": "Địa điểm",
+    "type": "Hình thức",
+    "department": "Phòng ban",
+    "no_openings": "Hiện tại chưa có vị trí trống. Vui lòng quay lại sau."
+  },
+  "client_impact_page": {
+    "title": "Tác động Thực chứng",
+    "hero_title": "Hiện Thực Hóa Tiềm Năng",
+    "hero_subtitle": "Chúng tôi không chỉ đưa ra lời khuyên. Chúng tôi đồng hành cùng khách hàng để mang lại những kết quả đo lường được, kiến tạo giá trị bền vững.",
+    "metrics_subtitle": "Những Con Số Biết Nói",
+    "metrics_title": "Thành Tựu Của Chúng Tôi",
+    "metric_1_value": "100+ Tỷ",
+    "metric_1_label": "Vốn Quản Lý (VNĐ)",
+    "metric_2_value": "120+",
+    "metric_2_label": "Khách Hàng Doanh Nghiệp",
+    "metric_3_value": "35%",
+    "metric_3_label": "Tăng Trưởng Doanh Thu (TB)",
+    "cases_subtitle": "Câu Chuyện Thành Công",
+    "cases_title": "Các Dự Án Tiêu Biểu",
+    "challenge": "Thách Thức",
+    "solution": "Giải Pháp",
+    "impact": "Kết Quả",
+    "read_more": "Đọc Toàn Bộ Nghiên Cứu"
   }
 }
