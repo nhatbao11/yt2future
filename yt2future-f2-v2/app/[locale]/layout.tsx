@@ -29,22 +29,22 @@ export async function generateMetadata({
   return {
     metadataBase: new URL(baseUrl),
     title: {
-      template: '%s | YT2Future',
+      template: '%s | YT Insight',
       default: defaultTitle,
     },
     description: defaultDescription,
     openGraph: {
       type: 'website',
       locale: locale,
-      siteName: 'YT2Future',
+      siteName: 'YT Insight',
       title: defaultTitle,
       description: defaultDescription,
       images: [
         {
           url: '/Logo.jpg',
-          width: 800,
-          height: 600,
-          alt: 'YT2Future',
+          width: 1024,
+          height: 1024,
+          alt: 'YT Insight',
         },
       ],
     },
@@ -103,13 +103,13 @@ export default async function LocaleLayout({
     '@graph': [
       {
         '@type': 'Organization',
-        name: 'YT2Future',
+        name: 'YT Insight',
         url: baseUrl,
         logo: `${baseUrl}/Logo.jpg`,
       },
       {
         '@type': 'WebSite',
-        name: 'YT2Future',
+        name: 'YT Insight',
         url: baseUrl,
         inLanguage: locale,
       },
@@ -136,7 +136,7 @@ export default async function LocaleLayout({
           <Navbar />
 
           {/* Main content */}
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow pt-20 md:pt-24">{children}</main>
 
           {/* Footer xuất hiện ở mọi trang */}
           <Footer />

@@ -3,7 +3,6 @@ import React from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import { useTranslations, useLocale } from 'next-intl';
 import { TrendingUp, ArrowRight, ShieldCheck, Target } from 'lucide-react';
-import Link from '@/components/common/Link';
 
 export default function ClientImpactPageClient() {
   const t = useTranslations('client_impact_page');
@@ -77,9 +76,9 @@ export default function ClientImpactPageClient() {
           <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="max-w-3xl">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-1 bg-white"></div>
-                <span className="text-white text-sm font-bold tracking-[0.2em] uppercase">
-                  YT2Future Impact
+                <div className="w-12 h-1 bg-[var(--brand-yellow)] rounded-full"></div>
+                <span className="text-[var(--brand-yellow)] text-xs md:text-sm font-bold tracking-[0.2em] uppercase">
+                  YT Insight Impact
                 </span>
               </div>
               <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight mb-6">
@@ -101,7 +100,7 @@ export default function ClientImpactPageClient() {
                   key={idx}
                   className="flex flex-col items-center justify-center pt-8 md:pt-0 text-center first:pt-0"
                 >
-                  <h4 className="text-5xl md:text-6xl font-extrabold text-blue-700 mb-2 tracking-tighter">
+                  <h4 className="text-5xl md:text-6xl font-extrabold text-[var(--brand-navy-deep)] mb-2 tracking-tighter">
                     {metric.value}
                   </h4>
                   <p className="text-sm md:text-base font-bold text-slate-500 uppercase tracking-widest">
@@ -117,7 +116,7 @@ export default function ClientImpactPageClient() {
         <section className="py-24 bg-slate-50">
           <div className="max-w-[1440px] mx-auto px-6 md:px-12">
             <div className="mb-16">
-              <h2 className="text-sm font-bold tracking-[0.2em] text-[#0a192f] uppercase mb-4">
+              <h2 className="text-sm font-bold tracking-[0.2em] text-[var(--brand-navy)] uppercase mb-4">
                 {t('cases_subtitle')}
               </h2>
               <h3 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
@@ -129,16 +128,18 @@ export default function ClientImpactPageClient() {
               {caseStudies.map((caseStudy, idx) => (
                 <article
                   key={idx}
-                  className="bg-white border border-slate-200 p-8 md:p-10 hover:border-blue-600 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 flex flex-col group relative overflow-hidden"
+                  className="bg-white rounded-2xl border border-slate-200/90 p-7 md:p-8 hover:border-[var(--brand-navy)] shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col group relative overflow-hidden"
                 >
                   <div className="flex justify-between items-start mb-6">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-50 px-3 py-1 border border-slate-100">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/70">
                       {caseStudy.industry}
                     </span>
-                    <div className="bg-slate-50 p-3 shrink-0 rounded-sm">{caseStudy.icon}</div>
+                    <div className="bg-slate-50 p-3 shrink-0 rounded-xl text-[var(--brand-navy)] group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                      {caseStudy.icon}
+                    </div>
                   </div>
 
-                  <h4 className="text-2xl font-extrabold text-[#0a192f] mb-8 leading-tight tracking-tight">
+                  <h4 className="text-xl md:text-2xl font-extrabold text-[#0a192f] mb-6 leading-tight tracking-tight group-hover:text-[var(--brand-navy)] transition-colors">
                     {caseStudy.title}
                   </h4>
 
@@ -157,8 +158,8 @@ export default function ClientImpactPageClient() {
                       </p>
                       <p className="text-sm text-slate-600 leading-relaxed">{caseStudy.solution}</p>
                     </div>
-                    <div className="bg-slate-50 p-4 border-l-4 border-blue-600 mt-4">
-                      <p className="text-xs font-bold text-blue-700 uppercase tracking-widest mb-2">
+                    <div className="bg-slate-50 p-4 border-l-4 border-[var(--brand-yellow)] rounded-r-xl mt-4">
+                      <p className="text-xs font-bold text-[var(--brand-navy)] uppercase tracking-widest mb-2">
                         {t('impact')}
                       </p>
                       <p className="text-sm text-slate-900 font-semibold leading-relaxed">
@@ -168,7 +169,7 @@ export default function ClientImpactPageClient() {
                   </div>
 
                   <div className="pt-6 border-t border-slate-100 mt-auto">
-                    <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0a192f] group-hover:text-blue-600 transition-colors cursor-pointer">
+                    <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#0a192f] group-hover:text-[var(--brand-navy)] transition-colors cursor-pointer">
                       {t('read_more')}{' '}
                       <ArrowRight
                         size={14}
@@ -178,7 +179,7 @@ export default function ClientImpactPageClient() {
                   </div>
 
                   {/* Top decorative bar */}
-                  <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--brand-navy)] to-[var(--brand-yellow)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
                 </article>
               ))}
             </div>

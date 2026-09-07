@@ -42,7 +42,7 @@ export default function LanguageSwitcher() {
   return (
     <button
       onClick={switchLocale}
-      className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-yellow-100 text-[#001a41] border border-gray-200 hover:border-yellow-200 transition-all font-black text-[10px] tracking-widest shadow-sm"
+      className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 hover:bg-[var(--brand-yellow)] text-white hover:text-[#12243f] border border-white/20 hover:border-[var(--brand-yellow)] transition-all font-black text-[10px] tracking-widest shadow-sm cursor-pointer"
       aria-label={t('switchLanguage')}
     >
       {locale === 'vi' ? 'VI' : 'EN'}

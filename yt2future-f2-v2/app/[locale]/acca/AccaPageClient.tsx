@@ -255,8 +255,8 @@ export default function AccaPageClient() {
 
               <p className="text-sm sm:text-base text-gray-300 font-medium leading-relaxed max-w-2xl">
                 {isVi
-                  ? 'Chương trình đào tạo ACCA thực chiến tại YT2Future kết hợp tư duy phân tích sâu sắc. Giảng dạy trực tiếp bởi đội ngũ chuyên gia Big 4 giàu kinh nghiệm, lớp học giới hạn sĩ số để tối ưu tương tác, tập trung hiểu sâu bản chất nghiệp vụ để thi đậu và áp dụng trực tiếp vào công việc.'
-                  : 'Our practical ACCA courses at YT2Future combine analytical thinking with practical application. Led by Big 4 professionals in small group classes, we focus on deep conceptual understanding to guarantee passing scores and actual workplace success.'}
+                  ? 'Chương trình đào tạo ACCA thực chiến tại YT Insight kết hợp tư duy phân tích sâu sắc. Giảng dạy trực tiếp bởi đội ngũ chuyên gia Big 4 giàu kinh nghiệm, lớp học giới hạn sĩ số để tối ưu tương tác, tập trung hiểu sâu bản chất nghiệp vụ để thi đậu và áp dụng trực tiếp vào công việc.'
+                  : 'Our practical ACCA courses at YT Insight combine analytical thinking with practical application. Led by Big 4 professionals in small group classes, we focus on deep conceptual understanding to guarantee passing scores and actual workplace success.'}
               </p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2 w-full">

@@ -1,7 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import PageHeader from '@/components/layout/PageHeader';
-import PrimaryButton from '@/components/common/PrimaryButton';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 
 export default function ContactPage() {
@@ -43,9 +42,9 @@ export default function ContactPage() {
               <div>
                 <h2 className="text-4xl md:text-5xl font-extrabold text-[#0a192f] uppercase tracking-tight mb-6">
                   {t('getInTouch')}{' '}
-                  <span className="text-blue-600">{t('getInTouchHighlight')}</span>
+                  <span className="text-[var(--brand-navy)]">{t('getInTouchHighlight')}</span>
                 </h2>
-                <p className="text-slate-600 font-medium text-lg leading-relaxed max-w-md border-l border-slate-200 pl-6">
+                <p className="text-slate-600 font-medium text-lg leading-relaxed max-w-md border-l-2 border-[var(--brand-yellow)] pl-6">
                   {t('desc')}
                 </p>
               </div>
@@ -53,13 +52,13 @@ export default function ContactPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-10">
                 {contactInfo.map((item, index) => (
                   <div key={index} className="flex gap-5 group">
-                    <div className="shrink-0 w-14 h-14 bg-slate-50 flex items-center justify-center rounded-sm border border-slate-100 group-hover:border-[#0a192f]/20 transition-all duration-300 shadow-sm group-hover:shadow-md">
-                      <div className="transition-transform group-hover:scale-110 duration-300">
+                    <div className="shrink-0 w-14 h-14 bg-slate-50 flex items-center justify-center rounded-xl border border-slate-100 group-hover:border-[var(--brand-yellow)] group-hover:bg-[var(--brand-navy-deep)]/5 transition-all duration-300 shadow-sm group-hover:shadow-md">
+                      <div className="transition-transform group-hover:scale-110 duration-300 text-[var(--brand-navy)]">
                         {item.icon}
                       </div>
                     </div>
                     <div>
-                      <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 group-hover:text-blue-600 transition-colors">
+                      <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 group-hover:text-[var(--brand-navy)] transition-colors">
                         {item.title}
                       </h4>
                       <p className="text-slate-900 font-bold text-base md:text-lg leading-tight">
@@ -72,7 +71,7 @@ export default function ContactPage() {
             </div>
 
             {/* PHẢI: BẢN ĐỒ - THAY THẾ CHO FORM */}
-            <div className="w-full h-full min-h-[400px] bg-slate-100 rounded-sm overflow-hidden border border-slate-200 shadow-lg">
+            <div className="w-full h-full min-h-[400px] bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 shadow-lg">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.8665792770263!2d106.60155617570258!3d10.744766859775364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752dd6c8d7655d%3A0x677b10f845a76903!2zOTIgMTlFLCBBbiBM4bqhYywgQsOsbmggVMOibiwgSOG7kyBDaMOIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s"
                 width="100%"

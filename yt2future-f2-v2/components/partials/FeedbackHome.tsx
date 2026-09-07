@@ -110,6 +110,34 @@ export default function FeedbackHome() {
     }
   };
 
+  // Lock body scroll when feedback modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      const originalOverflow = document.body.style.overflow;
+      const originalPaddingRight = document.body.style.paddingRight;
+      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      if (scrollBarWidth > 0) {
+        document.body.style.paddingRight = `${scrollBarWidth}px`;
+      }
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        document.body.style.paddingRight = originalPaddingRight;
+      };
+    }
+  }, [isModalOpen]);
+
+  // Close modal on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isModalOpen) {
+        setIsModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isModalOpen]);
+
   return (
     <section className="py-12 md:py-16 bg-white relative overflow-hidden">
       <div className="max-w-360 mx-auto px-4 md:px-12">
@@ -143,7 +171,7 @@ export default function FeedbackHome() {
 
               return (
                 <SwiperSlide key={fb.id} className="h-auto">
-                  <div className="flex h-full min-h-[300px] w-full flex-col bg-white p-6 md:min-h-[320px] md:p-8 border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-300">
+                  <div className="flex h-full min-h-[300px] w-full flex-col bg-white p-6 md:min-h-[320px] md:p-8 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-xl hover:-translate-y-1.5 hover:border-[var(--brand-navy)] transition-all duration-300">
                     {/* Rating Stars */}
                     <div className="shrink-0">
                       <div className="flex gap-1 mb-4">
@@ -161,7 +189,7 @@ export default function FeedbackHome() {
                     {/* Nội dung: khối cố định — ngắn dài vẫn cùng kích thước */}
                     <div className="flex min-h-0 flex-1 flex-col">
                       <div
-                        className={`min-h-[6.25rem] max-h-[6.25rem] md:min-h-[7rem] md:max-h-[7rem] rounded-sm ${isExpanded ? 'overflow-y-auto' : 'overflow-hidden'}`}
+                        className={`min-h-[6.25rem] max-h-[6.25rem] md:min-h-[7rem] md:max-h-[7rem] ${isExpanded ? 'overflow-y-auto' : 'overflow-hidden'}`}
                       >
                         <p
                           className={`text-slate-700 text-sm leading-relaxed ${!isExpanded && needsExpand ? 'line-clamp-4' : ''}`}
@@ -221,7 +249,7 @@ export default function FeedbackHome() {
         <div className="mt-8 md:mt-12 flex justify-center">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center justify-center gap-2 bg-[#001a41] text-white px-8 py-4 text-sm font-bold uppercase tracking-wider hover:bg-yellow-600 transition-all duration-300 shadow-sm hover:shadow-md"
+            className="inline-flex items-center justify-center gap-2 bg-[var(--brand-navy)] text-white px-8 py-4 rounded-xl text-sm font-bold uppercase tracking-wider hover:bg-[var(--brand-yellow)] hover:text-[var(--brand-navy-deep)] transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
           >
             <MessageSquarePlus size={18} /> {t('send')}
           </button>
@@ -235,7 +263,7 @@ export default function FeedbackHome() {
           onClick={() => setIsModalOpen(false)}
         >
           <div
-            className="bg-white w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-200"
+            className="bg-white w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-200 rounded-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -285,7 +313,7 @@ export default function FeedbackHome() {
                     onChange={(e) => setContent(e.target.value)}
                     maxLength={MAX_LENGTH}
                     placeholder={t('placeholder')}
-                    className="w-full h-32 p-4 border border-slate-300 text-slate-900 text-sm outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 resize-none leading-relaxed transition-all"
+                    className="w-full h-32 p-4 border border-slate-300 text-slate-900 text-sm rounded-xl outline-none focus:border-[var(--brand-navy)] focus:ring-1 focus:ring-[var(--brand-navy)] resize-none leading-relaxed transition-all"
                     required
                   />
                   <div className="absolute bottom-3 right-3 text-xs text-slate-400">
@@ -298,7 +326,7 @@ export default function FeedbackHome() {
               <button
                 type="submit"
                 disabled={loading || !content.trim()}
-                className="w-full bg-[#001a41] text-white py-3.5 text-sm font-bold uppercase tracking-wider hover:bg-yellow-600 disabled:bg-slate-300 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2"
+                className="w-full bg-[var(--brand-navy)] text-white py-3.5 rounded-xl text-sm font-bold uppercase tracking-wider hover:bg-[var(--brand-yellow)] hover:text-[var(--brand-navy-deep)] disabled:bg-slate-300 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2 shadow-sm cursor-pointer"
               >
                 {loading ? (
                   <>

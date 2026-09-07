@@ -25,7 +25,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       contextTitle: 'Bối cảnh thị trường & Nhu cầu vốn',
       contextNarrative: [
         'Tiếp cận nguồn vốn ngân hàng luôn là thách thức lớn đối với các doanh nghiệp vừa và nhỏ (SMEs) do thiếu tài sản bảo đảm hoặc hồ sơ tài chính chưa hoàn thiện.',
-        'YT2Future đồng hành cùng quý doanh nghiệp để tháo gỡ nút thắt này, tối ưu hóa hồ sơ năng lực và kết nối các định chế tài chính uy tín.',
+        'YT Insight đồng hành cùng quý doanh nghiệp để tháo gỡ nút thắt này, tối ưu hóa hồ sơ năng lực và kết nối các định chế tài chính uy tín.',
       ],
       contextImpacts: [
         'Hơn 60% SMEs gặp khó khăn khi tiếp cận vốn tự thân.',
@@ -49,7 +49,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       ],
       fitSellerHighlight:
         'Chúng tôi hỗ trợ tư vấn hoàn thiện hồ sơ phương án kinh doanh khả thi miễn phí.',
-      benefitsTitle: 'Lợi ích vượt trội từ YT2Future',
+      benefitsTitle: 'Lợi ích vượt trội từ YT Insight',
       benefitGroups: [
         {
           title: 'Tối ưu chi phí',
@@ -85,7 +85,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       partnersTitle: 'Đối tác liên kết tài chính',
       partnersSubtitle: 'Các đối tác ngân hàng hàng đầu',
       partnersPlaceholder:
-        'YT2Future hợp tác chiến lược cùng BIDV, VietinBank, MB Bank, Techcombank, VIB...',
+        'YT Insight hợp tác chiến lược cùng BIDV, VietinBank, MB Bank, Techcombank, VIB...',
       partnerLogos: [],
       introVideoUrl: '',
       videoPreviewLabel: 'Giới thiệu giải pháp vốn',
@@ -101,7 +101,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       contextTitle: 'Market Context & Capital Demands',
       contextNarrative: [
         'Accessing bank capital remains a major challenge for SMEs due to lack of collateral or incomplete financial records.',
-        'YT2Future partners with you to resolve these bottlenecks, optimizing your profile and connecting you to reputable financial institutions.',
+        'YT Insight partners with you to resolve these bottlenecks, optimizing your profile and connecting you to reputable financial institutions.',
       ],
       contextImpacts: [
         'Over 60% of SMEs struggle to access traditional loans on their own.',
@@ -125,7 +125,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       ],
       fitSellerHighlight:
         'We provide complimentary consultancy to polish your feasibility reports.',
-      benefitsTitle: 'Key Benefits of Choosing YT2Future',
+      benefitsTitle: 'Key Benefits of Choosing YT Insight',
       benefitGroups: [
         {
           title: 'Cost Optimization',
@@ -160,7 +160,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       partnersTitle: 'Financial Partners',
       partnersSubtitle: 'Leading banking institutions',
       partnersPlaceholder:
-        'YT2Future strategically collaborates with BIDV, VietinBank, MB Bank, Techcombank, VIB...',
+        'YT Insight strategically collaborates with BIDV, VietinBank, MB Bank, Techcombank, VIB...',
       partnerLogos: [],
       introVideoUrl: '',
       videoPreviewLabel: 'Capital Solution Overview',
@@ -216,7 +216,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       ],
       fitSellerHighlight:
         'Hỗ trợ tư vấn soạn thảo điều khoản thanh toán trên hợp đồng ngoại thương tránh bẫy pháp lý.',
-      benefitsTitle: 'Lợi thế khi sử dụng dịch vụ của YT2Future',
+      benefitsTitle: 'Lợi thế khi sử dụng dịch vụ của YT Insight',
       benefitGroups: [
         {
           title: 'Hỗ trợ ký quỹ cực thấp',
@@ -290,7 +290,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       ],
       fitSellerHighlight:
         'We provide legal clause checks on international sales contracts to prevent document trap risks.',
-      benefitsTitle: 'Advantages with YT2Future',
+      benefitsTitle: 'Advantages with YT Insight',
       benefitGroups: [
         {
           title: 'Ultra-low Margin',
@@ -380,7 +380,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       ],
       fitSellerHighlight:
         'Hỗ trợ phê duyệt hạn mức bảo lãnh không cần tài sản bảo đảm cho nhà thầu uy tín.',
-      benefitsTitle: 'Lợi thế vượt trội từ bảo lãnh YT2Future',
+      benefitsTitle: 'Lợi thế vượt trội từ bảo lãnh YT Insight',
       benefitGroups: [
         {
           title: 'Phát hành siêu tốc',
@@ -545,7 +545,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       ],
       fitSellerHighlight:
         'Tăng sự gắn kết của nhân sự cốt cán bằng các chính sách phúc lợi bảo hiểm cao cấp.',
-      benefitsTitle: 'Lợi thế khi lựa chọn bảo hiểm qua YT2Future',
+      benefitsTitle: 'Lợi thế khi lựa chọn bảo hiểm qua YT Insight',
       benefitGroups: [
         {
           title: 'Thiết kế gói tối ưu',
@@ -711,7 +711,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       ],
       fitSellerHighlight:
         'Bàn giao trọn gói kèm tài liệu hướng dẫn và mã nguồn gốc cho doanh nghiệp.',
-      benefitsTitle: 'Lợi thế công nghệ từ YT2Future',
+      benefitsTitle: 'Lợi thế công nghệ từ YT Insight',
       benefitGroups: [
         {
           title: 'Thiết kế Độc quyền',
@@ -750,7 +750,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       partnerLogos: [],
       introVideoUrl: '',
       videoPreviewLabel: 'Quy trình thiết kế Web',
-      videoPreviewHint: 'Xem cách chuyên gia công nghệ YT2Future phát triển một website cao cấp.',
+      videoPreviewHint: 'Xem cách chuyên gia công nghệ YT Insight phát triển một website cao cấp.',
     },
     contentEn: {
       heroTag: 'Digital & Software Solutions',
@@ -784,7 +784,7 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
         'Integrated analytics tags: Google Analytics, Search Console, Meta Pixel.',
       ],
       fitSellerHighlight: 'Full handover including source files and operating manuals.',
-      benefitsTitle: 'Technology Edge from YT2Future',
+      benefitsTitle: 'Technology Edge from YT Insight',
       benefitGroups: [
         {
           title: 'Custom Tailored Designs',
@@ -823,7 +823,8 @@ export const STATIC_SERVICES: ServiceDetailRecord[] = [
       partnerLogos: [],
       introVideoUrl: '',
       videoPreviewLabel: 'Web Design Workflow',
-      videoPreviewHint: 'Watch how YT2Future engineering teams build a high-end corporate website.',
+      videoPreviewHint:
+        'Watch how YT Insight engineering teams build a high-end corporate website.',
     },
   },
 ];

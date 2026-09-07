@@ -1,7 +1,7 @@
 {
   "seo": {
-    "defaultTitle": "YT2Future | Shaping Tomorrow",
-    "defaultDescription": "Investment insights, market analysis, and agile innovation at YT2Future."
+    "defaultTitle": "YT Insight | Optimizing Enterprise Resources",
+    "defaultDescription": "YT Insight helps enterprises optimize finance, strategy, and operations."
   },
   "common": {
     "readMore": "Read more",
@@ -37,12 +37,12 @@
     "insights": "Our insights",
     "career": "Career",
     "company": "Our company",
-    "aboutYT": "About YT",
+    "aboutYT": "About YT Insight",
     "clientImpact": "Client Impact",
     "offices": "Offices"
   },
   "footer": {
-    "slogan": "Shaping Tomorrow Through Agile Innovation.",
+    "slogan": "Optimizing enterprise resources.",
     "menu": "Menu",
     "legal": "Legal",
     "privacy": "Privacy Policy",
@@ -50,9 +50,9 @@
     "cookies": "Cookie Policy",
     "connect": "Connect With Us",
     "address": "Binh Tan, Ho Chi Minh City",
-    "copyright": "© 2026 YT2Future. Agile Innovation Team.",
-    "tagline": "Sustainable Future",
-    "description": "Shaping tomorrow through agile thinking and continuous innovation.",
+    "copyright": "© 2026 YT Insight. All rights reserved.",
+    "tagline": "YT Insights",
+    "description": "YT Insights partners with enterprises to optimize finance, strategy, and operations.",
     "quickLinks": "Quick Links",
     "followUs": "Follow Us",
     "policyViewerTitle": "Policy viewer",
@@ -63,55 +63,62 @@
   },
   "sectors": {
     "stock": {
-      "title": "Stock Market",
-      "desc": "Updating foundational knowledge for beginners, with a simple, easy-to-understand analytical approach and gradual market familiarization."
+      "title": "Capital Markets",
+      "desc": "In-depth analysis of equity markets, providing strategic reports and trend insights to optimize investment portfolios."
     },
     "realEstate": {
       "title": "Real Estate",
-      "desc": "Synthesizing ongoing projects nationwide, updating price levels by region, and analyzing real estate businesses through actual project portfolios."
+      "desc": "Comprehensive assessment of market cycles, project planning, and financial capacity of real estate developers."
     },
     "macro": {
       "title": "Macroeconomics",
-      "desc": "Analyzing the impact of economic policies in Vietnam on specific sectors, updating operating interest rates and monetary/foreign exchange policies to propose potential sectors for each stage."
+      "desc": "Forecasting the impact of monetary and foreign exchange policies, helping organizations navigate risks and identify opportunities."
     },
     "mindset": {
-      "title": "Financial Mindset",
-      "desc": "Designing a complete roadmap for beginner investors, especially office workers, helping access financial knowledge in an easy-to-understand way and applying it effectively in practice."
+      "title": "Financial Strategy",
+      "desc": "Building a foundational mindset for risk management and strategic asset allocation for leaders and professionals."
     }
   },
   "feedback": {
-    "title": "Customer",
-    "titleHighlight": "Feedback",
-    "tagline": "Review System from YT2Future",
-    "role": "Strategic Member",
+    "title": "Client",
+    "titleHighlight": "Testimonials",
+    "tagline": "YT Insight Rating System",
+    "role": "Strategic Partner",
     "send": "Send Feedback",
     "modalTitle": "Write a Review",
     "placeholder": "Enter your thoughts here...",
     "sending": "Processing...",
-    "submit": "Confirm Send",
-    "loginRequired": "Please sign in to send feedback!",
-    "success": "Feedback sent successfully!",
+    "submit": "Submit Review",
+    "loginRequired": "Please login to submit feedback!",
+    "success": "Feedback submitted successfully!",
     "error": "Server connection error!",
-    "failure": "Sending failed!",
+    "failure": "Submission failed!",
     "readMore": "Read more",
     "showLess": "Show less",
-    "userFallback": "User",
+    "userFallback": "Partner",
     "anonymous": "Anonymous",
     "ratingLabel": "Rating",
-    "feedbackLabel": "Your feedback"
+    "feedbackLabel": "Feedback Content"
   },
   "home": {
     "hero": {
-      "tagline": "YT2Future Strategy",
+      "tagline": "YT Insight Strategy",
       "title": "Shaping Tomorrow",
       "titleHighlight": "Through Agile Innovation.",
       "desc": "We empower enterprises to navigate complexity, accelerate growth, and build sustainable competitive advantage in an ever-evolving market.",
       "cta1": "Our Services",
-      "cta2": "Discover YT2Future"
+      "cta2": "Discover YT Insight",
+      "dashboard": {
+        "liveData": "Live Data",
+        "growthStrategy": "Growth Strategy",
+        "accelerated": "Accelerated",
+        "globalImpact": "Global Impact",
+        "markets": "15+ Markets"
+      }
     },
     "metrics": {
       "capital": "$5B+",
-      "capitalLabel": "Capital Managed",
+      "capitalLabel": "Assets Under Management",
       "clients": "120+",
       "clientsLabel": "Enterprise Clients",
       "growth": "35%",
@@ -123,30 +130,30 @@
       "tagline": "Our Expertise",
       "title": "Strategic Solutions for Complex Challenges",
       "viewAll": "View All Services",
-      "finance": "Corporate Finance & Strategy",
-      "financeDesc": "Optimizing capital structure and driving long-term enterprise value through rigorous analysis.",
+      "finance": "Corporate Finance",
+      "financeDesc": "Optimize capital structure and drive long-term enterprise value through in-depth analysis.",
       "digital": "Digital Transformation",
-      "digitalDesc": "Leveraging technology to reinvent operating models and create new competitive advantages.",
-      "operations": "Operations Excellence",
-      "operationsDesc": "Streamlining processes to reduce costs, increase agility, and improve supply chain resilience.",
+      "digitalDesc": "Leverage technology to reinvent operating models and create new competitive advantages.",
+      "operations": "Operational Excellence",
+      "operationsDesc": "Streamline processes to reduce costs, increase agility, and improve supply chains.",
       "people": "People & Organization",
-      "peopleDesc": "Building high-performance cultures and developing leadership capabilities for the future."
+      "peopleDesc": "Build a high-performance culture and develop leadership capabilities for the future."
     },
     "philosophy": {
       "tagline": "Our Philosophy",
-      "title": "A New Paradigm for Value Creation",
-      "desc": "Traditional consulting models are no longer sufficient. We combine deep industry expertise with agile execution to deliver measurable results faster than ever before.",
-      "p1Title": "Data-Driven Precision",
-      "p1Desc": "Every recommendation is backed by rigorous quantitative analysis and proprietary market intelligence.",
-      "p2Title": "Agile Execution",
-      "p2Desc": "We don't just write reports. We partner with you to implement solutions iteratively and adapt to market shifts.",
+      "title": "A New Value Creation Model",
+      "desc": "Traditional consulting models are no longer sufficient. We combine deep expertise with agile implementation to deliver rapid, tangible results.",
+      "p1Title": "Data-Driven",
+      "p1Desc": "Every recommendation is backed by quantitative analysis and proprietary market data.",
+      "p2Title": "Agile Implementation",
+      "p2Desc": "We don't just write reports. We partner with you to implement flexible solutions.",
       "p3Title": "Sustainable Impact",
-      "p3Desc": "Our goal is to build long-term capabilities within your organization, ensuring lasting competitive advantage."
+      "p3Desc": "Our goal is to build long-term capabilities for your organization, ensuring sustainable competitive advantage."
     },
     "spotlight": {
-      "tagline": "Client Spotlight",
-      "title": "Transforming a Legacy Retailer into an E-commerce Powerhouse",
-      "desc": "See how we helped a national retail chain redesign their supply chain network, leading to a 40% reduction in delivery times and a 200% increase in online sales.",
+      "tagline": "Featured Case Study",
+      "title": "Transforming a Retailer into an E-commerce Giant",
+      "desc": "Discover how we helped a national retail chain redesign its supply chain, reducing delivery times by 40% and increasing online sales by 200%.",
       "cta": "Read Full Case Study"
     },
     "insights": {
@@ -155,32 +162,50 @@
       "explore": "Explore Library"
     },
     "career": {
-      "title": "Build Your Career With Us",
-      "desc": "Join a team of driven problem-solvers. We offer unparalleled opportunities for growth, mentorship, and impact at scale.",
+      "title": "Shape Your Career With Us",
+      "desc": "Join an exceptional team. We offer unparalleled growth opportunities and impact at scale.",
       "cta": "Explore Opportunities"
     }
   },
   "about": {
     "pageTitle": "About Us",
-    "tagline": "About YT2Future",
-    "headline": "Shaping tomorrow through agile thinking and continuous innovation.",
-    "description": "YT2Future is built on the belief that sustainable financial future begins with agile thinking and continuous innovation. We provide curated investment knowledge, market analysis, and financial information, aiming to help readers understand the true nature of investing and make decisions based on long-term thinking. YT2Future aspires to accompany the community on the journey of learning, adapting, and shaping the future through knowledge.",
+    "tagline": "About YT Insight",
+    "headline": "Shaping the future through agile thinking and relentless innovation.",
+    "headline_line1": "SHAPING THE FUTURE",
+    "headline_line2": "THROUGH AGILE MINDSET",
+    "headline_line3": "AND RELENTLESS INNOVATION.",
+    "description": "At YT Insights, we believe there is no fixed formula for development. Every business has a story, a challenge, and a path of its own.\n\nTherefore, we choose to listen and accompany our clients in finding tailored, flexible, and long-term value solutions. On that journey, we also constantly improve ourselves to move further together.",
+    "desc_p1": "At YT Insights, we believe there is no fixed formula for development. Every business has a story, a challenge, and a path of its own.",
+    "desc_p2": "Therefore, we choose to listen and accompany our clients in finding tailored, flexible, and long-term value solutions. On that journey, we also constantly improve ourselves to move further together.",
     "quote": "Shaping tomorrow through agile innovation.",
     "values": {
-      "title": "Values",
-      "subtitle": "we bring",
-      "tagline": "Our Values",
+      "title": "THE VALUES",
+      "subtitle": "WE DELIVER",
+      "heading": "THE VALUES WE DELIVER",
+      "tagline": "Core Values",
+      "agile": {
+        "title": "AGILE MINDSET",
+        "desc": "Adapting to deliver tailored solutions for every unique business challenge."
+      },
+      "practical": {
+        "title": "PRACTICAL VALUE",
+        "desc": "Focusing on pragmatic solutions aimed at measurable outcomes and lasting value."
+      },
+      "longTerm": {
+        "title": "LONG-TERM PARTNERSHIP",
+        "desc": "Listening, learning, and progressing alongside clients for sustainable development."
+      },
       "knowledge": {
-        "title": "KNOWLEDGE SYSTEM",
-        "desc": "Sharing knowledge and experience distilled from learning and investment practice."
+        "title": "AGILE MINDSET",
+        "desc": "Adapting to deliver tailored solutions for every unique business challenge."
       },
       "thinking": {
-        "title": "ANALYTICAL THINKING",
-        "desc": "Training multi-dimensional market perspective, from macro to enterprise fundamentals."
+        "title": "PRACTICAL VALUE",
+        "desc": "Focusing on pragmatic solutions aimed at measurable outcomes and lasting value."
       },
       "community": {
-        "title": "COMMUNITY CONNECTION",
-        "desc": "Building an open learning community where all perspectives are respected and debated."
+        "title": "LONG-TERM PARTNERSHIP",
+        "desc": "Listening, learning, and progressing alongside clients for sustainable development."
       }
     },
     "founders": {
@@ -221,7 +246,7 @@
       "subject": "Subject",
       "message": "Your message"
     },
-    "mapTitle": "YT2Future location",
+    "mapTitle": "YT Insight location",
     "info": {
       "address": "Address",
       "email": "Email",
@@ -230,10 +255,16 @@
     },
     "values": {
       "address": "Binh Tan, Ho Chi Minh City",
-      "email": "ytcapital.group@gmail.com",
+      "email": "business.ytinsights@gmail.com",
       "hotline": "0822 082 407",
       "hours": "Mon - Fri: 08:00 - 17:30"
     }
+  },
+  "services_page": {
+    "pageTitle": "Our Services",
+    "heroEyebrow": "STRATEGIC SOLUTIONS",
+    "heroTitle": "Optimizing Enterprise Resources",
+    "heroDescription": "YT Insights accompanies businesses in optimizing finance, strategy, and operations, from capital allocation to growth decisions."
   },
   "dashboard": {
     "welcome": "Welcome",
@@ -637,33 +668,37 @@
     "loading": "Loading services…",
     "loadError": "Could not load services. Check: (1) the API server is running (default port 5000), (2) run `npx prisma migrate deploy` and `npm run seed:services` in the backend folder, (3) if you use `next start` without Nginx, set `INTERNAL_API_ORIGIN` for Next (e.g. http://127.0.0.1:5000).",
     "empty": "No published services yet. Add one in admin or run the backend seed script.",
-    "heroEyebrow": "Trade finance advisory solutions",
-    "intro": "Choose a service below for the full narrative, implementation flow, and practical benefits for your business.",
-    "sectionTitle": "Service catalog",
-    "cardCta": "View details",
-    "cardEyebrow": "Service",
-    "cardLeadLabel": "Summary",
-    "cardOutlineLabel": "Card highlights",
-    "cardTeaserHint": "Short description; open the card for the full detail page.",
+    "heroEyebrow": "Comprehensive Strategic Advisory Solutions",
+    "intro": "Explore our service portfolio to understand how YT Insight creates breakthrough value, optimizes operations, and drives sustainable growth for your enterprise.",
+    "sectionTitle": "Service Portfolio",
+    "cardCta": "Explore Solution",
+    "cardEyebrow": "Strategic Service",
+    "cardLeadLabel": "Overview",
+    "cardOutlineLabel": "Highlights",
+    "cardTeaserHint": "Brief description; click to view in-depth analysis on the details page.",
     "cardEmptyImageEdit": "No image yet — paste URL below",
-    "detailLoading": "Opening service…",
-    "metaDescription": "Trade-finance products and service solutions for enterprises at YT2Future."
+    "detailLoading": "Loading solution details…",
+    "metaDescription": "Strategic advisory, digital transformation, and operational excellence solutions at YT Insight."
   },
   "sector_page": {
-    "title": "Smart Library",
-    "metaDescription": "Explore in-depth sector research and market reports on YT2Future.",
-    "search_placeholder": "Search reports...",
-    "category_select": "Select Category",
+    "title": "Strategic Insights",
+    "badge": "PUBLICATIONS & RESEARCH",
+    "metaDescription": "Explore in-depth research reports, strategic publications, and insights from leading experts at YT Insight.",
+    "search_placeholder": "Search strategic reports...",
+    "report_list": "Report List",
+    "category_select": "Select research area",
     "all_categories": "All Categories",
+    "all_years": "All",
+    "year_prefix": "Year",
     "add_report": "Add Report",
-    "syncing": "Loading...",
-    "no_desc": "No description",
-    "details": "Details",
+    "syncing": "Syncing data...",
+    "no_desc": "No summary available.",
+    "details": "Read Report",
     "prev": "Previous",
     "next": "Next",
     "page": "Page",
-    "modal_title": "Report Viewer",
-    "viewer_title": "Report viewer"
+    "modal_title": "Report Details",
+    "viewer_title": "Publication Viewer"
   },
   "profile": {
     "title": "My Profile",
@@ -720,10 +755,14 @@
     }
   },
   "career_page": {
-    "title": "Career",
-    "hero_title": "Build Your Future With Us",
-    "hero_subtitle": "Join a team of driven problem-solvers. We offer unparalleled opportunities for growth, mentorship, and impact at scale.",
-    "values_title": "Why YT2Future?",
+    "title": "Careers",
+    "hero_tagline": "Careers at YT Insights",
+    "hero_title": "Build Your Career With YT Insights",
+    "hero_title_line1": "Build Your Career",
+    "hero_title_line2": "With YT Insights",
+    "hero_quote": "Learning together. Growing together. Shaping the future together.",
+    "hero_subtitle": "We believe that every development journey begins with small steps. At YT Insights, you will have the opportunity to learn, tackle real-world challenges, and create meaningful value alongside your teammates.",
+    "values_title": "Why YT Insight?",
     "values_subtitle": "Our Core Values",
     "value_1_title": "Agile Innovation",
     "value_1_desc": "We embrace change and leverage cutting-edge technology to deliver rapid, sustainable solutions.",

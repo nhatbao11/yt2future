@@ -1,258 +1,185 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import Link from '@/components/common/Link';
-import { useLocale } from 'next-intl';
-import { Coins, Shield, FileCheck, Globe, ArrowRight, Check, Laptop, Landmark } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import { Landmark, LineChart, Settings2 } from 'lucide-react';
+
+type ServiceCard = {
+  id: string;
+  eyebrow: string;
+  title: string;
+  summary: string;
+  solutionsLabel: string;
+  solutions: string[];
+  cta: string;
+  href: string;
+  accent: 'navy' | 'yellow' | 'blue';
+  icon: React.ReactNode;
+};
 
 export default function ServicesListClient() {
   const locale = useLocale();
-
+  const t = useTranslations('services_page');
   const isVi = locale === 'vi';
 
-  // Customized high-fidelity details matching the screenshot structure
-  const financeServices = [
+  const services: ServiceCard[] = [
     {
-      title: isVi ? 'Vay vốn doanh nghiệp' : 'Corporate Loans',
-      slug: 'vay-von',
-      pill: isVi ? 'Lãi suất ưu đãi' : 'Best Rates',
-      icon: <Coins size={32} className="text-[#0a192f]" />,
-      leftStatLabel: isVi ? 'HẠN MỨC VAY' : 'CREDIT LIMIT',
-      leftStatValue: isVi ? 'Đến 100 Tỷ đ' : 'Up to 100B VND',
-      rightStatLabel: isVi ? 'LÃI SUẤT CHỈ TỪ' : 'RATES FROM',
-      rightStatValue: '5.5% / năm',
-      details: [
-        {
-          label: isVi ? 'Thời hạn vay' : 'Loan Tenure',
-          value: isVi ? 'Lên đến 12 tháng' : 'Up to 12 months',
-        },
-        {
-          label: isVi ? 'Hình thức cấp' : 'Loan Type',
-          value: isVi ? 'Vay thấu chi / Hạn mức' : 'Overdraft / Credit Line',
-        },
-        {
-          label: isVi ? 'Tài sản bảo đảm' : 'Collateral',
-          value: isVi ? 'Linh hoạt / Tín chấp' : 'Flexible / Unsecured',
-          highlight: true,
-        },
-      ],
-      bullets: [
-        {
-          text: isVi
-            ? 'Hồ sơ thủ tục tinh gọn, thời gian phê duyệt và giải ngân siêu tốc trong 72h.'
-            : 'Streamlined process with fast approval and disbursement within 72 hours.',
-        },
-        {
-          text: isVi
-            ? 'Áp dụng cho các doanh nghiệp vừa và nhỏ (SMEs) có doanh thu từ 10 tỷ/năm.'
-            : 'Applicable for SMEs with annual revenues starting from 10 billion VND.',
-        },
-      ],
+      id: 'corporate-finance',
+      eyebrow: 'CORPORATE FINANCE',
+      title: isVi ? 'Tối ưu tài chính' : 'Financial Optimization',
+      summary: isVi
+        ? 'Xây dựng cấu trúc vốn phù hợp và tối ưu dòng tiền cho doanh nghiệp.'
+        : 'Build the right capital structure and optimize cash flow for the business.',
+      solutionsLabel: isVi ? 'Các giải pháp' : 'Solutions',
+      solutions: isVi
+        ? ['Huy động vốn', 'Vay ngân hàng', 'Tái cấu trúc nợ', 'Quản trị dòng tiền']
+        : ['Capital raising', 'Bank loans', 'Debt restructuring', 'Cash-flow management'],
+      cta: isVi ? 'Khám phá giải pháp' : 'Explore solutions',
+      href: '/contact',
+      accent: 'navy',
+      icon: <Landmark size={28} />,
     },
     {
-      title: isVi ? 'Bảo lãnh ngân hàng' : 'Bank Guarantees',
-      slug: 'bao-lanh',
-      pill: isVi ? 'Ký quỹ cực thấp' : 'Low Margin',
-      icon: <Shield size={32} className="text-[#0a192f]" />,
-      leftStatLabel: isVi ? 'TỐC ĐỘ PHÁT HÀNH' : 'ISSUANCE SPEED',
-      leftStatValue: isVi ? 'Trong 24 Giờ' : 'Within 24 Hours',
-      rightStatLabel: isVi ? 'KÝ QUỸ TỐI THIỂU' : 'MIN COLLATERAL',
-      rightStatValue: 'Từ 0%',
-      details: [
-        {
-          label: isVi ? 'Nghiệp vụ hỗ trợ' : 'Guarantee Types',
-          value: isVi ? 'Dự thầu, Thực hiện HĐ, Tạm ứng' : 'Bid, Performance, Advance',
-        },
-        {
-          label: isVi ? 'Ngân hàng phát hành' : 'Issuing Banks',
-          value: isVi ? 'BIDV, VietinBank, MB Bank...' : 'BIDV, VietinBank, MB Bank...',
-        },
-        {
-          label: isVi ? 'Hạn mức bảo lãnh' : 'Total Limit',
-          value: isVi ? 'Không giới hạn' : 'Unlimited',
-          highlight: true,
-        },
-      ],
-      bullets: [
-        {
-          text: isVi
-            ? 'Giải phóng hoàn toàn dòng tiền ký quỹ thầu để tái đầu tư vào dự án thực tế.'
-            : 'Fully unlock bid security margins to reinvest into actual operations.',
-        },
-        {
-          text: isVi
-            ? 'Hỗ trợ cấp hạn mức bảo lãnh không cần tài sản bảo đảm cho nhà thầu uy tín.'
-            : 'Unsecured guarantee lines available for reputable general contractors.',
-        },
-      ],
+      id: 'business-strategy',
+      eyebrow: 'BUSINESS STRATEGY',
+      title: isVi ? 'Chiến lược tăng trưởng' : 'Growth Strategy',
+      summary: isVi
+        ? 'Biến dữ liệu thị trường và năng lực nội tại thành chiến lược tăng trưởng rõ ràng.'
+        : 'Turn market data and internal capabilities into a clear growth strategy.',
+      solutionsLabel: isVi ? 'Các giải pháp' : 'Solutions',
+      solutions: ['Business Strategy', 'Market Analysis', 'Business Plan', 'Growth Strategy'],
+      cta: isVi ? 'Khám phá giải pháp' : 'Explore solutions',
+      href: '/contact',
+      accent: 'yellow',
+      icon: <LineChart size={28} />,
     },
     {
-      title: isVi ? 'LC & Thanh toán quốc tế' : 'LC & Trade Payments',
-      slug: 'lc-thanh-toan',
-      pill: isVi ? 'An toàn tuyệt đối' : 'Secure Trade',
-      icon: <FileCheck size={32} className="text-[#0a192f]" />,
-      leftStatLabel: isVi ? 'PHÍ PHÁT HÀNH' : 'ISSUANCE FEES',
-      leftStatValue: isVi ? 'Từ 0.1%' : 'From 0.1%',
-      rightStatLabel: isVi ? 'KÝ QUỸ MỞ L/C' : 'LC MARGIN',
-      rightStatValue: isVi ? 'Chỉ từ 0%' : 'From 0%',
-      details: [
-        { label: isVi ? 'Phương thức áp dụng' : 'LC Methods', value: 'At sight, Usance, UPAS L/C' },
-        {
-          label: isVi ? 'Đối tác liên kết' : 'Partner Network',
-          value: isVi ? 'Hơn 500 ngân hàng đại lý' : 'Over 500 correspondent banks',
-        },
-        {
-          label: isVi ? 'Kiểm soát chứng từ' : 'Audit Check',
-          value: isVi ? 'Soát xét lỗi 100% trước phát' : '100% error validation before issue',
-          highlight: true,
-        },
-      ],
-      bullets: [
-        {
-          text: isVi
-            ? 'Giảm thiểu rủi ro pháp lý giao thương và bảo vệ dòng vốn nhập khẩu tối đa.'
-            : 'Mitigate international trade legal risks and safeguard import capital.',
-        },
-        {
-          text: isVi
-            ? 'Phù hợp cho các doanh nghiệp nhập khẩu linh kiện, nguyên vật liệu nước ngoài.'
-            : 'Ideal for businesses importing overseas machinery or raw materials.',
-        },
-      ],
-    },
-    {
-      title: isVi ? 'Bảo hiểm doanh nghiệp' : 'Corporate Insurance',
-      slug: 'bao-hiem',
-      pill: isVi ? 'Bảo vệ 360°' : '360° Protection',
-      icon: <Shield size={32} className="text-[#0a192f]" />,
-      leftStatLabel: isVi ? 'PHẠM VI BẢO VỆ' : 'COVERAGE TYPE',
-      leftStatValue: isVi ? 'Tài sản & Con người' : 'Asset & Personnel',
-      rightStatLabel: isVi ? 'CHI PHÍ ĐƠN' : 'PREMIUM COSTS',
-      rightStatValue: isVi ? 'Tối ưu nhất' : 'Highly Optimized',
-      details: [
-        {
-          label: isVi ? 'Sản phẩm chủ lực' : 'Core Offerings',
-          value: isVi ? 'Cháy nổ, Hàng hóa, Sức khỏe' : 'Fire, Cargo, Employee Health',
-        },
-        { label: isVi ? 'Đối tác bảo hiểm' : 'Underwriters', value: 'Bảo Việt, PVI, PJICO...' },
-        {
-          label: isVi ? 'Xử lý bồi thường' : 'Claim Settlement',
-          value: isVi ? 'Nhanh chóng trong 15-30 ngày' : 'Settled within 15-30 days',
-          highlight: true,
-        },
-      ],
-      bullets: [
-        {
-          text: isVi
-            ? 'Lá chắn tài chính vững chắc bảo vệ doanh nghiệp trước mọi rủi ro hoạt động.'
-            : 'A robust financial shield protecting operations from unexpected disruptions.',
-        },
-        {
-          text: isVi
-            ? 'Đồng hành khảo sát hiện trường nhà xưởng và tư vấn gói tối ưu miễn phí.'
-            : 'Complimentary on-site risk inspections and policy cost optimizations.',
-        },
-      ],
+      id: 'business-performance',
+      eyebrow: 'BUSINESS PERFORMANCE',
+      title: isVi ? 'Tối ưu quy trình vận hành' : 'Operating Performance',
+      summary: isVi
+        ? 'Giúp doanh nghiệp kiểm soát hiệu quả hoạt động bằng dữ liệu và hệ thống quản trị.'
+        : 'Help enterprises control operating effectiveness with data and management systems.',
+      solutionsLabel: isVi ? 'Các giải pháp' : 'Solutions',
+      solutions: ['KPI', 'BI Dashboard', 'Cost Optimization', 'Process Optimization'],
+      cta: isVi ? 'Khám phá giải pháp' : 'Explore solutions',
+      href: '/contact',
+      accent: 'blue',
+      icon: <Settings2 size={28} />,
     },
   ];
 
-  return (
-    <div className="flex min-h-screen flex-col bg-[#f8fafc] text-left">
-      <PageHeader title={isVi ? 'Doanh nghiệp' : 'Enterprise'} />
+  const accentStyles = {
+    navy: {
+      border:
+        'border-2 border-[#12243f] hover:border-[#1a315a] shadow-[0_8px_30px_rgba(18,36,63,0.08)] hover:shadow-[0_20px_40px_rgba(18,36,63,0.18)]',
+      topBar: 'bg-[#12243f]',
+      iconWrap:
+        'bg-[#12243f] text-white shadow-md group-hover:scale-110 transition-transform duration-300',
+      eyebrow: 'text-[#12243f]',
+      cta: 'text-[#12243f] hover:text-[#243f6d]',
+      chip: 'bg-[#12243f]/10 text-[#12243f] border border-[#12243f]/25 font-bold',
+      dot: 'bg-[#12243f]',
+    },
+    yellow: {
+      border:
+        'border-2 border-[#ffcc23] hover:border-amber-400 shadow-[0_8px_30px_rgba(255,204,35,0.12)] hover:shadow-[0_20px_40px_rgba(255,204,35,0.25)]',
+      topBar: 'bg-[#ffcc23]',
+      iconWrap:
+        'bg-[#ffcc23] text-[#12243f] shadow-md group-hover:scale-110 transition-transform duration-300',
+      eyebrow: 'text-[#8a6800]',
+      cta: 'text-[#8a6800] hover:text-[#5c4600]',
+      chip: 'bg-[#ffcc23]/25 text-[#7a5c00] border border-[#ffcc23]/60 font-black',
+      dot: 'bg-[#eab308]',
+    },
+    blue: {
+      border:
+        'border-2 border-[#243f6d] hover:border-blue-700 shadow-[0_8px_30px_rgba(36,63,109,0.08)] hover:shadow-[0_20px_40px_rgba(36,63,109,0.18)]',
+      topBar: 'bg-[#243f6d]',
+      iconWrap:
+        'bg-[#243f6d] text-white shadow-md group-hover:scale-110 transition-transform duration-300',
+      eyebrow: 'text-[#243f6d]',
+      cta: 'text-[#243f6d] hover:text-blue-900',
+      chip: 'bg-[#243f6d]/10 text-[#243f6d] border border-[#243f6d]/25 font-bold',
+      dot: 'bg-[#243f6d]',
+    },
+  } as const;
 
-      <section className="relative py-16 md:py-24 grow z-10">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-          {/* Header & Tabs */}
-          <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-slate-200 pb-8">
-            <div className="max-w-2xl">
-              <h2 className="text-sm font-bold tracking-[0.2em] text-[#0a192f] uppercase mb-4">
-                {isVi ? 'Giải pháp chiến lược' : 'Strategic Solutions'}
-              </h2>
-              <h3 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                {isVi ? 'Tối ưu hóa nguồn lực cho doanh nghiệp' : 'Optimizing Enterprise Resources'}
-              </h3>
-            </div>
+  return (
+    <div className="flex min-h-screen flex-col bg-[#f7f9fc] text-left">
+      <PageHeader title={t('pageTitle')} />
+
+      <section className="relative grow py-12 md:py-20">
+        <div className="mx-auto max-w-[1440px] px-6 md:px-12">
+          {/* Header Section according to requested presentation order */}
+          <div className="mb-12 max-w-4xl border-b border-slate-200 pb-8 md:mb-16">
+            <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-[var(--brand-navy)]">
+              {t('heroEyebrow')}
+            </p>
+            <h2 className="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-5xl">
+              {t('heroTitle')}
+            </h2>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-600 md:text-lg">
+              {t('heroDescription')}
+            </p>
           </div>
 
-          {/* Clean Card Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            {financeServices.map((svc) => (
-              <div
-                key={svc.slug}
-                className="bg-white border border-slate-200 hover:border-blue-600 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 p-8 md:p-10 flex flex-col h-full group relative overflow-hidden"
-              >
-                {/* Header Area */}
-                <div className="flex justify-between items-start mb-8">
-                  <div className="bg-slate-50 p-4 shrink-0">{svc.icon}</div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-50 px-3 py-1">
-                    {svc.pill}
-                  </span>
-                </div>
-
-                <h4 className="text-2xl font-extrabold text-slate-900 mb-8 tracking-tight group-hover:text-[#0a192f] transition-colors">
-                  {svc.title}
-                </h4>
-
-                {/* Data Grid Stats */}
-                <div className="grid grid-cols-2 border-t border-l border-slate-100 mb-8">
-                  <div className="p-4 border-b border-r border-slate-100">
-                    <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase block mb-1">
-                      {svc.leftStatLabel}
-                    </span>
-                    <span className="text-sm font-bold text-[#0a192f]">{svc.leftStatValue}</span>
-                  </div>
-                  <div className="p-4 border-b border-r border-slate-100 bg-slate-50">
-                    <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase block mb-1">
-                      {svc.rightStatLabel}
-                    </span>
-                    <span className="text-sm font-bold text-[#0a192f]">{svc.rightStatValue}</span>
-                  </div>
-                </div>
-
-                {/* Table Details */}
-                <div className="space-y-4 mb-8">
-                  {svc.details.map((detail, dIdx) => (
-                    <div
-                      key={dIdx}
-                      className="flex justify-between items-center text-sm border-b border-slate-100 pb-2"
-                    >
-                      <span className="text-slate-500 font-medium">{detail.label}</span>
-                      <span
-                        className={`font-bold ${detail.highlight ? 'text-[#0a192f]' : 'text-slate-900'}`}
-                      >
-                        {detail.value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Bullets */}
-                <div className="space-y-3 mb-10">
-                  {svc.bullets.map((bullet, bIdx) => (
-                    <div key={bIdx} className="flex items-start gap-3">
-                      <Check size={16} className="mt-0.5 shrink-0 text-[#0a192f]" />
-                      <p className="flex-1 text-slate-600 text-sm leading-relaxed">{bullet.text}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Action Link */}
-                <Link
-                  href={`/services/${svc.slug}`}
-                  className="mt-auto inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0a192f] hover:text-blue-600 transition-colors"
+          {/* 3 cards placed in 1 horizontal row on desktop (lg:grid-cols-3) */}
+          <div className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-3 items-stretch">
+            {services.map((svc) => {
+              const style = accentStyles[svc.accent];
+              return (
+                <article
+                  key={svc.id}
+                  className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border-2 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1.5 md:p-8 ${style.border}`}
                 >
-                  {isVi ? 'Chi tiết dịch vụ' : 'Service Details'}
-                  <ArrowRight
-                    size={14}
-                    className="transition-transform group-hover:translate-x-1"
-                  />
-                </Link>
+                  <div className={`absolute inset-x-0 top-0 h-2 ${style.topBar}`} />
 
-                {/* Top decorative bar */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-              </div>
-            ))}
+                  <div className="mb-6 flex items-start justify-between gap-4">
+                    <div className={`rounded-xl p-3 ${style.iconWrap}`}>{svc.icon}</div>
+                    <span
+                      className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] ${style.chip}`}
+                    >
+                      {svc.eyebrow}
+                    </span>
+                  </div>
+
+                  <h3 className="text-2xl font-extrabold tracking-tight text-slate-900">
+                    {svc.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-600">{svc.summary}</p>
+
+                  <div className="mt-7 pt-6 border-t border-slate-100">
+                    <p
+                      className={`text-xs font-bold uppercase tracking-[0.16em] mb-3.5 ${style.eyebrow}`}
+                    >
+                      {svc.solutionsLabel}
+                    </p>
+                    <ul className="space-y-2.5">
+                      {svc.solutions.map((item) => (
+                        <li
+                          key={item}
+                          className="flex items-center gap-2.5 text-sm font-medium text-slate-700"
+                        >
+                          <span className={`h-2 w-2 rounded-full shrink-0 ${style.dot}`} />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <Link
+                    href={svc.href}
+                    className={`mt-auto inline-flex items-center gap-2 pt-8 text-sm font-bold tracking-wide transition-all group-hover:translate-x-1 ${style.cta}`}
+                  >
+                    <span className="text-base leading-none">→</span>
+                    <span>{svc.cta}</span>
+                  </Link>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>

@@ -22,7 +22,7 @@ export default function PageHeader({ title, parent }: PageHeaderProps) {
     <div className="w-full bg-white py-4 md:py-5 border-b border-slate-200 shadow-sm">
       <div className="max-w-360 mx-auto w-full px-4 md:px-12">
         <nav className="flex flex-wrap items-center gap-x-3 gap-y-1 text-slate-400 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em]">
-          <Link href="/" className="hover:text-blue-600 transition-colors duration-200">
+          <Link href="/" className="hover:text-[var(--brand-navy)] transition-colors duration-200">
             {t('home')}
           </Link>
 
@@ -32,7 +32,7 @@ export default function PageHeader({ title, parent }: PageHeaderProps) {
             <>
               <Link
                 href={parent.href}
-                className="hover:text-blue-600 transition-colors duration-200"
+                className="hover:text-[var(--brand-navy)] transition-colors duration-200"
               >
                 {parent.label}
               </Link>

@@ -1,7 +1,7 @@
 {
   "seo": {
-    "defaultTitle": "YT2Future | Kiến tạo tương lai",
-    "defaultDescription": "YT2Future — kiến thức đầu tư, phân tích thị trường và giải pháp tài chính cho nhà đầu tư Việt Nam."
+    "defaultTitle": "YT Insight | Tối ưu nguồn lực doanh nghiệp",
+    "defaultDescription": "YT Insight đồng hành cùng doanh nghiệp tối ưu tài chính, chiến lược và vận hành."
   },
   "common": {
     "readMore": "Đọc thêm",
@@ -37,12 +37,12 @@
     "insights": "Góc nhìn",
     "career": "Tuyển dụng",
     "company": "Công ty chúng tôi",
-    "aboutYT": "Về YT",
+    "aboutYT": "Về YT Insight",
     "clientImpact": "Tác động khách hàng",
     "offices": "Văn phòng"
   },
   "footer": {
-    "slogan": "Kiến tạo tương lai bằng đổi mới linh hoạt.",
+    "slogan": "Tối ưu hóa nguồn lực doanh nghiệp.",
     "menu": "Danh mục",
     "legal": "Pháp lý",
     "privacy": "Chính sách bảo mật",
@@ -50,9 +50,9 @@
     "cookies": "Chính sách Cookie",
     "connect": "Kết nối",
     "address": "Bình Tân, TP. Hồ Chí Minh",
-    "copyright": "© 2026 YT2Future. Đội ngũ Đổi mới Linh hoạt.",
-    "tagline": "Tương lai bền vững",
-    "description": "Kiến tạo tương lai bằng tư duy linh hoạt và đổi mới không ngừng.",
+    "copyright": "© 2026 YT Insight. All rights reserved.",
+    "tagline": "YT Insights",
+    "description": "YT Insights đồng hành cùng doanh nghiệp tối ưu tài chính, chiến lược và vận hành.",
     "quickLinks": "Liên kết nhanh",
     "followUs": "Theo dõi chúng tôi",
     "policyViewerTitle": "Trình xem chính sách",
@@ -63,26 +63,26 @@
   },
   "sectors": {
     "stock": {
-      "title": "Chứng khoán",
-      "desc": "Cập nhật kiến thức nền tảng dành cho người mới bắt đầu, với cách tiếp cận phân tích đơn giản, dễ hiểu và từng bước làm quen với thị trường."
+      "title": "Thị Trường Vốn",
+      "desc": "Phân tích chuyên sâu về thị trường chứng khoán, cung cấp báo cáo chiến lược và nhận định xu hướng giúp nhà đầu tư và doanh nghiệp tối ưu hóa nguồn vốn."
     },
     "realEstate": {
-      "title": "Bất động sản",
-      "desc": "Tổng hợp các dự án đã và đang triển khai trên cả nước, cập nhật mặt bằng giá theo khu vực và phân tích doanh nghiệp bất động sản thông qua danh mục dự án thực tế."
+      "title": "Bất Động Sản",
+      "desc": "Đánh giá toàn diện chu kỳ thị trường, quy hoạch dự án và phân tích năng lực tài chính của các nhà phát triển bất động sản."
     },
     "macro": {
-      "title": "Kinh tế vĩ mô",
-      "desc": "Phân tích tác động của các chính sách kinh tế tại Việt Nam lên từng nhóm ngành, cập nhật lãi suất điều hành và chính sách tiền tệ, ngoại hối từ đó đề xuất những nhóm ngành tiềm năng theo từng giai đoạn."
+      "title": "Kinh Tế Vĩ Mô",
+      "desc": "Dự báo tác động của chính sách tiền tệ và ngoại hối, giúp các tổ chức điều hướng rủi ro và nhận diện cơ hội phát triển cốt lõi."
     },
     "mindset": {
-      "title": "Tư duy tài chính",
-      "desc": "Thiết kế lộ trình hoàn chỉnh dành cho nhà đầu tư mới bắt đầu, đặc biệt là nhân viên văn phòng, giúp tiếp cận kiến thức tài chính một cách dễ hiểu và ứng dụng hiệu quả trong thực tiễn."
+      "title": "Quản Trị Tài Chính",
+      "desc": "Xây dựng nền tảng tư duy chiến lược về quản trị rủi ro và phân bổ tài sản dành cho các nhà lãnh đạo và chuyên gia cấp cao."
     }
   },
   "feedback": {
     "title": "Cảm nhận",
     "titleHighlight": "khách hàng",
-    "tagline": "Hệ thống đánh giá từ YT2Future",
+    "tagline": "Hệ thống đánh giá từ YT Insight",
     "role": "Hội viên chiến lược",
     "send": "Gửi phản hồi",
     "modalTitle": "Viết đánh giá",
@@ -95,19 +95,26 @@
     "failure": "Gửi thất bại!",
     "readMore": "Xem thêm",
     "showLess": "Thu gọn",
-    "userFallback": "Người dùng",
+    "userFallback": "Đối tác",
     "anonymous": "Ẩn danh",
     "ratingLabel": "Đánh giá",
     "feedbackLabel": "Nội dung phản hồi"
   },
   "home": {
     "hero": {
-      "tagline": "Chiến lược YT2Future",
+      "tagline": "Chiến lược YT Insight",
       "title": "Kiến Tạo Tương Lai",
       "titleHighlight": "Bằng Đổi Mới Linh Hoạt.",
       "desc": "Chúng tôi đồng hành cùng doanh nghiệp vượt qua thách thức, tăng tốc phát triển và xây dựng lợi thế cạnh tranh bền vững.",
       "cta1": "Dịch Vụ Của Chúng Tôi",
-      "cta2": "Khám Phá YT2Future"
+      "cta2": "Khám Phá YT Insight",
+      "dashboard": {
+        "liveData": "Dữ Liệu Thực",
+        "growthStrategy": "Chiến Lược Tăng Trưởng",
+        "accelerated": "Tăng Tốc",
+        "globalImpact": "Tác Động Toàn Cầu",
+        "markets": "Hơn 15 Thị Trường"
+      }
     },
     "metrics": {
       "capital": "$5B+",
@@ -162,25 +169,43 @@
   },
   "about": {
     "pageTitle": "Về chúng tôi",
-    "tagline": "Về YT2Future",
+    "tagline": "Về YT Insight",
     "headline": "Kiến tạo tương lai bằng tư duy linh hoạt và đổi mới không ngừng.",
-    "description": "YT2Future được xây dựng với niềm tin rằng tương lai tài chính bền vững bắt đầu từ tư duy linh hoạt và tinh thần đổi mới không ngừng. Chúng tôi cung cấp kiến thức đầu tư, phân tích thị trường và thông tin tài chính được chọn lọc, hướng tới việc giúp người đọc hiểu đúng bản chất của đầu tư và ra quyết định dựa trên tư duy dài hạn. YT2Future mong muốn đồng hành cùng cộng đồng trên hành trình học hỏi, thích nghi và kiến tạo tương lai bằng tri thức.",
+    "headline_line1": "KIẾN TẠO TƯƠNG LAI",
+    "headline_line2": "BẰNG TƯ DUY LINH HOẠT",
+    "headline_line3": "VÀ ĐỔI MỚI KHÔNG NGỪNG.",
+    "description": "Tại YT insights, chúng tôi tin rằng không có một công thức cố định cho sự phát triển. Mỗi doanh nghiệp có một câu chuyện, một thử thách và một con đường riêng.\n\nVì vậy, chúng tôi lựa chọn lắng nghe và đồng hành cùng khách hàng tìm ra những giải pháp phù hợp, linh hoạt và có giá trị lâu dài. Trên hành trình ấy, chúng tôi cũng không ngừng hoàn thiện chính mình để cùng nhau tiến xa hơn.",
+    "desc_p1": "Tại YT insights, chúng tôi tin rằng không có một công thức cố định cho sự phát triển. Mỗi doanh nghiệp có một câu chuyện, một thử thách và một con đường riêng.",
+    "desc_p2": "Vì vậy, chúng tôi lựa chọn lắng nghe và đồng hành cùng khách hàng tìm ra những giải pháp phù hợp, linh hoạt và có giá trị lâu dài. Trên hành trình ấy, chúng tôi cũng không ngừng hoàn thiện chính mình để cùng nhau tiến xa hơn.",
     "quote": "Kiến tạo tương lai bằng đổi mới linh hoạt.",
     "values": {
-      "title": "Giá trị",
-      "subtitle": "chúng tôi mang lại",
-      "tagline": "Giá trị của chúng tôi",
+      "title": "GIÁ TRỊ",
+      "subtitle": "CHÚNG TÔI MANG LẠI",
+      "heading": "GIÁ TRỊ CHÚNG TÔI MANG LẠI",
+      "tagline": "Giá trị cốt lõi",
+      "agile": {
+        "title": "TƯ DUY LINH HOẠT",
+        "desc": "Thích nghi để tìm ra giải pháp phù hợp với từng bài toán doanh nghiệp."
+      },
+      "practical": {
+        "title": "GIÁ TRỊ THỰC TIỄN",
+        "desc": "Tập trung vào những giải pháp thiết thực, hướng đến kết quả và giá trị lâu dài."
+      },
+      "longTerm": {
+        "title": "ĐỒNG HÀNH DÀI HẠN",
+        "desc": "Cùng khách hàng lắng nghe, học hỏi và từng bước phát triển bền vững."
+      },
       "knowledge": {
-        "title": "HỆ THỐNG KIẾN THỨC",
-        "desc": "Chia sẻ kiến thức và kinh nghiệm được đúc kết từ học tập và thực tiễn đầu tư."
+        "title": "TƯ DUY LINH HOẠT",
+        "desc": "Thích nghi để tìm ra giải pháp phù hợp với từng bài toán doanh nghiệp."
       },
       "thinking": {
-        "title": "TƯ DUY PHÂN TÍCH",
-        "desc": "Rèn luyện khả năng nhìn nhận thị trường đa chiều, từ vĩ mô đến nội tại doanh nghiệp."
+        "title": "GIÁ TRỊ THỰC TIỄN",
+        "desc": "Tập trung vào những giải pháp thiết thực, hướng đến kết quả và giá trị lâu dài."
       },
       "community": {
-        "title": "KẾT NỐI CỘNG ĐỒNG",
-        "desc": "Xây dựng cộng đồng học tập cởi mở, nơi mọi góc nhìn được tôn trọng và phản biện."
+        "title": "ĐỒNG HÀNH DÀI HẠN",
+        "desc": "Cùng khách hàng lắng nghe, học hỏi và từng bước phát triển bền vững."
       }
     },
     "founders": {
@@ -221,7 +246,7 @@
       "subject": "Chủ đề",
       "message": "Nội dung tin nhắn"
     },
-    "mapTitle": "Vị trí YT2Future",
+    "mapTitle": "Vị trí YT Insight",
     "info": {
       "address": "Địa chỉ",
       "email": "Email",
@@ -230,10 +255,16 @@
     },
     "values": {
       "address": "Bình Tân, TP. Hồ Chí Minh",
-      "email": "ytcapital.group@gmail.com",
+      "email": "business.ytinsights@gmail.com",
       "hotline": "0822 082 407",
       "hours": "Thứ 2 - Thứ 6: 08:00 - 17:30"
     }
+  },
+  "services_page": {
+    "pageTitle": "Dịch vụ của chúng tôi",
+    "heroEyebrow": "GIẢI PHÁP CHIẾN LƯỢC",
+    "heroTitle": "Tối ưu hóa nguồn lực Doanh nghiệp",
+    "heroDescription": "YT Insights đồng hành cùng doanh nghiệp trong việc tối ưu tài chính, chiến lược và vận hành, từ bài toán vốn đến quyết định tăng trưởng."
   },
   "dashboard": {
     "welcome": "Chào mừng",
@@ -637,33 +668,37 @@
     "loading": "Đang tải danh sách dịch vụ…",
     "loadError": "Không tải được danh sách dịch vụ. Kiểm tra: (1) backend API đang chạy (mặc định port 5000), (2) đã chạy `npx prisma migrate deploy` và `npm run seed:services` trong thư mục backend, (3) nếu chạy `next start` mà không dùng Nginx: đặt biến môi trường `INTERNAL_API_ORIGIN` trỏ tới backend (vd. http://127.0.0.1:5000).",
     "empty": "Chưa có dịch vụ công khai. Admin có thể thêm dịch vụ hoặc chạy lệnh seed trên backend.",
-    "heroEyebrow": "Tư vấn giải pháp tài trợ thương mại",
-    "intro": "Chọn một dịch vụ để xem mô tả đầy đủ, quy trình triển khai và lợi ích thực tế cho doanh nghiệp.",
-    "sectionTitle": "Danh mục dịch vụ",
-    "cardCta": "Xem chi tiết",
-    "cardEyebrow": "Dịch vụ",
-    "cardLeadLabel": "Tóm tắt",
-    "cardOutlineLabel": "Điểm nổi bật trên thẻ",
-    "cardTeaserHint": "Mô tả ngắn; bấm thẻ để xem đầy đủ trên trang chi tiết.",
+    "heroEyebrow": "Giải Pháp Tư Vấn Chiến Lược Toàn Diện",
+    "intro": "Khám phá danh mục dịch vụ của chúng tôi để hiểu cách YT Insight kiến tạo giá trị đột phá, tối ưu hóa vận hành và thúc đẩy tăng trưởng bền vững cho doanh nghiệp của bạn.",
+    "sectionTitle": "Danh Mục Dịch Vụ",
+    "cardCta": "Khám phá giải pháp",
+    "cardEyebrow": "Dịch vụ chiến lược",
+    "cardLeadLabel": "Tóm lược",
+    "cardOutlineLabel": "Điểm nổi bật",
+    "cardTeaserHint": "Mô tả ngắn; bấm thẻ để xem phân tích chuyên sâu trên trang chi tiết.",
     "cardEmptyImageEdit": "Chưa có ảnh — dán URL bên dưới",
-    "detailLoading": "Đang mở dịch vụ…",
-    "metaDescription": "Danh mục sản phẩm dịch vụ tài trợ thương mại và giải pháp cho doanh nghiệp tại YT2Future."
+    "detailLoading": "Đang mở chi tiết giải pháp…",
+    "metaDescription": "Danh mục dịch vụ tư vấn chiến lược, chuyển đổi số và tối ưu hóa vận hành tại YT Insight."
   },
   "sector_page": {
-    "title": "Thư viện thông minh",
-    "metaDescription": "Khám phá báo cáo chọn lọc, nghiên cứu thị trường và kiến thức tài chính trong Thư viện thông minh YT2Future.",
-    "search_placeholder": "Tìm kiếm báo cáo...",
-    "category_select": "Chọn danh mục",
+    "title": "Góc Nhìn Chiến Lược",
+    "badge": "ẤN PHẨM & NGHIÊN CỨU",
+    "metaDescription": "Khám phá các báo cáo nghiên cứu chuyên sâu, ấn phẩm chiến lược và góc nhìn từ các chuyên gia hàng đầu tại YT Insight.",
+    "search_placeholder": "Tìm kiếm báo cáo chuyên sâu...",
+    "report_list": "Danh sách báo cáo",
+    "category_select": "Chọn lĩnh vực nghiên cứu",
     "all_categories": "Tất cả danh mục",
+    "all_years": "Tất cả",
+    "year_prefix": "Năm",
     "add_report": "Thêm báo cáo",
-    "syncing": "Đang tải...",
-    "no_desc": "Không có mô tả",
-    "details": "Chi tiết",
+    "syncing": "Đang đồng bộ dữ liệu...",
+    "no_desc": "Chưa có tóm tắt nghiên cứu.",
+    "details": "Đọc Báo Cáo",
     "prev": "Trước",
     "next": "Sau",
     "page": "Trang",
-    "modal_title": "Xem báo cáo",
-    "viewer_title": "Trình xem báo cáo"
+    "modal_title": "Chi tiết báo cáo",
+    "viewer_title": "Trình xem ấn phẩm"
   },
   "profile": {
     "title": "Hồ sơ cá nhân",
@@ -721,9 +756,13 @@
   },
   "career_page": {
     "title": "Tuyển dụng",
-    "hero_title": "Kiến Tạo Sự Nghiệp Cùng YT2Future",
-    "hero_subtitle": "Gia nhập đội ngũ chuyên gia hàng đầu. Chúng tôi mang đến cơ hội phát triển đột phá, môi trường làm việc đẳng cấp và tác động ở quy mô toàn cầu.",
-    "values_title": "Tại sao chọn YT2Future?",
+    "hero_tagline": "Tuyển dụng YT Insights",
+    "hero_title": "Kiến Tạo Sự Nghiệp Cùng YT Insights",
+    "hero_title_line1": "Kiến Tạo Sự Nghiệp",
+    "hero_title_line2": "Cùng YT Insights",
+    "hero_quote": "Cùng nhau học hỏi. Cùng nhau tiến bước. Cùng kiến tạo tương lai.",
+    "hero_subtitle": "Chúng tôi tin rằng mỗi hành trình phát triển đều bắt đầu từ những bước tiến nhỏ. Tại YT Insights, bạn sẽ có cơ hội học hỏi, thử sức với những bài toán thực tế và cùng đồng đội tạo ra những giá trị có ý nghĩa.",
+    "values_title": "Tại sao chọn YT Insight?",
     "values_subtitle": "Giá Trị Cốt Lõi",
     "value_1_title": "Đổi Mới Linh Hoạt",
     "value_1_desc": "Chúng tôi đón nhận sự thay đổi và ứng dụng công nghệ tiên tiến để mang lại các giải pháp bền vững.",

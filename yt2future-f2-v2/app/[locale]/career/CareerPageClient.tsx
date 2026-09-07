@@ -3,15 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import PageHeader from '@/components/layout/PageHeader';
 import { useTranslations, useLocale } from 'next-intl';
-import {
-  Briefcase,
-  Globe,
-  TrendingUp,
-  ChevronRight,
-  ArrowRight,
-  MapPin,
-  Clock,
-} from 'lucide-react';
+import { Briefcase, Globe, TrendingUp, ArrowRight, MapPin, Clock } from 'lucide-react';
 import Link from '@/components/common/Link';
 
 export default function CareerPageClient() {
@@ -23,17 +15,17 @@ export default function CareerPageClient() {
     {
       title: t('value_1_title'),
       desc: t('value_1_desc'),
-      icon: <TrendingUp size={32} className="text-[#0a192f]" />,
+      icon: <TrendingUp size={32} className="text-[var(--brand-yellow)]" />,
     },
     {
       title: t('value_2_title'),
       desc: t('value_2_desc'),
-      icon: <Globe size={32} className="text-[#0a192f]" />,
+      icon: <Globe size={32} className="text-[var(--brand-yellow)]" />,
     },
     {
       title: t('value_3_title'),
       desc: t('value_3_desc'),
-      icon: <Briefcase size={32} className="text-[#0a192f]" />,
+      icon: <Briefcase size={32} className="text-[var(--brand-yellow)]" />,
     },
   ];
 
@@ -67,38 +59,50 @@ export default function CareerPageClient() {
 
       <main>
         {/* HERO SECTION */}
-        <section className="relative bg-[#0a192f] text-white py-24 md:py-32 overflow-hidden border-b border-[#1a365d]">
-          {/* Subtle background pattern/image can go here */}
+        <section className="relative bg-[#0a192f] text-white py-20 md:py-28 overflow-hidden border-b border-[#1a365d]">
+          {/* Subtle background pattern */}
           <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,rgba(255,255,255,0.2)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.2)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_center,white,transparent_80%)]" />
 
-          <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
-            <div className="max-w-2xl">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-1 bg-white"></div>
-                <span className="text-white text-sm font-bold tracking-[0.2em] uppercase">
-                  {isVi ? 'Tuyển dụng YT2Future' : 'YT2Future Careers'}
+          <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10 grid grid-cols-1 lg:grid-cols-2 items-center gap-12 lg:gap-16">
+            <div className="max-w-xl">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-1 bg-[var(--brand-yellow)]"></div>
+                <span className="text-[var(--brand-yellow)] text-xs font-bold tracking-[0.25em] uppercase">
+                  {t('hero_tagline')}
                 </span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight mb-6">
-                {t('hero_title')}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-extrabold tracking-tight leading-[1.18] mb-6">
+                <span className="block">{t('hero_title_line1')}</span>
+                <span className="block text-[var(--brand-yellow)]">{t('hero_title_line2')}</span>
               </h1>
-              <p className="text-lg md:text-xl text-slate-300 font-medium leading-relaxed max-w-xl">
+              <div className="mb-6 p-4 rounded-xl bg-white/5 border-l-4 border-[var(--brand-yellow)] backdrop-blur-sm">
+                <p className="text-base md:text-lg italic font-semibold text-slate-100 leading-snug">
+                  “{t('hero_quote')}”
+                </p>
+              </div>
+              <p className="text-base md:text-lg text-slate-300 font-normal leading-relaxed">
                 {t('hero_subtitle')}
               </p>
             </div>
 
-            {/* Optional decorative element on the right */}
-            <div className="hidden lg:block relative w-[500px] h-[300px]">
-              <div className="absolute inset-0 border-2 border-white/20 -translate-x-4 translate-y-4" />
-              <div className="absolute inset-0 bg-white/10 backdrop-blur-sm border border-white/30 flex flex-col justify-center p-10">
-                <h3 className="text-2xl font-bold mb-4">
-                  {isVi ? '"Linh hoạt trong từng bước tiến."' : '"Agility in every step."'}
-                </h3>
-                <p className="text-slate-300 italic">
+            {/* Career Hero Image */}
+            <div className="relative w-full aspect-4/3 overflow-hidden rounded-2xl border border-white/20 shadow-2xl group">
+              <Image
+                src="/career_hero.jpg"
+                alt={isVi ? 'Đội ngũ YT Insights' : 'YT Insights Team'}
+                fill
+                sizes="(max-width: 1023px) 100vw, 50vw"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/70 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-4 left-4 right-4 bg-[#0a192f]/85 backdrop-blur-md border border-white/10 rounded-xl px-4 py-3 flex items-center justify-between">
+                <span className="text-xs font-bold text-white uppercase tracking-wider">
                   {isVi
-                    ? 'Gia nhập hãng tư vấn chiến lược phát triển nhanh nhất khu vực.'
-                    : 'Join the fastest growing strategy firm in the region.'}
-                </p>
+                    ? 'Môi trường chuyên nghiệp & Bứt phá'
+                    : 'Professional & Empowering Environment'}
+                </span>
+                <span className="h-2 w-2 rounded-full bg-[var(--brand-yellow)] animate-ping" />
               </div>
             </div>
           </div>
@@ -120,13 +124,17 @@ export default function CareerPageClient() {
               {values.map((val, idx) => (
                 <div
                   key={idx}
-                  className="bg-white border border-slate-200 p-10 hover:border-[#0a192f]/30 transition-colors shadow-sm hover:shadow-lg group"
+                  className="bg-white rounded-2xl border border-slate-200/90 p-7 md:p-8 hover:border-[var(--brand-navy)] shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group flex flex-col justify-between"
                 >
-                  <div className="w-16 h-16 bg-slate-50 flex items-center justify-center mb-8 rounded-full group-hover:scale-110 transition-transform duration-300">
-                    {val.icon}
+                  <div>
+                    <div className="w-14 h-14 bg-[var(--brand-navy-deep)] text-[var(--brand-yellow)] flex items-center justify-center mb-6 rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-md">
+                      {val.icon}
+                    </div>
+                    <h4 className="text-xl font-bold text-slate-900 group-hover:text-[var(--brand-navy)] transition-colors mb-3">
+                      {val.title}
+                    </h4>
+                    <p className="text-slate-600 leading-relaxed text-sm">{val.desc}</p>
                   </div>
-                  <h4 className="text-xl font-bold text-slate-900 mb-4">{val.title}</h4>
-                  <p className="text-slate-600 leading-relaxed text-sm">{val.desc}</p>
                 </div>
               ))}
             </div>
@@ -147,19 +155,19 @@ export default function CareerPageClient() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-5">
               {openRoles.length > 0 ? (
                 openRoles.map((role, idx) => (
                   <Link
                     href={`/career/${role.slug}`}
                     key={idx}
-                    className="group bg-white border border-slate-200 hover:border-[#0a192f] transition-colors p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6"
+                    className="group bg-white rounded-2xl border border-slate-200/90 hover:border-[var(--brand-navy)] shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6"
                   >
                     <div className="flex-1">
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2">
                         {role.department}
                       </span>
-                      <h4 className="text-xl md:text-2xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
+                      <h4 className="text-xl md:text-2xl font-bold text-slate-900 group-hover:text-[var(--brand-navy)] transition-colors">
                         {role.title}
                       </h4>
                     </div>
@@ -176,7 +184,7 @@ export default function CareerPageClient() {
                     </div>
 
                     <div className="shrink-0 flex items-center justify-end">
-                      <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#0a192f] group-hover:text-blue-600 transition-colors">
+                      <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#0a192f] group-hover:text-[var(--brand-navy)] transition-colors">
                         {t('apply_now')}{' '}
                         <ArrowRight
                           size={14}
@@ -187,7 +195,7 @@ export default function CareerPageClient() {
                   </Link>
                 ))
               ) : (
-                <div className="text-center py-20 bg-slate-50 border border-slate-200 border-dashed">
+                <div className="text-center py-20 bg-slate-50 border border-slate-200 border-dashed rounded-2xl">
                   <p className="text-slate-500 font-medium">{t('no_openings')}</p>
                 </div>
               )}

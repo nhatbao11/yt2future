@@ -15,7 +15,7 @@ export default function SectorCard({ title, desc, icon: Icon }: SectorProps) {
 
         <div className="relative z-10 flex flex-col h-full w-full">
           {/* Icon box */}
-          <div className="mb-8 p-4 transition-colors duration-500 rounded-sm sector-icon-box w-fit">
+          <div className="mb-8 p-4 transition-colors duration-500 rounded-xl sector-icon-box w-fit">
             <Icon className="transition-colors duration-500 sector-icon" size={32} />
           </div>
 

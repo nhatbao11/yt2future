@@ -25,7 +25,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
       contextTitle: 'Tại sao nên chọn Lộ trình ACCA trọn gói?',
       contextNarrative: [
         'Học rời rạc các môn thường khiến học viên mất định hướng và không liên kết được kiến thức kế toán quản trị với kiểm toán thực tế.',
-        'Lộ trình trọn gói tại YT2Future giúp bạn tối ưu hóa thời gian học tập, củng cố kiến thức liên tục và tiết kiệm chi phí tối đa.',
+        'Lộ trình trọn gói tại YT Insight giúp bạn tối ưu hóa thời gian học tập, củng cố kiến thức liên tục và tiết kiệm chi phí tối đa.',
       ],
       contextImpacts: [
         'Trang bị 100% kiến thức nền tảng chuẩn quốc tế IFRS.',
@@ -50,7 +50,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
       ],
       fitSellerHighlight:
         'Hỗ trợ giải đáp 24/7 trực tuyến cùng giảng viên và trợ giảng chuyên môn.',
-      benefitsTitle: 'Lợi thế vượt trội từ YT2Future',
+      benefitsTitle: 'Lợi thế vượt trội từ YT Insight',
       benefitGroups: [
         {
           title: 'Giảng viên đẳng cấp',
@@ -85,7 +85,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
       partnersTitle: 'Tài liệu & Chứng nhận',
       partnersSubtitle: 'Sử dụng tài liệu chuẩn quốc tế',
       partnersPlaceholder:
-        'YT2Future liên kết cùng nhà xuất bản BPP và cung cấp bộ ngân hàng câu hỏi luyện thi ACCA độc quyền.',
+        'YT Insight liên kết cùng nhà xuất bản BPP và cung cấp bộ ngân hàng câu hỏi luyện thi ACCA độc quyền.',
       partnerLogos: [],
       introVideoUrl: '',
       videoPreviewLabel: 'Lộ trình ACCA',
@@ -124,7 +124,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
         'Mentorship for CV preparation and Big 4 interview training.',
       ],
       fitSellerHighlight: '24/7 dedicated online support from class instructors and assistants.',
-      benefitsTitle: 'The YT2Future Edge',
+      benefitsTitle: 'The YT Insight Edge',
       benefitGroups: [
         {
           title: 'Distinguished Tutors',
@@ -159,7 +159,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
       partnersTitle: 'Course Textbooks',
       partnersSubtitle: 'Approved learning materials',
       partnersPlaceholder:
-        'YT2Future provides official BPP study texts and our custom question banks.',
+        'YT Insight provides official BPP study texts and our custom question banks.',
       partnerLogos: [],
       introVideoUrl: '',
       videoPreviewLabel: 'ACCA Intro',
@@ -352,7 +352,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
       contextTitle: 'Nền tảng của Mọi Lộ trình Kế toán',
       contextNarrative: [
         'Kế toán tài chính là ngôn ngữ của kinh doanh. Thiếu F3, học viên không thể tiếp thu được các môn nâng cao như F7 hay F8.',
-        'Khóa học tại YT2Future dạy cặn kẽ bản chất ghi sổ kép, giúp học viên ghi nhớ lâu thay vì chỉ học vẹt sơ đồ tài khoản.',
+        'Khóa học tại YT Insight dạy cặn kẽ bản chất ghi sổ kép, giúp học viên ghi nhớ lâu thay vì chỉ học vẹt sơ đồ tài khoản.',
       ],
       contextImpacts: [
         'Sở hữu tư duy xử lý nghiệp vụ theo chuẩn mực kế toán quốc tế IFRS/IAS.',
@@ -375,7 +375,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
         'Lập Báo cáo lưu chuyển tiền tệ (Cash Flow Statement).',
       ],
       fitSellerHighlight: 'Cung cấp từ điển thuật ngữ Kế toán Anh - Việt độc quyền.',
-      benefitsTitle: 'Lợi thế khi học F3 tại YT2Future',
+      benefitsTitle: 'Lợi thế khi học F3 tại YT Insight',
       benefitGroups: [
         {
           title: 'Hiểu bản chất tối đa',
@@ -448,7 +448,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
         'Preparing Statement of Cash Flows using direct and indirect methods.',
       ],
       fitSellerHighlight: 'Includes our custom English-Vietnamese accounting glossary booklet.',
-      benefitsTitle: 'Benefits of F3 with YT2Future',
+      benefitsTitle: 'Benefits of F3 with YT Insight',
       benefitGroups: [
         {
           title: 'Deep Concept Focus',
@@ -537,7 +537,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
       ],
       fitSellerHighlight:
         'Hướng dẫn giải các case study tự luận lớn (Section C) chiếm 40% số điểm.',
-      benefitsTitle: 'Lợi thế khi lựa chọn YT2Future học F7',
+      benefitsTitle: 'Lợi thế khi lựa chọn YT Insight học F7',
       benefitGroups: [
         {
           title: 'IFRS Thực tế',
@@ -572,7 +572,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
       partnersTitle: 'Học liệu cung cấp',
       partnersSubtitle: 'Tài liệu cập nhật chuẩn hãng',
       partnersPlaceholder:
-        'Tài liệu học tập chính thức từ BPP và ngân hàng đề thi tự luận độc quyền từ giảng viên YT2Future.',
+        'Tài liệu học tập chính thức từ BPP và ngân hàng đề thi tự luận độc quyền từ giảng viên YT Insight.',
       partnerLogos: [],
       introVideoUrl: '',
       videoPreviewLabel: 'Giới thiệu F7',
@@ -682,7 +682,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
       contextTitle: 'Nghề kiểm toán và Thử thách F8',
       contextNarrative: [
         'F8 nổi tiếng là môn thi khó viết tự luận nhất vì đòi hỏi tư duy thực tế cao thay vì chỉ ghi nhớ lý thuyết sách vở.',
-        'Tại YT2Future, chúng tôi giải quyết khó khăn này bằng cách đưa học viên tiếp cận hồ sơ kiểm toán thực tế.',
+        'Tại YT Insight, chúng tôi giải quyết khó khăn này bằng cách đưa học viên tiếp cận hồ sơ kiểm toán thực tế.',
       ],
       contextImpacts: [
         'Tư duy nhận diện điểm yếu kiểm soát nội bộ và đề xuất giải pháp khắc phục.',
@@ -742,7 +742,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
       partnersTitle: 'Tài liệu đồng hành',
       partnersSubtitle: 'Giáo trình chuẩn quốc tế',
       partnersPlaceholder:
-        'Tài liệu học tập chính thức từ BPP và ngân hàng case study kiểm toán thực tế từ YT2Future.',
+        'Tài liệu học tập chính thức từ BPP và ngân hàng case study kiểm toán thực tế từ YT Insight.',
       partnerLogos: [],
       introVideoUrl: '',
       videoPreviewLabel: 'Giới thiệu F8',
@@ -758,7 +758,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
       contextTitle: 'The Audit Profession & The F8 Challenge',
       contextNarrative: [
         'F8 is known for its challenging essay questions because it requires practical scenario reasoning rather than book memorization.',
-        'At YT2Future, we overcome this by guiding you through simulated audit working papers.',
+        'At YT Insight, we overcome this by guiding you through simulated audit working papers.',
       ],
       contextImpacts: [
         'Identify internal control deficiencies in a case study and suggest management solutions.',
@@ -783,7 +783,7 @@ export const STATIC_ACCA_COURSES: ServiceDetailRecord[] = [
       ],
       fitSellerHighlight:
         'Formulaic training on drafting high-scoring control weakness and audit procedure responses.',
-      benefitsTitle: 'The F8 Edge at YT2Future',
+      benefitsTitle: 'The F8 Edge at YT Insight',
       benefitGroups: [
         {
           title: 'Big 4 Experience',

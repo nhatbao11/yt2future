@@ -111,7 +111,7 @@ export default function SignupPageClient({ errorMessage, successMessage }: Signu
               name="fullName"
               type="text"
               required
-              placeholder="YT2Future"
+              placeholder="YT Insight"
               className="w-full bg-slate-50 border border-slate-200 p-3.5 mt-1 text-sm text-slate-900 font-bold rounded-md outline-none focus:border-yellow-500 focus:bg-white transition-all placeholder:text-slate-300"
             />
           </div>
@@ -124,7 +124,7 @@ export default function SignupPageClient({ errorMessage, successMessage }: Signu
               name="email"
               type="email"
               required
-              placeholder="ytcapital.group@gmail.com"
+              placeholder="business.ytinsights@gmail.com"
               className="w-full bg-slate-50 border border-slate-200 p-3.5 mt-1 text-sm text-slate-900 font-bold rounded-md outline-none focus:border-yellow-500 focus:bg-white transition-all placeholder:text-slate-300"
             />
           </div>

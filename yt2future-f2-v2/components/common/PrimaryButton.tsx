@@ -45,8 +45,8 @@ export default function PrimaryButton({
       disabled={disabled}
       onClick={href ? handleClick : undefined}
       className={`
-        relative overflow-hidden group bg-[#001a41] text-white 
-        px-8 py-4 text-sm font-bold uppercase tracking-widest 
+        relative overflow-hidden group bg-[var(--brand-navy)] text-white 
+        px-8 py-4 text-sm font-bold uppercase tracking-widest rounded-xl
         transition-all duration-500 shadow-xl
         ${fullWidth ? 'w-full' : 'w-auto'} 
         ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
@@ -54,9 +54,11 @@ export default function PrimaryButton({
       `}
     >
       <span
-        className={`absolute inset-0 w-0 bg-yellow-500 transition-all duration-500 ease-out z-0 ${!disabled ? 'group-hover:w-full' : ''}`}
+        className={`absolute inset-0 w-0 bg-[var(--brand-yellow)] transition-all duration-500 ease-out z-0 ${!disabled ? 'group-hover:w-full' : ''}`}
       ></span>
-      <span className="relative z-10 flex items-center justify-center gap-4">{label}</span>
+      <span className="relative z-10 flex items-center justify-center gap-4 group-hover:text-[#12243f] transition-colors">
+        {label}
+      </span>
     </button>
   );
 }

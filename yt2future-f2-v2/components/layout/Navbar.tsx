@@ -62,8 +62,8 @@ export default function Navbar() {
         { name: t('clientImpact'), href: '/client-impact' },
         { name: t('offices'), href: '/contact' },
       ],
-      tagline: 'Shaping tomorrow through agile innovation and sustainable growth.',
-      bannerTitle: 'YT2FUTURE',
+      tagline: 'Optimizing enterprise resources with finance, strategy, and performance.',
+      bannerTitle: 'YT INSIGHT',
     },
   ];
 
@@ -239,34 +239,32 @@ export default function Navbar() {
 
   const getLinkStyle = (path: string, isMobile = false) => {
     const isActive = checkIsActive(path);
-    const baseStyle = `text-[11px] xl:text-[12px] font-bold uppercase tracking-wider transition-all duration-200 rounded-sm cursor-pointer whitespace-nowrap`;
+    const baseStyle = `text-[11px] xl:text-[12px] font-bold uppercase tracking-wider transition-all duration-200 rounded-lg cursor-pointer whitespace-nowrap`;
     if (isMobile)
-      return `${baseStyle} w-full px-6 py-4 border-b border-[#1a365d] ${isActive ? 'bg-[#1a365d] text-white font-extrabold' : 'text-white hover:bg-[#1a365d]/50'}`;
-    return `${baseStyle} px-3 xl:px-4 py-1.5 xl:py-2 ${isActive ? 'text-white border-b-2 border-white rounded-none' : 'text-gray-300 hover:text-white'}`;
+      return `${baseStyle} w-full px-6 py-4 border-b border-[#1a365d] ${isActive ? 'bg-[#1a365d] text-[var(--brand-yellow)] font-extrabold' : 'text-white hover:bg-[#1a365d]/50 hover:text-[var(--brand-yellow)]'}`;
+    return `${baseStyle} px-3 xl:px-4 py-1.5 xl:py-2 ${isActive ? 'text-[var(--brand-yellow)] border-b-2 border-[var(--brand-yellow)] rounded-none' : 'text-gray-300 hover:text-[var(--brand-yellow)]'}`;
   };
 
   return (
     <>
       <header
-        className={`w-full bg-[#051c2c] text-white fixed top-0 left-0 right-0 z-[100] h-18 md:h-18.75 flex items-center transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'} ${isScrolled ? 'shadow-md shadow-black/20 bg-[#051c2c]/95 backdrop-blur-sm' : ''}`}
+        className={`w-full bg-[var(--brand-navy-deep)] text-white fixed top-0 left-0 right-0 z-[100] h-20 md:h-24 flex items-center transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'} ${isScrolled ? 'shadow-md shadow-black/20 bg-[var(--brand-navy-deep)]/95 backdrop-blur-sm' : ''}`}
       >
         <nav className="max-w-360 mx-auto w-full px-4 md:px-12 flex justify-between items-center relative">
-          <Link href="/" className="flex items-center gap-2 md:gap-3 z-110 min-w-40 md:min-w-55">
-            <div className="relative w-10 h-10 md:w-14 md:h-14 overflow-hidden rounded-full border border-gray-100 shrink-0 shadow-sm">
+          <Link href="/" className="flex items-center gap-2.5 md:gap-3 z-110 shrink-0">
+            <div className="relative h-16 w-16 md:h-[72px] md:w-[72px] overflow-hidden rounded-full bg-white shrink-0 shadow-sm border border-white/20">
               <Image
                 src="/Logo.jpg"
-                alt="Logo"
+                alt="YT Insight"
                 fill
-                sizes="56px"
-                className="object-cover"
+                sizes="72px"
+                className="object-cover scale-110"
                 priority
               />
             </div>
-            <div className="flex flex-col justify-center">
-              <h1 className="text-white font-extrabold text-base md:text-xl tracking-tighter uppercase leading-none whitespace-nowrap">
-                YT2FUTURE
-              </h1>
-            </div>
+            <h1 className="text-white font-extrabold text-base md:text-xl tracking-tight leading-none whitespace-nowrap">
+              YT Insight
+            </h1>
           </Link>
 
           {/* Desktop Menu */}
@@ -293,12 +291,12 @@ export default function Navbar() {
                         key={index}
                         href={subItem.href}
                         onClick={(e) => handleNavLinkClick(e, subItem.href)}
-                        className="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-[#051c2c] text-xs sm:text-sm font-bold transition-all duration-200 group/sub"
+                        className="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-[var(--brand-yellow)]/15 text-slate-700 hover:text-[var(--brand-navy-deep)] text-xs sm:text-sm font-bold transition-all duration-200 group/sub"
                       >
                         <span>{subItem.name}</span>
                         <ArrowRight
                           size={14}
-                          className="text-[#051c2c] opacity-0 -translate-x-2 group-hover/sub:opacity-100 group-hover/sub:translate-x-0 transition-all"
+                          className="text-[var(--brand-navy)] opacity-0 -translate-x-2 group-hover/sub:opacity-100 group-hover/sub:translate-x-0 transition-all"
                         />
                       </Link>
                     ))}
@@ -383,21 +381,27 @@ export default function Navbar() {
         className={`xl:hidden fixed inset-0 z-[150] bg-[#0a192f] transition-all duration-500 ease-in-out flex flex-col ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
       >
         {/* Top Bar inside Mobile Menu */}
-        <div className="h-18 md:h-18.75 px-4 md:px-12 flex justify-between items-center border-b border-white/10">
+        <div className="h-20 md:h-24 px-4 md:px-12 flex justify-between items-center border-b border-white/10">
           <Link
             href="/"
             className="flex items-center gap-2 md:gap-3"
             onClick={() => setIsMenuOpen(false)}
           >
-            <div className="relative w-10 h-10 overflow-hidden rounded-full border border-white/20 shrink-0">
-              <Image src="/Logo.jpg" alt="Logo" fill sizes="40px" className="object-cover" />
+            <div className="relative h-16 w-16 overflow-hidden rounded-full bg-white shrink-0 border border-white/20">
+              <Image
+                src="/Logo.jpg"
+                alt="YT Insight"
+                fill
+                sizes="64px"
+                className="object-cover scale-110"
+              />
             </div>
-            <h1 className="text-white font-extrabold text-base md:text-lg tracking-widest uppercase">
-              YT2FUTURE
+            <h1 className="text-white font-extrabold text-base md:text-lg tracking-tight leading-none">
+              YT Insight
             </h1>
           </Link>
           <button
-            className="p-2 text-white hover:text-blue-400 transition-colors cursor-pointer"
+            className="p-2 text-white hover:text-[var(--brand-yellow)] transition-colors cursor-pointer"
             onClick={() => setIsMenuOpen(false)}
             aria-label="Close menu"
           >
@@ -412,7 +416,7 @@ export default function Navbar() {
               <div key={link.name} className="flex flex-col group">
                 <Link
                   href={link.href === '#' ? '#' : link.href}
-                  className="text-xl sm:text-2xl font-extrabold text-white tracking-tight uppercase hover:text-blue-400 transition-colors"
+                  className="text-xl sm:text-2xl font-extrabold text-white tracking-tight uppercase hover:text-[var(--brand-yellow)] transition-colors"
                   onClick={(e) => {
                     if (link.href !== '#') {
                       handleNavLinkClick(e, link.href);
@@ -424,7 +428,7 @@ export default function Navbar() {
                 </Link>
 
                 {link.dropdown && (
-                  <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-blue-600/30">
+                  <div className="mt-4 flex flex-col gap-4 pl-4 border-l-2 border-[var(--brand-yellow)]/40">
                     {link.dropdown.map((subItem, subIdx) => (
                       <Link
                         key={subIdx}
@@ -433,7 +437,7 @@ export default function Navbar() {
                           handleNavLinkClick(e, subItem.href);
                           setIsMenuOpen(false);
                         }}
-                        className="text-base sm:text-lg font-bold text-slate-400 hover:text-white transition-colors"
+                        className="text-base sm:text-lg font-bold text-slate-400 hover:text-[var(--brand-yellow)] transition-colors"
                       >
                         {subItem.name}
                       </Link>
@@ -446,19 +450,19 @@ export default function Navbar() {
 
           {/* Bottom Info Section */}
           <div className="mt-auto pt-12 pb-6">
-            <div className="w-12 h-1 bg-blue-600 mb-8" />
+            <div className="w-12 h-1 bg-[var(--brand-yellow)] mb-8" />
             <p className="text-sm text-slate-400 font-medium uppercase tracking-widest mb-4">
               {t('contact') || 'Contact Us'}
             </p>
             <a
-              href="mailto:ytcapital.group@gmail.com"
-              className="block text-lg text-white font-bold hover:text-blue-400 mb-2 transition-colors"
+              href="mailto:business.ytinsights@gmail.com"
+              className="block text-lg text-white font-bold hover:text-[var(--brand-yellow)] mb-2 transition-colors"
             >
-              ytcapital.group@gmail.com
+              business.ytinsights@gmail.com
             </a>
             <a
               href="tel:0822082407"
-              className="block text-lg text-white font-bold hover:text-blue-400 transition-colors"
+              className="block text-lg text-white font-bold hover:text-[var(--brand-yellow)] transition-colors"
             >
               +84 822 082 407
             </a>
@@ -477,7 +481,7 @@ export default function Navbar() {
                   </div>
                   <div>
                     <p className="font-bold text-white text-base">{userData.fullName}</p>
-                    <p className="text-[10px] uppercase text-blue-400 font-bold tracking-widest">
+                    <p className="text-[10px] uppercase text-[var(--brand-yellow)] font-bold tracking-widest">
                       {userData.role}
                     </p>
                   </div>
@@ -494,7 +498,7 @@ export default function Navbar() {
                     <Link
                       href="/admin"
                       onClick={() => setIsMenuOpen(false)}
-                      className="text-sm font-bold text-blue-400 hover:text-blue-300 uppercase tracking-wider"
+                      className="text-sm font-bold text-[var(--brand-yellow)] hover:text-amber-300 uppercase tracking-wider"
                     >
                       {t('admin')}
                     </Link>

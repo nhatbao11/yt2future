@@ -79,7 +79,7 @@ export default function SigninPageClient({ errorMessage }: SigninPageClientProps
             type="email"
             required
             autoComplete="new-password"
-            placeholder="ytcapital.group@gmail.com"
+            placeholder="business.ytinsights@gmail.com"
             className="w-full bg-slate-50 border border-slate-200 p-3.5 mt-1 text-sm text-slate-900 font-bold rounded-md outline-none focus:border-yellow-500 focus:bg-white transition-all"
           />
         </div>

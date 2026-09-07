@@ -1,13 +1,13 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import PageHeader from '@/components/layout/PageHeader';
 import { reportService } from '@/features/reports/api/reportApi';
 import { categoryApi } from '@/features/categories/api/categoryApi';
-import { Search, PlusCircle, X, ChevronDown, ArrowRight, BookOpen } from 'lucide-react';
+import { Search, PlusCircle, X, FileText } from 'lucide-react';
 import CreateReportPage from '@/components/common/CreateReportPage';
 import InlinePdfViewer from '@/components/common/InlinePdfViewer';
+import PageHeader from '@/components/layout/PageHeader';
 import { useTranslations, useLocale } from 'next-intl';
 
 export default function SectorPage() {
@@ -28,22 +28,54 @@ export default function SectorPage() {
       user?: { fullName?: string };
     }>
   >([]);
-  const [categories, setCategories] = useState<Array<{ id: number; name: string }>>([]);
+  const [categories, setCategories] = useState<Array<{ id: number; name: string; slug?: string }>>(
+    []
+  );
   const [activeCatId, setActiveCatId] = useState<number | undefined>(undefined);
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState<{ role?: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [readingPdfUrl, setReadingPdfUrl] = useState<string | null>(null);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [readingPdf, setReadingPdf] = useState<{ url: string; title: string } | null>(null);
 
   const getPdfViewerSrc = (pdfUrl: string) =>
-    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0`;
-  const openPdf = (pdfUrl: string) => {
-    setReadingPdfUrl(pdfUrl);
+    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#pagemode=thumbs&navpanes=1&view=FitH`;
+
+  const openPdf = (pdfUrl: string, title?: string) => {
+    setReadingPdf({ url: pdfUrl, title: title || t('modal_title') });
   };
+
+  // Lock body scroll when modal or PDF viewer is open
+  useEffect(() => {
+    if (readingPdf || isModalOpen) {
+      const originalOverflow = document.body.style.overflow;
+      const originalPaddingRight = document.body.style.paddingRight;
+      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      if (scrollBarWidth > 0) {
+        document.body.style.paddingRight = `${scrollBarWidth}px`;
+      }
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        document.body.style.paddingRight = originalPaddingRight;
+      };
+    }
+  }, [readingPdf, isModalOpen]);
+
+  // Close modals on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (readingPdf) setReadingPdf(null);
+        if (isModalOpen) setIsModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [readingPdf, isModalOpen]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -71,7 +103,7 @@ export default function SectorPage() {
         setActiveCatId(catId);
       } else {
         const matched = categories.find(
-          (c: any) =>
+          (c) =>
             c.slug === categoryParam ||
             c.name.toLowerCase().includes(categoryParam.toLowerCase()) ||
             (categoryParam === 'doanh-nghiep' && c.name.toLowerCase().includes('doanh nghiệp')) ||
@@ -105,90 +137,176 @@ export default function SectorPage() {
     return () => clearTimeout(timer);
   }, [loadReports]);
 
+  // Extract distinct years from reports
+  const availableYears = useMemo(() => {
+    const years = new Set<number>();
+    reports.forEach((r) => {
+      if (r.createdAt) {
+        const y = new Date(r.createdAt).getFullYear();
+        if (!isNaN(y)) years.add(y);
+      }
+    });
+    if (years.size === 0) {
+      return [2026, 2025, 2024];
+    }
+    return Array.from(years).sort((a, b) => b - a);
+  }, [reports]);
+
+  // Client-side year filter
+  const filteredReports = useMemo(() => {
+    if (!selectedYear) return reports;
+    return reports.filter((r) => {
+      if (!r.createdAt) return false;
+      return new Date(r.createdAt).getFullYear() === selectedYear;
+    });
+  }, [reports, selectedYear]);
+
+  const formatReportDate = (dateStr: string) => {
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      const month = d.getMonth() + 1;
+      const year = d.getFullYear();
+      return locale === 'vi' ? `Tháng ${month}/${year}` : `${month}/${year}`;
+    } catch {
+      return dateStr;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#f7f9fc] flex flex-col">
       <PageHeader title={t('title')} />
 
-      <main className="max-w-[1440px] mx-auto px-6 md:px-12 py-16">
-        {/* TOP CONTROLS */}
-        <div className="mb-16 flex flex-col lg:flex-row items-center justify-between gap-8 border-b border-slate-200 pb-8">
-          <div className="flex flex-col md:flex-row items-center gap-6 w-full lg:w-auto">
-            {/* Search Input */}
-            <div className="relative w-full lg:w-96">
-              <input
-                type="text"
-                placeholder={t('search_placeholder')}
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setPage(1);
-                }}
-                className="w-full bg-transparent border-b border-slate-300 pl-8 pr-4 py-3 text-sm text-[#0a192f] placeholder-slate-400 outline-none focus:border-[#0a192f] transition-all"
-              />
-              <Search
-                className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400"
-                size={16}
-              />
+      <main className="max-w-[1440px] mx-auto w-full px-6 md:px-12 py-10 md:py-14 grow">
+        {/* Header Intro - Đồng nhất bố cục với các tab khác (Services, About, etc.) */}
+        <div className="mb-10 max-w-4xl border-b border-slate-200 pb-8">
+          <p className="mb-3 text-xs md:text-sm font-bold uppercase tracking-[0.22em] text-[var(--brand-navy)]">
+            {t('badge')}
+          </p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight text-slate-900">
+            {t('title')}
+          </h1>
+          <p className="mt-4 max-w-3xl text-sm sm:text-base leading-relaxed text-slate-600 md:text-lg">
+            {t('metaDescription')}
+          </p>
+        </div>
+
+        {/* FILTER & CONTROL BAR - Two Rows of Filter Pills & Count */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-slate-200 pb-6">
+          {/* Left: Report Count with Document Icon */}
+          <div className="flex items-center justify-between lg:justify-start gap-4">
+            <div className="flex items-center gap-2.5">
+              <FileText className="w-5 h-5 text-[var(--brand-navy)]" />
+              <h2 className="font-extrabold text-base md:text-lg text-slate-900 uppercase tracking-wide">
+                {t('report_list')} ({filteredReports.length})
+              </h2>
             </div>
 
-            {/* Category Dropdown */}
-            <div
-              className="relative w-full lg:w-64"
-              onMouseEnter={() => setIsFilterOpen(true)}
-              onMouseLeave={() => setIsFilterOpen(false)}
-            >
+            {/* Add Report for CTV on mobile */}
+            {userData?.role === 'CTV' && (
               <button
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className="w-full flex items-center justify-between gap-4 border-b border-slate-300 px-2 py-3 text-sm text-[#0a192f] font-medium hover:border-[#0a192f] transition-all"
+                onClick={() => setIsModalOpen(true)}
+                className="lg:hidden flex items-center gap-1.5 bg-[var(--brand-navy)] text-white px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-[var(--brand-navy-soft)] transition-colors shadow-sm"
               >
-                <span className="truncate">
-                  {categories.find((c) => c.id === activeCatId)?.name || t('category_select')}
-                </span>
-                <ChevronDown
-                  size={16}
-                  className={`text-slate-400 transition-transform duration-300 ${isFilterOpen ? 'rotate-180' : ''}`}
-                />
+                <PlusCircle size={14} /> {t('add_report')}
               </button>
-
-              <div
-                className={`absolute left-0 top-full mt-2 w-full bg-white border border-slate-200 shadow-xl transition-all z-50 ${isFilterOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}
-              >
-                <button
-                  onClick={() => {
-                    setActiveCatId(undefined);
-                    setPage(1);
-                    setIsFilterOpen(false);
-                  }}
-                  className="w-full text-left px-5 py-3 text-sm hover:bg-slate-50 border-b border-slate-100 text-slate-600 font-medium transition-colors"
-                >
-                  {t('all_categories')}
-                </button>
-                {categories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => {
-                      setActiveCatId(cat.id);
-                      setPage(1);
-                      setIsFilterOpen(false);
-                    }}
-                    className="w-full text-left px-5 py-3 text-sm hover:bg-slate-50 border-b border-slate-100 text-slate-600 font-medium transition-colors last:border-0"
-                  >
-                    {cat.name}
-                  </button>
-                ))}
-              </div>
-            </div>
+            )}
           </div>
 
-          {/* Add Report Button for Admin/CTV */}
-          {userData?.role === 'CTV' && (
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#0a192f] text-white px-6 py-3 text-xs font-bold uppercase tracking-widest hover:bg-[#0f2445] transition-colors"
-            >
-              <PlusCircle size={16} /> {t('add_report')}
-            </button>
-          )}
+          {/* Right: Search + 2 Filter Pill Rows */}
+          <div className="flex flex-col gap-3">
+            {/* Search + Category Pills */}
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Search Bar */}
+              <div className="relative w-full sm:w-60">
+                <input
+                  type="text"
+                  placeholder={t('search_placeholder')}
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setPage(1);
+                  }}
+                  className="w-full bg-white border border-slate-200 rounded-full pl-8 pr-3 py-1.5 text-xs text-[#0a192f] placeholder-slate-400 outline-none focus:border-[var(--brand-navy)] transition-all shadow-sm"
+                />
+                <Search
+                  className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={14}
+                />
+              </div>
+
+              {/* All Categories Pill */}
+              <button
+                onClick={() => {
+                  setActiveCatId(undefined);
+                  setPage(1);
+                }}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border shadow-sm cursor-pointer ${
+                  activeCatId === undefined
+                    ? 'bg-[var(--brand-navy-deep)] border-[var(--brand-navy-deep)] text-white'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                {t('all_categories')}
+              </button>
+
+              {/* Dynamic Category Pills */}
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => {
+                    setActiveCatId(cat.id);
+                    setPage(1);
+                  }}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border shadow-sm cursor-pointer ${
+                    activeCatId === cat.id
+                      ? 'bg-[var(--brand-navy-deep)] border-[var(--brand-navy-deep)] text-white'
+                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
+
+              {/* Add Report Button for CTV on desktop */}
+              {userData?.role === 'CTV' && (
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="hidden lg:flex items-center gap-1.5 bg-[var(--brand-navy)] text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-[var(--brand-navy-soft)] transition-colors shadow-sm ml-auto cursor-pointer"
+                >
+                  <PlusCircle size={14} /> {t('add_report')}
+                </button>
+              )}
+            </div>
+
+            {/* Year Filter Pills */}
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={() => setSelectedYear(null)}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border shadow-sm cursor-pointer ${
+                  selectedYear === null
+                    ? 'bg-[var(--brand-yellow)] border-[var(--brand-yellow)] text-[var(--brand-navy-deep)] font-extrabold'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                {t('all_years')}
+              </button>
+
+              {availableYears.map((year) => (
+                <button
+                  key={year}
+                  onClick={() => setSelectedYear(year)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border shadow-sm cursor-pointer ${
+                    selectedYear === year
+                      ? 'bg-[var(--brand-yellow)] border-[var(--brand-yellow)] text-[var(--brand-navy-deep)] font-extrabold'
+                      : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  {t('year_prefix')} {year}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* REPORTS GRID */}
@@ -196,59 +314,77 @@ export default function SectorPage() {
           <div className="flex items-center justify-center py-32 text-sm text-slate-400 font-medium tracking-widest uppercase animate-pulse">
             {t('syncing')}
           </div>
+        ) : filteredReports.length === 0 ? (
+          <div className="text-center py-24 bg-white rounded-2xl border border-dashed border-slate-200 mt-8 shadow-sm">
+            <p className="text-slate-500 font-medium text-sm">{t('no_desc')}</p>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14">
-            {reports.map((report) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mt-8">
+            {filteredReports.map((report) => (
               <div
                 key={report.id}
-                onClick={() => openPdf(report.pdfUrl)}
-                className="group flex flex-col cursor-pointer border border-slate-200 bg-white hover:border-[#0a192f]/30 transition-all duration-300 shadow-sm hover:shadow-lg"
+                onClick={() => openPdf(report.pdfUrl, report.title)}
+                className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden flex flex-col justify-between group cursor-pointer"
               >
-                {/* Image Wrapper */}
-                <div className="aspect-[4/3] relative overflow-hidden bg-slate-100 border-b border-slate-200">
-                  <Image
-                    src={report.thumbnail || '/Logo.jpg'}
-                    alt={report.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
+                <div>
+                  {/* Thumbnail Area with badges */}
+                  <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
+                    <Image
+                      src={report.thumbnail || '/Logo.jpg'}
+                      alt={report.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+
+                    {/* Top-Left Category Badge */}
+                    <span className="absolute top-3 left-3 z-10 bg-[var(--brand-navy-deep)]/90 backdrop-blur-sm text-white font-extrabold text-[10px] uppercase px-3 py-1 rounded-full tracking-wider shadow-sm">
+                      {report.category?.name || 'Research'}
+                    </span>
+
+                    {/* Top-Right Month/Year Badge */}
+                    <span className="absolute top-3 right-3 z-10 bg-[var(--brand-yellow)] text-[var(--brand-navy-deep)] font-black text-[10px] uppercase px-2.5 py-1 rounded-full tracking-wider shadow-sm">
+                      {formatReportDate(report.createdAt)}
+                    </span>
+                  </div>
+
+                  {/* Content Area */}
+                  <div className="p-5 md:p-6 pb-2">
+                    <div className="flex items-center justify-between text-xs text-slate-400 font-medium mb-3">
+                      <span className="font-bold uppercase tracking-wider text-[11px] text-slate-500">
+                        BY {report.user?.fullName || 'YT Insight'}
+                      </span>
+                      <span>
+                        {new Date(report.createdAt).toLocaleDateString(
+                          locale === 'vi' ? 'vi-VN' : 'en-US'
+                        )}
+                      </span>
+                    </div>
+
+                    <h3 className="text-lg md:text-xl font-bold text-slate-900 group-hover:text-[var(--brand-navy)] transition-colors leading-snug line-clamp-2 mb-3">
+                      {report.title}
+                    </h3>
+
+                    <p className="text-xs md:text-sm text-slate-500 line-clamp-3 leading-relaxed mb-4 font-normal">
+                      {report.description || t('no_desc')}
+                    </p>
+                  </div>
                 </div>
 
-                {/* Content */}
-                <div className="flex flex-col flex-1 p-6 lg:p-8">
-                  <div className="flex items-center gap-4 mb-4">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#0a192f]">
-                      {report.category?.name || 'Uncategorized'}
-                    </span>
-                    <span className="text-[10px] font-medium text-slate-400">
-                      {new Date(report.createdAt).toLocaleDateString(
-                        locale === 'vi' ? 'vi-VN' : 'en-US'
-                      )}
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl md:text-2xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors leading-snug mb-4">
-                    {report.title}
-                  </h3>
-
-                  <p className="text-sm text-slate-600 line-clamp-3 leading-relaxed mb-6">
-                    {report.description || t('no_desc')}
-                  </p>
-
-                  <div className="mt-auto flex items-center justify-between border-t border-slate-200 pt-5">
-                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                      BY {report.user?.fullName}
-                    </span>
-                    <span className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0a192f] group-hover:text-blue-600 transition-colors">
-                      {t('details')}{' '}
-                      <ArrowRight
-                        size={14}
-                        className="group-hover:translate-x-1 transition-transform"
-                      />
-                    </span>
-                  </div>
+                {/* Bottom Action Button (styled like Co 4 La) */}
+                <div className="px-5 md:px-6 pb-5 pt-2">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openPdf(report.pdfUrl, report.title);
+                    }}
+                    className="w-full border-2 border-[var(--brand-navy)] text-[var(--brand-navy)] group-hover:bg-[var(--brand-navy)] group-hover:text-white py-2.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center justify-center gap-2 uppercase tracking-wider shadow-sm group-hover:shadow-md cursor-pointer"
+                  >
+                    <FileText size={15} />
+                    <span>{t('details')}</span>
+                  </button>
                 </div>
               </div>
             ))}
@@ -257,14 +393,14 @@ export default function SectorPage() {
 
         {/* PAGINATION */}
         {totalPages > 1 && (
-          <div className="mt-24 flex justify-center items-center gap-6 border-t border-slate-200 pt-8">
+          <div className="mt-16 flex justify-center items-center gap-6 border-t border-slate-200 pt-8">
             <button
               disabled={page === 1}
               onClick={(e) => {
                 e.stopPropagation();
                 setPage(page - 1);
               }}
-              className="text-xs font-bold uppercase tracking-widest text-[#0a192f] disabled:opacity-30 hover:text-blue-600 transition-colors"
+              className="text-xs font-bold uppercase tracking-widest text-[var(--brand-navy)] disabled:opacity-30 hover:text-[var(--brand-yellow)] transition-colors cursor-pointer"
             >
               {t('prev')}
             </button>
@@ -277,35 +413,45 @@ export default function SectorPage() {
                 e.stopPropagation();
                 setPage(page + 1);
               }}
-              className="text-xs font-bold uppercase tracking-widest text-[#0a192f] disabled:opacity-30 hover:text-blue-600 transition-colors"
+              className="text-xs font-bold uppercase tracking-widest text-[var(--brand-navy)] disabled:opacity-30 hover:text-[var(--brand-yellow)] transition-colors cursor-pointer"
             >
               {t('next')}
             </button>
           </div>
         )}
 
-        {/* CLEAN PDF VIEWER MODAL */}
-        {readingPdfUrl && (
-          <div className="fixed inset-0 z-[9999] bg-slate-900/90 backdrop-blur-md animate-in fade-in duration-300 flex items-center justify-center p-4">
-            <div className="bg-white w-full max-w-7xl h-[95vh] flex flex-col relative shadow-2xl">
-              <div className="flex justify-between items-center px-6 py-4 border-b border-slate-200 bg-white">
-                <span className="text-xs font-bold tracking-widest uppercase flex items-center gap-3 text-[#0a192f]">
-                  <BookOpen size={16} className="text-blue-600" /> {t('modal_title')}
-                </span>
+        {/* MODAL XEM BÁO CÁO / PDF - CHUẨN ĐỒNG BỘ 100% VỚI MODAL FOOTER */}
+        {readingPdf && (
+          <div
+            className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm animate-in fade-in duration-300 sm:flex sm:items-center sm:justify-center sm:p-3 lg:p-4 cursor-pointer"
+            onClick={() => setReadingPdf(null)}
+          >
+            <div
+              className="bg-white w-full h-[100dvh] sm:h-[94dvh] sm:max-w-[96vw] lg:max-w-7xl lg:h-[92vh] flex flex-col shadow-2xl overflow-hidden border-2 border-[var(--brand-navy)] sm:rounded-2xl cursor-default"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="bg-[var(--brand-navy-deep)] px-4 py-3 md:p-4 flex justify-between items-center">
+                <div className="flex items-center gap-3 min-w-0 pr-3">
+                  <FileText className="text-[var(--brand-yellow)] shrink-0" size={20} />
+                  <span className="text-white text-xs md:text-sm font-black uppercase tracking-widest truncate">
+                    {readingPdf.title}
+                  </span>
+                </div>
 
                 <button
-                  onClick={() => setReadingPdfUrl(null)}
-                  className="p-2 text-slate-400 hover:text-[#0a192f] hover:bg-slate-100 rounded-full transition-all"
+                  onClick={() => setReadingPdf(null)}
+                  className="bg-[var(--brand-navy)] text-white p-1.5 hover:bg-[var(--brand-yellow)] hover:text-[#12243f] hover:rotate-90 transition-all cursor-pointer shrink-0 rounded-lg"
+                  aria-label="Close"
                 >
-                  <X size={20} />
+                  <X size={22} />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-hidden bg-slate-100">
+              <div className="bg-gray-100 h-[calc(100dvh-56px)] sm:h-[calc(94dvh-56px)] lg:h-auto lg:flex-1">
                 <InlinePdfViewer
-                  src={getPdfViewerSrc(readingPdfUrl)}
+                  src={getPdfViewerSrc(readingPdf.url)}
                   className="w-full h-full"
-                  title={t('viewer_title')}
+                  title={readingPdf.title}
                 />
               </div>
             </div>
@@ -314,15 +460,21 @@ export default function SectorPage() {
 
         {/* ADD REPORT MODAL */}
         {isModalOpen && (
-          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md">
-            <div className="bg-white w-full max-w-5xl relative overflow-y-auto max-h-[95vh] shadow-2xl">
+          <div
+            className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md cursor-pointer"
+            onClick={() => setIsModalOpen(false)}
+          >
+            <div
+              className="bg-white w-full max-w-5xl relative overflow-y-auto max-h-[95vh] shadow-2xl rounded-2xl cursor-default"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="flex justify-between items-center px-6 py-4 border-b border-slate-200 bg-slate-50 sticky top-0 z-50">
                 <span className="text-xs font-bold tracking-widest uppercase text-[#0a192f]">
                   Create Report
                 </span>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="p-2 text-slate-400 hover:text-[#0a192f] hover:bg-slate-200 rounded-full transition-all"
+                  className="p-2 text-slate-400 hover:text-[#0a192f] hover:bg-slate-200 rounded-full transition-all cursor-pointer"
                 >
                   <X size={20} />
                 </button>
