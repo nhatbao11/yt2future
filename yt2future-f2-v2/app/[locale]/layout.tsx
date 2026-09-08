@@ -33,6 +33,13 @@ export async function generateMetadata({
       default: defaultTitle,
     },
     description: defaultDescription,
+    icons: {
+      icon: [
+        { url: '/favicon.ico', sizes: 'any' },
+        { url: '/icon.png', sizes: '512x512', type: 'image/png' },
+      ],
+      apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+    },
     openGraph: {
       type: 'website',
       locale: locale,
