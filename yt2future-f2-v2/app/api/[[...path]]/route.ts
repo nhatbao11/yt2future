@@ -60,10 +60,16 @@ async function proxy(req: NextRequest, pathSegments: string[] | undefined): Prom
     headers.delete(h);
   }
 
+  const cookieHeader = req.headers.get('cookie');
+  if (cookieHeader) {
+    headers.set('cookie', cookieHeader);
+  }
+
   const init: RequestInit = {
     method: req.method,
     headers,
     redirect: 'manual',
+    cache: 'no-store',
   };
 
   if (req.method !== 'GET' && req.method !== 'HEAD') {
@@ -77,6 +83,16 @@ async function proxy(req: NextRequest, pathSegments: string[] | undefined): Prom
 
   const outHeaders = new Headers(res.headers);
   outHeaders.delete('transfer-encoding');
+
+  if ('getSetCookie' in res.headers && typeof res.headers.getSetCookie === 'function') {
+    const setCookies = res.headers.getSetCookie();
+    if (setCookies && setCookies.length > 0) {
+      outHeaders.delete('set-cookie');
+      for (const sc of setCookies) {
+        outHeaders.append('set-cookie', sc);
+      }
+    }
+  }
 
   return new NextResponse(res.body, {
     status: res.status,
