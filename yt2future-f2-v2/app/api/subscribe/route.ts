@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { getBackendApiUrl } from '@/lib/serverPublicApi';
 
 export async function POST(request: Request) {
   try {
@@ -8,8 +9,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid email' }, { status: 400 });
     }
 
-    const backendUrl = process.env.NEXT_PUBLIC_BE_URL || 'http://localhost:5000';
-    const res = await fetch(`${backendUrl}/api/subscribers`, {
+    const backendUrl = getBackendApiUrl();
+    const res = await fetch(`${backendUrl}/subscribers`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -17,14 +18,18 @@ export async function POST(request: Request) {
       body: JSON.stringify({ email }),
     });
 
-    const data = await res.json();
+    const contentType = res.headers.get('content-type') || '';
+    let data: { message?: string } | null = null;
+    if (contentType.includes('application/json')) {
+      data = (await res.json().catch(() => null)) as { message?: string } | null;
+    }
 
     if (!res.ok) {
       if (res.status === 409) {
         return NextResponse.json({ error: 'Duplicate email' }, { status: 409 });
       }
       return NextResponse.json(
-        { error: data.message || 'Error subscribing' },
+        { error: data?.message || 'Error subscribing' },
         { status: res.status }
       );
     }

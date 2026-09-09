@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
 import { cookies } from 'next/headers';
+import { getBackendApiUrl } from '@/lib/serverPublicApi';
 
 const MAX_BYTES = 6 * 1024 * 1024;
 
@@ -9,25 +10,8 @@ const ALLOWED_FOLDERS = new Set(['services/catalog', 'services/partners']);
 const getErrorMessage = (error: unknown, fallback: string) =>
   error instanceof Error ? error.message : fallback;
 
-function resolveBackendApiBase(): string {
-  const candidates = [
-    process.env.INTERNAL_API_ORIGIN,
-    process.env.LOCAL_API_URL,
-    process.env.NEXT_PUBLIC_API_URL,
-  ];
-
-  for (const raw of candidates) {
-    const trimmed = raw?.trim();
-    if (!trimmed || !/^https?:\/\//i.test(trimmed)) continue;
-    const withoutSlash = trimmed.replace(/\/$/, '');
-    return withoutSlash.endsWith('/api') ? withoutSlash : `${withoutSlash}/api`;
-  }
-
-  return 'http://localhost:5000/api';
-}
-
 async function requireAdmin(token: string): Promise<NextResponse | null> {
-  const authRes = await fetch(`${resolveBackendApiBase()}/auth/me`, {
+  const authRes = await fetch(`${getBackendApiUrl()}/auth/me`, {
     headers: { Cookie: `yt2future_token=${token}` },
     cache: 'no-store',
   });

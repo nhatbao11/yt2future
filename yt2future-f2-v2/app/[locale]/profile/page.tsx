@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import ProfilePageClient from './ProfilePageClient';
 import type { Metadata } from 'next';
+import { getBackendApiUrl } from '@/lib/serverPublicApi';
 
 export async function generateMetadata({
   params,
@@ -26,13 +27,10 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
   if (!token) redirect(`/${locale}/signin`);
 
   // Gọi Backend để lấy profile hiện tại
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/auth/me`,
-    {
-      headers: { Cookie: `yt2future_token=${token}` },
-      cache: 'no-store',
-    }
-  );
+  const res = await fetch(`${getBackendApiUrl()}/auth/me`, {
+    headers: { Cookie: `yt2future_token=${token}` },
+    cache: 'no-store',
+  });
 
   if (!res.ok) redirect(`/${locale}/signin`);
   const { user: profile } = await res.json();

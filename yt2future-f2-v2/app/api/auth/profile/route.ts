@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
 import { cookies } from 'next/headers';
+import { getBackendApiUrl } from '@/lib/serverPublicApi';
 
 const getErrorMessage = (error: unknown, fallback: string) =>
   error instanceof Error ? error.message : fallback;
@@ -55,8 +56,8 @@ export async function PUT(req: NextRequest) {
     }
 
     // 3. Call Backend API
-    const LOCAL_BACKEND_URL = process.env.LOCAL_API_URL || 'http://localhost:5000/api';
-    const backendRes = await fetch(`${LOCAL_BACKEND_URL}/auth/update-user`, {
+    const backendApiUrl = getBackendApiUrl();
+    const backendRes = await fetch(`${backendApiUrl}/auth/update-user`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -66,9 +67,13 @@ export async function PUT(req: NextRequest) {
     });
 
     if (!backendRes.ok) {
-      const errorData = await backendRes.json();
+      const contentType = backendRes.headers.get('content-type') || '';
+      let errorData: { message?: string } | null = null;
+      if (contentType.includes('application/json')) {
+        errorData = (await backendRes.json().catch(() => null)) as { message?: string } | null;
+      }
       return NextResponse.json(
-        { message: errorData.message || 'Update failed' },
+        { message: errorData?.message || 'Update failed' },
         { status: backendRes.status }
       );
     }

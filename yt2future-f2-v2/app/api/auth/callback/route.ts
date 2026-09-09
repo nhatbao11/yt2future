@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
+import { getBackendApiUrl } from '@/lib/serverPublicApi';
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -27,11 +28,10 @@ export async function GET(request: Request) {
         };
 
         try {
-          // 3. Gọi Backend để đồng bộ và lấy Token (Ép gọi localhost:5000 để lách Nginx proxy)
-          const LOCAL_BACKEND_URL = process.env.LOCAL_API_URL || 'http://localhost:5000/api';
-          const API_URL = LOCAL_BACKEND_URL;
+          // 3. Gọi Backend để đồng bộ và lấy Token
+          const backendApiUrl = getBackendApiUrl();
 
-          const backendRes = await fetch(`${API_URL}/auth/grant-google-role`, {
+          const backendRes = await fetch(`${backendApiUrl}/auth/grant-google-role`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(profile),

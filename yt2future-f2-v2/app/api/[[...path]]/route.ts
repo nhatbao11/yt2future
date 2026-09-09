@@ -10,24 +10,28 @@ import { NextRequest, NextResponse } from 'next/server';
  * Ghi đè bằng `INTERNAL_API_ORIGIN` (vd. Docker: `http://api:5000`).
  */
 function resolveBackendOrigin(): string {
-  const internal = process.env.INTERNAL_API_ORIGIN?.trim();
-  if (internal) {
-    return internal.replace(/\/$/, '');
-  }
-  const pub = process.env.NEXT_PUBLIC_API_URL?.trim();
-  if (pub && /^https?:\/\//i.test(pub)) {
+  const candidates = [
+    process.env.INTERNAL_API_ORIGIN,
+    process.env.LOCAL_API_URL,
+    process.env.NEXT_PUBLIC_API_URL,
+    process.env.NEXT_PUBLIC_BE_URL,
+  ];
+
+  for (const raw of candidates) {
+    const trimmed = raw?.trim();
+    if (!trimmed || !/^https?:\/\//i.test(trimmed)) continue;
     try {
-      const u = new URL(pub);
-      const path = u.pathname.replace(/\/$/, '');
-      if (path === '/api' || path.endsWith('/api')) {
-        return u.origin;
-      }
-      if (path) return `${u.origin}${path}`;
+      const u = new URL(trimmed);
       return u.origin;
     } catch {
       /* fallthrough */
     }
   }
+
+  if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+    return 'https://yt2future-backend.vercel.app';
+  }
+
   return 'http://127.0.0.1:5000';
 }
 
