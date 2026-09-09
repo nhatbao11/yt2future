@@ -27,7 +27,7 @@ export default function Footer() {
     setActivePdf({ url, title });
   };
   const getPdfViewerSrc = (pdfUrl: string) =>
-    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#pagemode=thumbs&navpanes=1&view=FitH`;
+    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0&toolbar=0`;
 
   // Lock body scroll when activePdf is open
   useEffect(() => {
@@ -98,14 +98,14 @@ export default function Footer() {
               <div className="relative h-16 w-16 overflow-hidden rounded-full bg-white border border-slate-200 shadow-sm shrink-0">
                 <Image
                   src="/Logo.jpg"
-                  alt="YT Insight"
+                  alt="YT Insights"
                   fill
                   sizes="64px"
                   className="object-cover"
                 />
               </div>
               <h3 className="text-2xl font-black tracking-tight leading-none text-[var(--brand-navy)]">
-                YT Insight
+                YT Insights
               </h3>
             </div>
 
@@ -216,7 +216,7 @@ export default function Footer() {
               ))}
             </div>
             <div className="text-[11px] text-slate-500 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-              <p>YT Insight - Get our latest thinking on your device.</p>
+              <p>YT Insights - Get our latest thinking on your device.</p>
             </div>
           </div>
 

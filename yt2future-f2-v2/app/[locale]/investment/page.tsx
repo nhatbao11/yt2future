@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = t('title');
   const description =
     locale === 'vi'
-      ? 'Danh mục sản phẩm dịch vụ tài chính dành cho doanh nghiệp tại YT Insight.'
-      : 'Enterprise financial products and service offerings at YT Insight.';
+      ? 'Danh mục sản phẩm dịch vụ tài chính dành cho doanh nghiệp tại YT Insights.'
+      : 'Enterprise financial products and service offerings at YT Insights.';
 
   return {
     title,

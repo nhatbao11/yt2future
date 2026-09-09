@@ -122,7 +122,7 @@ export default function AboutPage() {
                   <div className="relative w-full h-full overflow-hidden rounded-xl bg-slate-50">
                     <Image
                       src="/group.png"
-                      alt="Tầm nhìn và Sứ mệnh YT Insight"
+                      alt="Tầm nhìn và Sứ mệnh YT Insights"
                       fill
                       sizes="(max-width: 1023px) 100vw, 50vw"
                       className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -214,7 +214,7 @@ export default function AboutPage() {
                   {/* Bottom Accent Bar */}
                   <div className="mt-8 pt-4 border-t border-slate-100 flex items-center justify-between">
                     <span className="text-xs font-semibold text-slate-400 group-hover:text-[var(--brand-navy)] transition-colors">
-                      YT Insight Core Value
+                      YT Insights Core Value
                     </span>
                     <ArrowUpRight
                       size={18}

@@ -12,8 +12,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = locale === 'vi' ? 'Đào tạo ACCA thực chiến' : 'ACCA Professional Training';
   const description =
     locale === 'vi'
-      ? 'Chương trình đào tạo ACCA thực chiến chất lượng cao tại YT Insight. Học chủ động cùng chuyên gia Big 4.'
-      : 'High-quality ACCA practical training programs at YT Insight. Learn actively with Big 4 experts.';
+      ? 'Chương trình đào tạo ACCA thực chiến chất lượng cao tại YT Insights. Học chủ động cùng chuyên gia Big 4.'
+      : 'High-quality ACCA practical training programs at YT Insights. Learn actively with Big 4 experts.';
 
   return {
     title,

@@ -1,8 +1,8 @@
-# YT Insight - SHAPING TOMORROW THROUGH AGILE INNOVATION
+# YT Insights - SHAPING TOMORROW THROUGH AGILE INNOVATION
 
 ## 📊 Giới thiệu Dự án
 
-**YT Insight** là một nền tảng phân tích tài chính và quản lý tri thức đầu tư chuyên sâu. Dự án được xây dựng nhằm cung cấp các báo cáo thị trường, phân tích doanh nghiệp và thư viện kiến thức chuyên sâu dưới dạng PDF dành cho các nhà đầu tư cá nhân và tổ chức.
+**YT Insights** là một nền tảng phân tích tài chính và quản lý tri thức đầu tư chuyên sâu. Dự án được xây dựng nhằm cung cấp các báo cáo thị trường, phân tích doanh nghiệp và thư viện kiến thức chuyên sâu dưới dạng PDF dành cho các nhà đầu tư cá nhân và tổ chức.
 
 ---
 

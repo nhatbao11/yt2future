@@ -252,18 +252,18 @@ export default function Navbar() {
       >
         <nav className="max-w-360 mx-auto w-full px-4 md:px-12 flex justify-between items-center relative">
           <Link href="/" className="flex items-center gap-2.5 md:gap-3 z-110 shrink-0">
-            <div className="relative h-16 w-16 md:h-[72px] md:w-[72px] overflow-hidden rounded-full bg-white shrink-0 shadow-sm border border-white/20">
+            <div className="relative h-12 w-12 sm:h-14 sm:w-14 md:h-[68px] md:w-[68px] overflow-hidden rounded-full bg-white shrink-0 shadow-sm border border-white/20">
               <Image
                 src="/Logo.jpg"
-                alt="YT Insight"
+                alt="YT Insights"
                 fill
-                sizes="72px"
+                sizes="(max-width: 640px) 48px, (max-width: 768px) 56px, 68px"
                 className="object-cover scale-110"
                 priority
               />
             </div>
-            <h1 className="text-white font-extrabold text-base md:text-xl tracking-tight leading-none whitespace-nowrap">
-              YT Insight
+            <h1 className="text-white font-extrabold text-base sm:text-lg md:text-xl tracking-tight leading-none whitespace-nowrap">
+              YT Insights
             </h1>
           </Link>
 
@@ -387,17 +387,17 @@ export default function Navbar() {
             className="flex items-center gap-2 md:gap-3"
             onClick={() => setIsMenuOpen(false)}
           >
-            <div className="relative h-16 w-16 overflow-hidden rounded-full bg-white shrink-0 border border-white/20">
+            <div className="relative h-12 w-12 sm:h-14 sm:w-14 overflow-hidden rounded-full bg-white shrink-0 border border-white/20">
               <Image
                 src="/Logo.jpg"
-                alt="YT Insight"
+                alt="YT Insights"
                 fill
-                sizes="64px"
+                sizes="56px"
                 className="object-cover scale-110"
               />
             </div>
             <h1 className="text-white font-extrabold text-base md:text-lg tracking-tight leading-none">
-              YT Insight
+              YT Insights
             </h1>
           </Link>
           <button

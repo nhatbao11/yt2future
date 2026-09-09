@@ -29,7 +29,7 @@ export async function generateMetadata({
   return {
     metadataBase: new URL(baseUrl),
     title: {
-      template: '%s | YT Insight',
+      template: '%s | YT Insights',
       default: defaultTitle,
     },
     description: defaultDescription,
@@ -43,7 +43,7 @@ export async function generateMetadata({
     openGraph: {
       type: 'website',
       locale: locale,
-      siteName: 'YT Insight',
+      siteName: 'YT Insights',
       title: defaultTitle,
       description: defaultDescription,
       images: [
@@ -51,7 +51,7 @@ export async function generateMetadata({
           url: '/Logo.jpg',
           width: 1024,
           height: 1024,
-          alt: 'YT Insight',
+          alt: 'YT Insights',
         },
       ],
     },
@@ -110,13 +110,13 @@ export default async function LocaleLayout({
     '@graph': [
       {
         '@type': 'Organization',
-        name: 'YT Insight',
+        name: 'YT Insights',
         url: baseUrl,
         logo: `${baseUrl}/Logo.jpg`,
       },
       {
         '@type': 'WebSite',
-        name: 'YT Insight',
+        name: 'YT Insights',
         url: baseUrl,
         inLanguage: locale,
       },

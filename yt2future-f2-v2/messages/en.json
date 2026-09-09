@@ -1,7 +1,7 @@
 {
   "seo": {
-    "defaultTitle": "YT Insight | Optimizing Enterprise Resources",
-    "defaultDescription": "YT Insight helps enterprises optimize finance, strategy, and operations."
+    "defaultTitle": "YT Insights | Optimizing Enterprise Resources",
+    "defaultDescription": "YT Insights helps enterprises optimize finance, strategy, and operations."
   },
   "common": {
     "readMore": "Read more",
@@ -37,7 +37,7 @@
     "insights": "Our insights",
     "career": "Career",
     "company": "Our company",
-    "aboutYT": "About YT Insight",
+    "aboutYT": "About YT Insights",
     "clientImpact": "Client Impact",
     "offices": "Offices"
   },
@@ -50,7 +50,7 @@
     "cookies": "Cookie Policy",
     "connect": "Connect With Us",
     "address": "Binh Tan, Ho Chi Minh City",
-    "copyright": "© 2026 YT Insight. All rights reserved.",
+    "copyright": "© 2026 YT Insights. All rights reserved.",
     "tagline": "YT Insights",
     "description": "YT Insights partners with enterprises to optimize finance, strategy, and operations.",
     "quickLinks": "Quick Links",
@@ -82,7 +82,7 @@
   "feedback": {
     "title": "Client",
     "titleHighlight": "Testimonials",
-    "tagline": "YT Insight Rating System",
+    "tagline": "YT Insights Rating System",
     "role": "Strategic Partner",
     "send": "Send Feedback",
     "modalTitle": "Write a Review",
@@ -102,19 +102,21 @@
   },
   "home": {
     "hero": {
-      "tagline": "YT Insight Strategy",
+      "tagline": "YT Insights Strategy",
       "title": "Shaping Tomorrow",
       "titleHighlight": "Through Agile Innovation.",
       "desc": "We empower enterprises to navigate complexity, accelerate growth, and build sustainable competitive advantage in an ever-evolving market.",
       "cta1": "Our Services",
-      "cta2": "Discover YT Insight",
+      "cta2": "Discover YT Insights",
       "dashboard": {
         "liveData": "Live Data",
         "growthStrategy": "Growth Strategy",
         "accelerated": "Accelerated",
         "globalImpact": "Global Impact",
         "markets": "15+ Markets"
-      }
+      },
+      "titleHighlightLine1": "Through Agile",
+      "titleHighlightLine2": "Innovation."
     },
     "metrics": {
       "capital": "$5B+",
@@ -169,7 +171,7 @@
   },
   "about": {
     "pageTitle": "About Us",
-    "tagline": "About YT Insight",
+    "tagline": "About YT Insights",
     "headline": "Shaping the future through agile thinking and relentless innovation.",
     "headline_line1": "SHAPING THE FUTURE",
     "headline_line2": "THROUGH AGILE MINDSET",
@@ -246,7 +248,7 @@
       "subject": "Subject",
       "message": "Your message"
     },
-    "mapTitle": "YT Insight location",
+    "mapTitle": "YT Insights location",
     "info": {
       "address": "Address",
       "email": "Email",
@@ -669,7 +671,7 @@
     "loadError": "Could not load services. Check: (1) the API server is running (default port 5000), (2) run `npx prisma migrate deploy` and `npm run seed:services` in the backend folder, (3) if you use `next start` without Nginx, set `INTERNAL_API_ORIGIN` for Next (e.g. http://127.0.0.1:5000).",
     "empty": "No published services yet. Add one in admin or run the backend seed script.",
     "heroEyebrow": "Comprehensive Strategic Advisory Solutions",
-    "intro": "Explore our service portfolio to understand how YT Insight creates breakthrough value, optimizes operations, and drives sustainable growth for your enterprise.",
+    "intro": "Explore our service portfolio to understand how YT Insights creates breakthrough value, optimizes operations, and drives sustainable growth for your enterprise.",
     "sectionTitle": "Service Portfolio",
     "cardCta": "Explore Solution",
     "cardEyebrow": "Strategic Service",
@@ -678,12 +680,12 @@
     "cardTeaserHint": "Brief description; click to view in-depth analysis on the details page.",
     "cardEmptyImageEdit": "No image yet — paste URL below",
     "detailLoading": "Loading solution details…",
-    "metaDescription": "Strategic advisory, digital transformation, and operational excellence solutions at YT Insight."
+    "metaDescription": "Strategic advisory, digital transformation, and operational excellence solutions at YT Insights."
   },
   "sector_page": {
     "title": "Strategic Insights",
     "badge": "PUBLICATIONS & RESEARCH",
-    "metaDescription": "Explore in-depth research reports, strategic publications, and insights from leading experts at YT Insight.",
+    "metaDescription": "Explore in-depth research reports, strategic publications, and insights from leading experts at YT Insights.",
     "search_placeholder": "Search strategic reports...",
     "report_list": "Report List",
     "category_select": "Select research area",
@@ -762,7 +764,7 @@
     "hero_title_line2": "With YT Insights",
     "hero_quote": "Learning together. Growing together. Shaping the future together.",
     "hero_subtitle": "We believe that every development journey begins with small steps. At YT Insights, you will have the opportunity to learn, tackle real-world challenges, and create meaningful value alongside your teammates.",
-    "values_title": "Why YT Insight?",
+    "values_title": "Why YT Insights?",
     "values_subtitle": "Our Core Values",
     "value_1_title": "Agile Innovation",
     "value_1_desc": "We embrace change and leverage cutting-edge technology to deliver rapid, sustainable solutions.",

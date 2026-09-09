@@ -78,7 +78,7 @@ export default function ClientImpactPageClient() {
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-1 bg-[var(--brand-yellow)] rounded-full"></div>
                 <span className="text-[var(--brand-yellow)] text-xs md:text-sm font-bold tracking-[0.2em] uppercase">
-                  YT Insight Impact
+                  YT Insights Impact
                 </span>
               </div>
               <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight mb-6">

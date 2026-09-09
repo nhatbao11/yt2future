@@ -13,8 +13,8 @@ export async function generateMetadata({
   const title = t('signIn.title');
   const description =
     locale === 'vi'
-      ? 'Đăng nhập tài khoản YT Insight để truy cập báo cáo và tính năng dành cho thành viên.'
-      : 'Sign in to your YT Insight account for reports and member features.';
+      ? 'Đăng nhập tài khoản YT Insights để truy cập báo cáo và tính năng dành cho thành viên.'
+      : 'Sign in to your YT Insights account for reports and member features.';
   return {
     title,
     description,

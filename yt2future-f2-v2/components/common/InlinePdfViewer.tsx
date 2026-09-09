@@ -23,10 +23,13 @@ type PageProps = {
   renderAnnotationLayer: boolean;
 };
 
-function isIOSDevice(): boolean {
+function isMobileOrTabletDevice(): boolean {
   if (typeof navigator === 'undefined') return false;
   const ua = navigator.userAgent;
-  return /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  const isMobileUa = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+  const isTouchScreen =
+    typeof window !== 'undefined' && (window.innerWidth < 1024 || navigator.maxTouchPoints > 1);
+  return isMobileUa || isTouchScreen;
 }
 
 export default function InlinePdfViewer({ src, title, className }: InlinePdfViewerProps) {
@@ -36,7 +39,7 @@ export default function InlinePdfViewer({ src, title, className }: InlinePdfView
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [DocumentComp, setDocumentComp] = useState<ComponentType<DocumentProps> | null>(null);
   const [PageComp, setPageComp] = useState<ComponentType<PageProps> | null>(null);
-  const renderWithPdfJs = useMemo(() => isIOSDevice(), []);
+  const renderWithPdfJs = useMemo(() => isMobileOrTabletDevice(), []);
 
   useEffect(() => {
     if (!renderWithPdfJs) return;
@@ -44,7 +47,12 @@ export default function InlinePdfViewer({ src, title, className }: InlinePdfView
     const node = containerRef.current;
     if (!node) return;
 
-    const updateSize = () => setContainerWidth(Math.max(320, Math.floor(node.clientWidth - 16)));
+    const updateSize = () => {
+      const padding = node.clientWidth < 480 ? 12 : 24;
+      const calculated = Math.floor(node.clientWidth - padding);
+      setContainerWidth(Math.max(260, calculated));
+    };
+
     updateSize();
 
     const observer = new ResizeObserver(updateSize);
@@ -95,7 +103,7 @@ export default function InlinePdfViewer({ src, title, className }: InlinePdfView
   return (
     <div
       ref={containerRef}
-      className={`${className || 'w-full h-full'} overflow-auto bg-slate-100 p-2`}
+      className={`${className || 'w-full h-full'} overflow-auto bg-slate-100 p-2 sm:p-4`}
     >
       <DocumentComp
         file={src}
@@ -107,10 +115,23 @@ export default function InlinePdfViewer({ src, title, className }: InlinePdfView
         onLoadError={() => setPdfError('Failed to load PDF')}
       >
         {pdfError ? (
-          <div className="py-8 text-center text-sm text-rose-600">{pdfError}</div>
+          <div className="py-8 text-center text-sm text-rose-600">
+            <p className="mb-3">{pdfError}</p>
+            <a
+              href={src}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-4 py-2 bg-[var(--brand-navy)] text-white text-xs font-bold rounded-lg hover:bg-[var(--brand-yellow)] hover:text-[#12243f] transition-all"
+            >
+              Mở tài liệu trong tab mới
+            </a>
+          </div>
         ) : (
           Array.from({ length: numPages }, (_, index) => (
-            <div key={`pdf-page-${index + 1}`} className="mb-3 last:mb-0 flex justify-center">
+            <div
+              key={`pdf-page-${index + 1}`}
+              className="mb-4 last:mb-0 flex justify-center shadow-md rounded-md overflow-hidden bg-white max-w-fit mx-auto"
+            >
               <PageComp
                 pageNumber={index + 1}
                 width={containerWidth || 360}

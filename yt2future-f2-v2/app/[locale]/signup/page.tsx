@@ -14,8 +14,8 @@ export async function generateMetadata({
   const title = t('signUp.title');
   const description =
     locale === 'vi'
-      ? 'Đăng ký tài khoản YT Insight để làm thành viên và truy cập nội dung đầy đủ.'
-      : 'Create a YT Insight account to join as a member and unlock full content.';
+      ? 'Đăng ký tài khoản YT Insights để làm thành viên và truy cập nội dung đầy đủ.'
+      : 'Create a YT Insights account to join as a member and unlock full content.';
   return {
     title,
     description,

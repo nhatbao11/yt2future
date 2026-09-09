@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { reportService } from '@/features/reports/api/reportApi';
 import { categoryApi } from '@/features/categories/api/categoryApi';
-import { Search, PlusCircle, X, FileText } from 'lucide-react';
+import { Search, PlusCircle, X, FileText, ExternalLink } from 'lucide-react';
 import CreateReportPage from '@/components/common/CreateReportPage';
 import InlinePdfViewer from '@/components/common/InlinePdfViewer';
 import PageHeader from '@/components/layout/PageHeader';
@@ -42,7 +42,7 @@ export default function SectorPage() {
   const [readingPdf, setReadingPdf] = useState<{ url: string; title: string } | null>(null);
 
   const getPdfViewerSrc = (pdfUrl: string) =>
-    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#pagemode=thumbs&navpanes=1&view=FitH`;
+    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0&toolbar=0`;
 
   const openPdf = (pdfUrl: string, title?: string) => {
     setReadingPdf({ url: pdfUrl, title: title || t('modal_title') });
@@ -328,13 +328,17 @@ export default function SectorPage() {
               >
                 <div>
                   {/* Thumbnail Area with badges */}
-                  <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
+                  <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full bg-slate-100 overflow-hidden">
                     <Image
                       src={report.thumbnail || '/Logo.jpg'}
                       alt={report.title}
                       fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className={
+                        report.thumbnail && report.thumbnail !== '/Logo.jpg'
+                          ? 'object-cover transition-transform duration-700 group-hover:scale-105'
+                          : 'object-contain p-8 bg-slate-50 transition-transform duration-500 group-hover:scale-105'
+                      }
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
 
@@ -353,7 +357,7 @@ export default function SectorPage() {
                   <div className="p-5 md:p-6 pb-2">
                     <div className="flex items-center justify-between text-xs text-slate-400 font-medium mb-3">
                       <span className="font-bold uppercase tracking-wider text-[11px] text-slate-500">
-                        BY {report.user?.fullName || 'YT Insight'}
+                        BY {report.user?.fullName || 'YT Insights'}
                       </span>
                       <span>
                         {new Date(report.createdAt).toLocaleDateString(
@@ -438,13 +442,25 @@ export default function SectorPage() {
                   </span>
                 </div>
 
-                <button
-                  onClick={() => setReadingPdf(null)}
-                  className="bg-[var(--brand-navy)] text-white p-1.5 hover:bg-[var(--brand-yellow)] hover:text-[#12243f] hover:rotate-90 transition-all cursor-pointer shrink-0 rounded-lg"
-                  aria-label="Close"
-                >
-                  <X size={22} />
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <a
+                    href={`/api/pdf-proxy?url=${encodeURIComponent(readingPdf.url)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-[var(--brand-navy)] text-white p-1.5 hover:bg-[var(--brand-yellow)] hover:text-[#12243f] transition-all cursor-pointer rounded-lg inline-flex items-center justify-center"
+                    title="Mở tài liệu trong tab mới"
+                    aria-label="Open in new tab"
+                  >
+                    <ExternalLink size={18} />
+                  </a>
+                  <button
+                    onClick={() => setReadingPdf(null)}
+                    className="bg-[var(--brand-navy)] text-white p-1.5 hover:bg-[var(--brand-yellow)] hover:text-[#12243f] hover:rotate-90 transition-all cursor-pointer shrink-0 rounded-lg"
+                    aria-label="Close"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
               </div>
 
               <div className="bg-gray-100 h-[calc(100dvh-56px)] sm:h-[calc(94dvh-56px)] lg:h-auto lg:flex-1">

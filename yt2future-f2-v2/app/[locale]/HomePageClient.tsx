@@ -71,26 +71,28 @@ export default function HomePage() {
             {/* LEFT COLUMN: Text Content */}
             <div className="lg:col-span-6 flex flex-col pt-10 md:pt-0">
               <ScrollReveal direction="up" distance={40}>
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-[2px] bg-[var(--brand-yellow)]"></div>
-                  <span className="text-[var(--brand-yellow)] text-xs md:text-sm font-bold tracking-[0.3em] uppercase drop-shadow-[0_0_8px_rgba(255,204,35,0.4)]">
+                <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                  <div className="w-8 sm:w-12 h-[2px] bg-[var(--brand-yellow)]"></div>
+                  <span className="text-[var(--brand-yellow)] text-[11px] sm:text-xs md:text-sm font-bold tracking-[0.25em] sm:tracking-[0.3em] uppercase drop-shadow-[0_0_8px_rgba(255,204,35,0.4)]">
                     {t('hero.tagline')}
                   </span>
                 </div>
-                <h1 className="text-4xl md:text-6xl lg:text-[5.5rem] font-black text-white leading-[1.05] tracking-tight mb-8 drop-shadow-2xl">
-                  {t('hero.title')}
-                  <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-yellow)] via-[#ffd24d] to-amber-100 animate-gradient-x">
-                    {t('hero.titleHighlight')}
+                <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-[5.2rem] font-black text-white leading-[1.15] sm:leading-[1.05] tracking-tight mb-6 sm:mb-8 drop-shadow-2xl">
+                  <span className="block">{t('hero.title')}</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-yellow)] via-[#ffd24d] to-amber-100 animate-gradient-x block sm:inline">
+                    <span className="inline sm:inline-block">{t('hero.titleHighlightLine1')}</span>{' '}
+                    <span className="inline sm:inline-block whitespace-nowrap">
+                      {t('hero.titleHighlightLine2')}
+                    </span>
                   </span>
                 </h1>
-                <p className="text-base md:text-xl text-slate-300 font-medium max-w-2xl leading-relaxed mb-10 border-l-2 border-[var(--brand-yellow)]/70 pl-5">
+                <p className="text-sm sm:text-base md:text-xl text-slate-300 font-medium max-w-2xl leading-relaxed mb-8 sm:mb-10 border-l-2 border-[var(--brand-yellow)]/70 pl-4 sm:pl-5">
                   {t('hero.desc')}
                 </p>
-                <div className="flex flex-col sm:flex-row gap-5">
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 w-full sm:w-auto">
                   <Link
                     href="/services"
-                    className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-[var(--brand-yellow)] text-[#12243f] font-extrabold text-sm tracking-widest uppercase rounded-xl overflow-hidden shadow-[0_4px_25px_rgba(255,204,35,0.35)] transition-all hover:bg-amber-300 hover:scale-105"
+                    className="group relative inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 bg-[var(--brand-yellow)] text-[#12243f] font-extrabold text-xs sm:text-sm tracking-widest uppercase rounded-xl overflow-hidden shadow-[0_4px_25px_rgba(255,204,35,0.35)] transition-all hover:bg-amber-300 hover:scale-105 w-full sm:w-auto text-center"
                   >
                     <span className="relative z-10">{t('hero.cta1')}</span>
                     <ArrowRight
@@ -100,7 +102,7 @@ export default function HomePage() {
                   </Link>
                   <Link
                     href="/about"
-                    className="inline-flex items-center justify-center gap-3 px-8 py-4 border border-white/20 bg-white/5 backdrop-blur-sm text-white font-bold text-sm tracking-widest uppercase rounded-xl hover:bg-white/10 hover:border-white/40 transition-all duration-300"
+                    className="inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 border border-white/20 bg-white/5 backdrop-blur-sm text-white font-bold text-xs sm:text-sm tracking-widest uppercase rounded-xl hover:bg-white/10 hover:border-white/40 transition-all duration-300 w-full sm:w-auto text-center"
                   >
                     {t('hero.cta2')}
                   </Link>
@@ -170,7 +172,7 @@ export default function HomePage() {
         {/* 2. IMPACT METRICS BAR */}
         <section className="bg-[var(--brand-navy-deep)] border-y border-[var(--brand-yellow)]/30 relative z-20">
           <div className="max-w-[1440px] mx-auto px-6 md:px-12 py-12 md:py-16">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 divide-x divide-white/15">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 md:divide-x md:divide-white/15">
               <ScrollReveal delay={0.1} className="text-center px-4">
                 <div className="text-4xl md:text-5xl font-black text-[var(--brand-yellow)] mb-2 tracking-tight">
                   {t('metrics.capital')}
@@ -443,7 +445,7 @@ export default function HomePage() {
               {mockInsights.map((insight, idx) => (
                 <ScrollReveal key={idx} delay={idx * 0.15}>
                   <Link
-                    href={`/sector/${insight.id}`}
+                    href="/sector"
                     className="group flex flex-col h-full bg-white rounded-2xl border border-slate-200/90 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1.5 hover:border-[var(--brand-navy)] transition-all duration-300 overflow-hidden"
                   >
                     <div className="relative h-60 mb-6 overflow-hidden bg-slate-100 rounded-xl">

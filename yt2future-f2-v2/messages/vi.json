@@ -1,7 +1,7 @@
 {
   "seo": {
-    "defaultTitle": "YT Insight | Tối ưu nguồn lực doanh nghiệp",
-    "defaultDescription": "YT Insight đồng hành cùng doanh nghiệp tối ưu tài chính, chiến lược và vận hành."
+    "defaultTitle": "YT Insights | Tối ưu nguồn lực doanh nghiệp",
+    "defaultDescription": "YT Insights đồng hành cùng doanh nghiệp tối ưu tài chính, chiến lược và vận hành."
   },
   "common": {
     "readMore": "Đọc thêm",
@@ -37,7 +37,7 @@
     "insights": "Góc nhìn",
     "career": "Tuyển dụng",
     "company": "Công ty chúng tôi",
-    "aboutYT": "Về YT Insight",
+    "aboutYT": "Về YT Insights",
     "clientImpact": "Tác động khách hàng",
     "offices": "Văn phòng"
   },
@@ -50,7 +50,7 @@
     "cookies": "Chính sách Cookie",
     "connect": "Kết nối",
     "address": "Bình Tân, TP. Hồ Chí Minh",
-    "copyright": "© 2026 YT Insight. All rights reserved.",
+    "copyright": "© 2026 YT Insights. All rights reserved.",
     "tagline": "YT Insights",
     "description": "YT Insights đồng hành cùng doanh nghiệp tối ưu tài chính, chiến lược và vận hành.",
     "quickLinks": "Liên kết nhanh",
@@ -82,7 +82,7 @@
   "feedback": {
     "title": "Cảm nhận",
     "titleHighlight": "khách hàng",
-    "tagline": "Hệ thống đánh giá từ YT Insight",
+    "tagline": "Hệ thống đánh giá từ YT Insights",
     "role": "Hội viên chiến lược",
     "send": "Gửi phản hồi",
     "modalTitle": "Viết đánh giá",
@@ -102,19 +102,21 @@
   },
   "home": {
     "hero": {
-      "tagline": "Chiến lược YT Insight",
+      "tagline": "Chiến lược YT Insights",
       "title": "Kiến Tạo Tương Lai",
       "titleHighlight": "Bằng Đổi Mới Linh Hoạt.",
       "desc": "Chúng tôi đồng hành cùng doanh nghiệp vượt qua thách thức, tăng tốc phát triển và xây dựng lợi thế cạnh tranh bền vững.",
       "cta1": "Dịch Vụ Của Chúng Tôi",
-      "cta2": "Khám Phá YT Insight",
+      "cta2": "Khám Phá YT Insights",
       "dashboard": {
         "liveData": "Dữ Liệu Thực",
         "growthStrategy": "Chiến Lược Tăng Trưởng",
         "accelerated": "Tăng Tốc",
         "globalImpact": "Tác Động Toàn Cầu",
         "markets": "Hơn 15 Thị Trường"
-      }
+      },
+      "titleHighlightLine1": "Bằng Đổi Mới",
+      "titleHighlightLine2": "Linh Hoạt."
     },
     "metrics": {
       "capital": "$5B+",
@@ -169,7 +171,7 @@
   },
   "about": {
     "pageTitle": "Về chúng tôi",
-    "tagline": "Về YT Insight",
+    "tagline": "Về YT Insights",
     "headline": "Kiến tạo tương lai bằng tư duy linh hoạt và đổi mới không ngừng.",
     "headline_line1": "KIẾN TẠO TƯƠNG LAI",
     "headline_line2": "BẰNG TƯ DUY LINH HOẠT",
@@ -246,7 +248,7 @@
       "subject": "Chủ đề",
       "message": "Nội dung tin nhắn"
     },
-    "mapTitle": "Vị trí YT Insight",
+    "mapTitle": "Vị trí YT Insights",
     "info": {
       "address": "Địa chỉ",
       "email": "Email",
@@ -669,7 +671,7 @@
     "loadError": "Không tải được danh sách dịch vụ. Kiểm tra: (1) backend API đang chạy (mặc định port 5000), (2) đã chạy `npx prisma migrate deploy` và `npm run seed:services` trong thư mục backend, (3) nếu chạy `next start` mà không dùng Nginx: đặt biến môi trường `INTERNAL_API_ORIGIN` trỏ tới backend (vd. http://127.0.0.1:5000).",
     "empty": "Chưa có dịch vụ công khai. Admin có thể thêm dịch vụ hoặc chạy lệnh seed trên backend.",
     "heroEyebrow": "Giải Pháp Tư Vấn Chiến Lược Toàn Diện",
-    "intro": "Khám phá danh mục dịch vụ của chúng tôi để hiểu cách YT Insight kiến tạo giá trị đột phá, tối ưu hóa vận hành và thúc đẩy tăng trưởng bền vững cho doanh nghiệp của bạn.",
+    "intro": "Khám phá danh mục dịch vụ của chúng tôi để hiểu cách YT Insights kiến tạo giá trị đột phá, tối ưu hóa vận hành và thúc đẩy tăng trưởng bền vững cho doanh nghiệp của bạn.",
     "sectionTitle": "Danh Mục Dịch Vụ",
     "cardCta": "Khám phá giải pháp",
     "cardEyebrow": "Dịch vụ chiến lược",
@@ -678,12 +680,12 @@
     "cardTeaserHint": "Mô tả ngắn; bấm thẻ để xem phân tích chuyên sâu trên trang chi tiết.",
     "cardEmptyImageEdit": "Chưa có ảnh — dán URL bên dưới",
     "detailLoading": "Đang mở chi tiết giải pháp…",
-    "metaDescription": "Danh mục dịch vụ tư vấn chiến lược, chuyển đổi số và tối ưu hóa vận hành tại YT Insight."
+    "metaDescription": "Danh mục dịch vụ tư vấn chiến lược, chuyển đổi số và tối ưu hóa vận hành tại YT Insights."
   },
   "sector_page": {
     "title": "Góc Nhìn Chiến Lược",
     "badge": "ẤN PHẨM & NGHIÊN CỨU",
-    "metaDescription": "Khám phá các báo cáo nghiên cứu chuyên sâu, ấn phẩm chiến lược và góc nhìn từ các chuyên gia hàng đầu tại YT Insight.",
+    "metaDescription": "Khám phá các báo cáo nghiên cứu chuyên sâu, ấn phẩm chiến lược và góc nhìn từ các chuyên gia hàng đầu tại YT Insights.",
     "search_placeholder": "Tìm kiếm báo cáo chuyên sâu...",
     "report_list": "Danh sách báo cáo",
     "category_select": "Chọn lĩnh vực nghiên cứu",
@@ -762,7 +764,7 @@
     "hero_title_line2": "Cùng YT Insights",
     "hero_quote": "Cùng nhau học hỏi. Cùng nhau tiến bước. Cùng kiến tạo tương lai.",
     "hero_subtitle": "Chúng tôi tin rằng mỗi hành trình phát triển đều bắt đầu từ những bước tiến nhỏ. Tại YT Insights, bạn sẽ có cơ hội học hỏi, thử sức với những bài toán thực tế và cùng đồng đội tạo ra những giá trị có ý nghĩa.",
-    "values_title": "Tại sao chọn YT Insight?",
+    "values_title": "Tại sao chọn YT Insights?",
     "values_subtitle": "Giá Trị Cốt Lõi",
     "value_1_title": "Đổi Mới Linh Hoạt",
     "value_1_desc": "Chúng tôi đón nhận sự thay đổi và ứng dụng công nghệ tiên tiến để mang lại các giải pháp bền vững.",
