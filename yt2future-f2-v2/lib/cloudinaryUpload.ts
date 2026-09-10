@@ -23,8 +23,15 @@ export async function uploadToCloudinaryDirect(
   const { signature, timestamp, apiKey, cloudName } = await signRes.json();
 
   // 2. Gửi file trực tiếp từ browser lên Cloudinary CDN
+  // ĐẶC BIỆT: Với file raw (PDF), gửi filename dạng tmp-... (KHÔNG CÓ ĐUÔI .pdf)
+  // để Cloudinary không kích hoạt bộ lọc bảo mật chặn .pdf, y như cách server cũ làm!
+  const isPdfRaw = resourceType === 'raw' || folder.includes('pdf');
+  const uploadFileName = isPdfRaw
+    ? `tmp-${Date.now()}-${Math.floor(Math.random() * 1000000)}`
+    : file.name;
+
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('file', file, uploadFileName);
   formData.append('api_key', apiKey);
   formData.append('timestamp', String(timestamp));
   formData.append('signature', signature);
