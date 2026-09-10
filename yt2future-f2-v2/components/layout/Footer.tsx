@@ -27,7 +27,7 @@ export default function Footer() {
     setActivePdf({ url, title });
   };
   const getPdfViewerSrc = (pdfUrl: string) =>
-    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0&toolbar=0`;
+    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#pagemode=thumbs&navpanes=1&view=FitH`;
 
   // Lock body scroll when activePdf is open
   useEffect(() => {

@@ -33,7 +33,7 @@ export default function SignupPageClient({ errorMessage, successMessage }: Signu
     setActivePdf({ url, title });
   };
   const getPdfViewerSrc = (pdfUrl: string) =>
-    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0`;
+    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#pagemode=thumbs&navpanes=1&view=FitH`;
 
   return (
     <>

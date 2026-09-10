@@ -42,7 +42,7 @@ export default function SectorPage() {
   const [readingPdf, setReadingPdf] = useState<{ url: string; title: string } | null>(null);
 
   const getPdfViewerSrc = (pdfUrl: string) =>
-    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0&toolbar=0`;
+    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#pagemode=thumbs&navpanes=1&view=FitH`;
 
   const openPdf = (pdfUrl: string, title?: string) => {
     setReadingPdf({ url: pdfUrl, title: title || t('modal_title') });

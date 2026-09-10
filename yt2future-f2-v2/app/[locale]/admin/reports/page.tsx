@@ -96,7 +96,7 @@ export default function AdminReportsPage() {
     setPreviewData(report);
   };
   const getPdfViewerSrc = (pdfUrl: string) =>
-    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#view=FitH&zoom=page-fit&navpanes=0`;
+    `/api/pdf-proxy?url=${encodeURIComponent(pdfUrl)}#pagemode=thumbs&navpanes=1&view=FitH`;
 
   return (
     <div className="space-y-6">
