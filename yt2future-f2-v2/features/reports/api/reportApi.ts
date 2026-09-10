@@ -20,9 +20,12 @@ export const reportService = {
     return response.data;
   },
 
-  addReport: async (formData: FormData) => {
-    const response = await apiClient.post('/reports/add', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+  addReport: async (payload: FormData | Record<string, unknown>) => {
+    const isFormData = typeof FormData !== 'undefined' && payload instanceof FormData;
+    const response = await apiClient.post('/reports/add', payload, {
+      headers: isFormData
+        ? { 'Content-Type': 'multipart/form-data' }
+        : { 'Content-Type': 'application/json' },
     });
     return response.data;
   },
@@ -52,9 +55,12 @@ export const reportService = {
     return response.data;
   },
 
-  updateReport: async (id: string, formData: FormData) => {
-    const response = await apiClient.put(`/reports/${id}`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+  updateReport: async (id: string, payload: FormData | Record<string, unknown>) => {
+    const isFormData = typeof FormData !== 'undefined' && payload instanceof FormData;
+    const response = await apiClient.put(`/reports/${id}`, payload, {
+      headers: isFormData
+        ? { 'Content-Type': 'multipart/form-data' }
+        : { 'Content-Type': 'application/json' },
     });
     return response.data;
   },

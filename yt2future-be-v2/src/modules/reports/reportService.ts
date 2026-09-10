@@ -46,13 +46,15 @@ export async function createReport(input: {
   categoryId: number;
   description: string | null | undefined;
   status?: string;
-  files: FileArray | null | undefined;
+  pdfUrl?: string | null | undefined;
+  thumbnail?: string | null | undefined;
+  files?: FileArray | null | undefined;
 }) {
   const { userId, title, categoryId, description, status } = input;
   const slug = buildSlugFromTitle(title);
 
-  let thumbnail = '';
-  let pdfUrl = '';
+  let thumbnail = input.thumbnail || '';
+  let pdfUrl = input.pdfUrl || '';
 
   if (input.files) {
     const thumb = getSingleFile(input.files.thumbnail);
@@ -159,9 +161,11 @@ export async function updateReport(input: {
   title: string;
   categoryId: number;
   description: string | null | undefined;
-  files: FileArray | null | undefined;
+  pdfUrl?: string | null | undefined;
+  thumbnail?: string | null | undefined;
+  files?: FileArray | null | undefined;
 }) {
-  const { id, title, categoryId, description, files } = input;
+  const { id, title, categoryId, description, files, pdfUrl, thumbnail } = input;
 
   const oldReport = await prisma.report.findUnique({ where: { id } });
   if (!oldReport) {
@@ -176,6 +180,14 @@ export async function updateReport(input: {
 
   if (title && title !== oldReport.title) {
     data.slug = buildSlugFromTitle(title);
+  }
+
+  if (thumbnail) {
+    data.thumbnail = thumbnail;
+  }
+
+  if (pdfUrl) {
+    data.pdfUrl = pdfUrl;
   }
 
   if (files) {

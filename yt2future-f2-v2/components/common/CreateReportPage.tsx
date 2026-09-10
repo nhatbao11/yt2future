@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import slugify from 'slugify';
 import { useTranslations } from 'next-intl';
 
+import { uploadToCloudinaryDirect } from '@/lib/cloudinaryUpload';
+
 interface CreateReportProps {
   onClose?: () => void;
   initialData?: {
@@ -27,6 +29,7 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
   const t = useTranslations('createReport');
   const [categories, setCategories] = useState<Array<{ id: number; name: string }>>([]);
   const [loading, setLoading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState<string>('');
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
 
@@ -68,23 +71,45 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
     // Nếu thêm mới thì bắt buộc file, sửa thì không
     if (!initialData && !pdfFile) return toast.error(t('toast.selectPdf'));
 
-    const data = new FormData();
-    data.append('title', formData.title);
-    data.append('slug', formData.slug);
-    data.append('categoryId', String(formData.categoryId));
-    data.append('description', formData.description);
-    if (thumbnailFile) data.append('thumbnail', thumbnailFile);
-    if (pdfFile) data.append('pdfFile', pdfFile);
-
     setLoading(true);
     try {
+      let pdfUrl = initialData?.pdfUrl || '';
+      let thumbnailUrl = initialData?.thumbnail || '';
+
+      // 1. Tải PDF trực tiếp lên Cloudinary (bỏ qua giới hạn 4.5MB của Vercel)
+      if (pdfFile) {
+        setUploadStatus('Đang tải file PDF lên Cloudinary...');
+        pdfUrl = await uploadToCloudinaryDirect(pdfFile, 'yt_reports/pdf', 'raw');
+      }
+
+      // 2. Tải Thumbnail trực tiếp lên Cloudinary nếu có
+      if (thumbnailFile) {
+        setUploadStatus('Đang tải ảnh bìa lên Cloudinary...');
+        thumbnailUrl = await uploadToCloudinaryDirect(
+          thumbnailFile,
+          'yt_reports/thumbnails',
+          'image'
+        );
+      }
+
+      // 3. Gửi payload JSON nhẹ (~1KB) lên server
+      setUploadStatus('Đang lưu thông tin báo cáo...');
+      const payload = {
+        title: formData.title,
+        slug: formData.slug,
+        categoryId: Number(formData.categoryId),
+        description: formData.description,
+        pdfUrl,
+        thumbnail: thumbnailUrl,
+      };
+
       let res;
       if (initialData) {
         // Gọi API Sửa
-        res = await reportService.updateReport(initialData.id, data);
+        res = await reportService.updateReport(initialData.id, payload);
       } else {
         // Gọi API Thêm mới
-        res = await reportService.addReport(data);
+        res = await reportService.addReport(payload);
       }
 
       if (res.success) {
@@ -92,10 +117,13 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
         if (onClose) onClose();
         else router.push('/sector');
       }
-    } catch {
-      toast.error(t('toast.systemError'));
+    } catch (err: unknown) {
+      console.error('Submit report error:', err);
+      const msg = err instanceof Error ? err.message : t('toast.systemError');
+      toast.error(msg);
     } finally {
       setLoading(false);
+      setUploadStatus('');
     }
   };
 
@@ -294,7 +322,10 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
               className="w-full md:w-auto min-w-[240px] bg-[#001a41] text-white px-10 py-4 rounded-lg font-black uppercase tracking-widest hover:bg-slate-800 disabled:bg-slate-300 transition-all flex items-center justify-center gap-3 text-[11px]"
             >
               {loading ? (
-                t('processing')
+                <span className="flex items-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+                  {uploadStatus || t('processing')}
+                </span>
               ) : (
                 <>
                   {initialData ? <Save size={16} /> : <Send size={16} />}{' '}

@@ -5,7 +5,7 @@ import * as reportService from '../modules/reports/reportService.js';
 
 export const createReport = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { title, categoryId, description, status } = req.body;
+    const { title, categoryId, description, status, pdfUrl, thumbnail } = req.body;
     const userId = req.user!.id;
 
     if (!title) {
@@ -18,6 +18,8 @@ export const createReport = async (req: Request, res: Response, next: NextFuncti
       categoryId: Number(categoryId),
       description,
       status,
+      pdfUrl,
+      thumbnail,
       files: req.files,
     });
 
@@ -113,13 +115,15 @@ export const deleteReport = async (req: Request, res: Response, next: NextFuncti
 export const updateReport = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
-    const { title, categoryId, description } = req.body;
+    const { title, categoryId, description, pdfUrl, thumbnail } = req.body;
 
     const updatedReport = await reportService.updateReport({
       id: id!,
       title,
       categoryId: Number(categoryId),
       description,
+      pdfUrl,
+      thumbnail,
       files: req.files,
     });
 
