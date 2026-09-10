@@ -25,11 +25,21 @@ type PageProps = {
 
 function isMobileOrTabletDevice(): boolean {
   if (typeof navigator === 'undefined') return false;
+
+  // Use Client Hints API if available (Chrome, Edge, etc.)
+  // On desktop computers (including laptops with touchscreens/trackpads), mobile is strictly false
+  const uaData = (navigator as unknown as { userAgentData?: { mobile?: boolean } }).userAgentData;
+  if (uaData?.mobile !== undefined) {
+    if (!uaData.mobile) return false;
+  }
+
   const ua = navigator.userAgent;
+  // Real mobile operating systems (phones / tablets)
   const isMobileUa = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-  const isTouchScreen =
-    typeof window !== 'undefined' && (window.innerWidth < 1024 || navigator.maxTouchPoints > 1);
-  return isMobileUa || isTouchScreen;
+  // iPadOS 13+ identifying as Macintosh with multi-touch
+  const isIPad = /Macintosh/i.test(ua) && navigator.maxTouchPoints > 1;
+
+  return isMobileUa || isIPad;
 }
 
 export default function InlinePdfViewer({ src, title, className }: InlinePdfViewerProps) {
