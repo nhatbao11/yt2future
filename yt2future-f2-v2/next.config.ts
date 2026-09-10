@@ -9,6 +9,11 @@ const projectRoot = dirname(fileURLToPath(import.meta.url));
 const nextConfig: NextConfig = {
   /** Docker / self-host: tạo `.next/standalone` + `server.js` */
   // output: 'standalone',
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '20mb',
+    },
+  },
   turbopack: {
     // Monorepo có nhiều lockfile, khóa root về đúng app FE
     root: projectRoot,

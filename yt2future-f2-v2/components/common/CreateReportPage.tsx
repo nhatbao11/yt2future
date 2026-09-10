@@ -78,8 +78,12 @@ export default function CreateReportPage({ onClose, initialData }: CreateReportP
 
       // 1. Tải PDF trực tiếp lên Cloudinary (bỏ qua giới hạn 4.5MB của Vercel)
       if (pdfFile) {
+        console.log(
+          `[CreateReport] Đang tải trực tiếp lên Cloudinary: ${pdfFile.name} (${(pdfFile.size / 1024 / 1024).toFixed(2)} MB)`
+        );
         setUploadStatus('Đang tải file PDF lên Cloudinary...');
         pdfUrl = await uploadToCloudinaryDirect(pdfFile, 'yt_reports/pdf', 'raw');
+        console.log('[CreateReport] Tải PDF thành công, URL:', pdfUrl);
       }
 
       // 2. Tải Thumbnail trực tiếp lên Cloudinary nếu có
