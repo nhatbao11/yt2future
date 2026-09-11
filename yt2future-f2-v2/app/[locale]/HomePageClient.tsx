@@ -77,10 +77,12 @@ export default function HomePage() {
                     {t('hero.tagline')}
                   </span>
                 </div>
-                <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-[5.2rem] font-black text-white leading-[1.15] sm:leading-[1.05] tracking-tight mb-6 sm:mb-8 drop-shadow-2xl">
-                  <span className="block">{t('hero.title')}</span>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[2.75rem] xl:text-[3.5rem] 2xl:text-[4.25rem] font-black text-white leading-[1.12] sm:leading-[1.08] lg:leading-[1.05] tracking-tight mb-6 sm:mb-8 drop-shadow-2xl">
+                  <span className="block lg:whitespace-nowrap">{t('hero.title')}</span>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-yellow)] via-[#ffd24d] to-amber-100 animate-gradient-x block sm:inline">
-                    <span className="inline sm:inline-block">{t('hero.titleHighlightLine1')}</span>{' '}
+                    <span className="inline sm:inline-block whitespace-nowrap">
+                      {t('hero.titleHighlightLine1')}
+                    </span>{' '}
                     <span className="inline sm:inline-block whitespace-nowrap">
                       {t('hero.titleHighlightLine2')}
                     </span>
